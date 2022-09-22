@@ -12,17 +12,11 @@
                 <h1>Bienvenue &agrave; vous sur notre site de jeu en ligne</h1>
             </div>
             <div class="jeux_dispos">
-                <button id="4" onclick="color(id)">Pendu</button>
-                <button id="5" onclick="color(id)">Quizz_bin</button>
-                <button id="6" onclick="color(id)">Memori</button>
+                <button id="4" href="./pendu.html">Pendu</button>
+                <button id="5" href="./quizz_binaire.html">Quizz_bin</button>
+                <button id="6" href="./memo.html">Memori</button>
 
             </div>
-            <script type="text/javascript">
-                function color(id) {
-                    document.getElementById(id).style.backgroundColor = "red"
-
-                }
-            </script>
         </div>
     </body>
 </html>
