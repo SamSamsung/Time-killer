@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style_memo.css">
+    <script type="text/javascript" src="./scripts/script_memo.js"></script>
+    <title>Memori</title>
+</head>
+    <body>
+        <div class="container">
+            <div class="titre">
+                <h1 id="joueur">Joueur 1</h1>
+                <h1>Jeu du M&eacute;mori</h1>
+            </div>
+            <div class="tt_cartes">
+                <div id="overlay"></div>
+                <div class="pop_up" id="gagne">
+                    <a href="memo.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Félicitation, vous avez gagné !</h1>
+                    <h1 class="emoji">😀</h1>
+                </div>
+                <div class="pop_up" id="perdu">
+                    <a href="memo.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Dommage ! Vous avez perdu.</h1>
+                    <h1 class="emoji">😞</h1>
+                </div>
+                <button class="carte" id="1" onclick="carte(id)"></button>
+                <button class="carte" id="2" onclick="carte(id)"></button>
+                <button class="carte" id="3" onclick="carte(id)"></button>
+                <button class="carte" id="4" onclick="carte(id)"></button>
+                <button class="carte" id="5" onclick="carte(id)"></button>
+                <button class="carte" id="6" onclick="carte(id)"></button>
+                <button class="carte" id="7" onclick="carte(id)"></button>
+                <button class="carte" id="blanc">Il vous reste <span id="essais"> 7 </span> essai(s)</button>
+                <button class="carte" id="8" onclick="carte(id)"></button>
+                <button class="carte" id="9" onclick="carte(id)"></button>
+                <button class="carte" id="10" onclick="carte(id)"></button>
+                <button class="carte" id="11" onclick="carte(id)"></button>
+                <button class="carte" id="12" onclick="carte(id)"></button>
+                <button class="carte" id="13" onclick="carte(id)"></button>
+                <button class="carte" id="14" onclick="carte(id)"></button>
+            </div>
+            
+        </div>
+        
+    </body>
+</html>

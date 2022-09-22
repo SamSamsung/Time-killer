@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css"> <!-- On importe le document style.css pour  utiliser le css-->
+    <script src="./scripts/scripts.js"></script>
+    
+    <title>Pendu</title>
+</head>
+    <body>
+        
+        <div class="container">
+            <div class="titre">
+                <h1>Le jeu du Pendu</h1>
+            </div>
+            <div class="jeu">
+                <div id="overlay"></div>
+                <div class="pop_up" id="gagne">
+                    <a href="pendu.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Félicitation, vous avez gagné !</h1>
+                    <h1 class="emoji">😀</h1>
+                </div>
+                <div class="pop_up" id="perdu">
+                    <a href="pendu.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Dommage ! Vous avez perdu.</h1>
+                    <h2>Le mot &eacute;tait : <span id="mot"></span></h2>
+                    <h1 class="emoji">😞</h1>
+                </div>
+                <div class="image_pendu">
+                    <img src="photos/0.png" class="images_pendu active" id="0" alt="">
+                    <img src="photos/1.png" class="images_pendu" id="1" alt="">
+                    <img src="photos/2.png" class="images_pendu" id="2" alt="">
+                    <img src="photos/3.png" class="images_pendu" id="3" alt="">
+                    <img src="photos/4.png" class="images_pendu" id="4" alt="">
+                    <img src="photos/5.png" class="images_pendu" id="5" alt="">
+                    <img src="photos/6.png" class="images_pendu" id="6" alt="">
+                    <img src="photos/7.png" class="images_pendu" id="7" alt="">
+
+                </div>
+                <div class="cases">
+                    <h1 id="cases_lettres">_ </h1>
+                </div>
+                <h3 id="compteur">Vous avez 7 essais</h3>
+                <div class="lettres">
+                    <button type="button" id ="A" onclick = "recupere_lettre('A')">A</button>
+                    <button type="button" id="B" onclick="recupere_lettre('B')">B</button>
+                    <button type="button" id="C" onclick="recupere_lettre('C')">C</button>
+                    <button type="button" id="D" onclick="recupere_lettre('D')">D</button>
+                    <button type="button" id="E" onclick="recupere_lettre('E')">E</button>
+                    <button type="button" id="F" onclick="recupere_lettre('F')">F</button>
+                    <button type="button" id="G" onclick="recupere_lettre('G')">G</button>
+                    <button type="button" id="H" onclick="recupere_lettre('H')">H</button>
+                    <button type="button" id="I" onclick="recupere_lettre('I')">I</button>
+                    <button type="button" id="J" onclick="recupere_lettre('J')">J</button>
+                    <button type="button" id="K" onclick="recupere_lettre('K')">K</button>
+                    <button type="button" id="L" onclick="recupere_lettre('L')">L</button>
+                    <button type="button" id="M" onclick="recupere_lettre('M')">M</button>
+                    <button type="button" id="N" onclick="recupere_lettre('N')" >N</button>
+                    <button type="button" id="O" onclick="recupere_lettre('O')">O</button>
+                    <button type="button" id="P" onclick="recupere_lettre('P')">P</button>
+                    <button type="button" id="Q" onclick="recupere_lettre('Q')">Q</button>
+                    <button type="button" id="R" onclick="recupere_lettre('R')">R</button>
+                    <button type="button" id="S" onclick="recupere_lettre('S')">S</button>
+                    <button type="button" id="T" onclick="recupere_lettre('T')">T</button>
+                    <button type="button" id="U" onclick="recupere_lettre('U')">U</button>
+                    <button type="button" id="V" onclick="recupere_lettre('V')">V</button>
+                    <button type="button" id="W" onclick="recupere_lettre('W')">W</button>
+                    <button type="button" id="X" onclick="recupere_lettre('X')">X</button>
+                    <button type="button" id="Y" onclick="recupere_lettre('Y')">Y</button>
+                    <button type="button" id="Z" onclick="recupere_lettre('Z')">Z</button>
+                </div>
+            </div>
+            <div class="auteurs">
+                <p>Auteurs : Samuel et Alexandre</p>
+            </div>
+        </div>
+        <div class="container_utilisees">
+            <div class="titre">
+                <h1>Lettres fausses</h1>
+            </div>
+            <div class="util">
+                <button type="button" id="A_dis">A</button>
+                <button type="button" id="B_dis">B</button>
+                <button type="button" id="C_dis">C</button>
+                <button type="button" id="D_dis">D</button>
+                <button type="button" id="E_dis">E</button>
+                <button type="button" id="F_dis">F</button>
+                <button type="button" id="G_dis">G</button>
+                <button type="button" id="H_dis">H</button>
+                <button type="button" id="I_dis">I</button>
+                <button type="button" id="J_dis">J</button>
+                <button type="button" id="K_dis">K</button>
+                <button type="button" id="L_dis">L</button>
+                <button type="button" id="M_dis">M</button>
+                <button type="button" id="N_dis">N</button>
+                <button type="button" id="O_dis">O</button>
+                <button type="button" id="P_dis">P</button>
+                <button type="button" id="Q_dis">Q</button>
+                <button type="button" id="R_dis">R</button>
+                <button type="button" id="S_dis">S</button>
+                <button type="button" id="T_dis">T</button>
+                <button type="button" id="U_dis">U</button>
+                <button type="button" id="V_dis">V</button>
+                <button type="button" id="W_dis">W</button>
+                <button type="button" id="X_dis">X</button>
+                <button type="button" id="Y_dis">Y</button>
+                <button type="button" id="Z_dis">Z</button>
+            </div>
+            <div class="auteurs">
+                <p>Auteurs: Samuel et Alexandre</p>
+            </div>
+        </div>
+    
+    </body>
+</html>
