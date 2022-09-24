@@ -215,3 +215,9 @@ button.non_active {
     opacity: 1;
     pointer-events: all;
 }
+
+.retour{
+    font-size: 300%;
+    color: black;
+    text-decoration: none;
+}
