@@ -19,11 +19,13 @@
                 <div class="pop_up" id="gagne">
                     <a href="memo.html"><button class="bouton_ferme">&times;</button></a>
                     <h1>Félicitation, vous avez gagné !</h1>
+                    <h1 class="j_resultat" id="joueur_gagner">Bravo au joueur 2 !</h1>
                     <h1 class="emoji">😀</h1>
                 </div>
                 <div class="pop_up" id="perdu">
                     <a href="memo.html"><button class="bouton_ferme">&times;</button></a>
                     <h1>Dommage ! Vous avez perdu.</h1>
+                    <h1 class="j_resultats" id="joueur_perdu">Le joueur 2 n'avait plus d'essais !</h1>
                     <h1 class="emoji">😞</h1>
                 </div>
                 <button class="carte" id="1" onclick="carte(id)"></button>
@@ -33,7 +35,7 @@
                 <button class="carte" id="5" onclick="carte(id)"></button>
                 <button class="carte" id="6" onclick="carte(id)"></button>
                 <button class="carte" id="7" onclick="carte(id)"></button>
-                <button class="carte" id="blanc">Il vous reste <span id="essais"> 7 </span> essai(s)</button>
+                <button class="carte" id="blanc"> <span id="num">Joueur 1</span> <br> Il vous reste <span id="essais"> 7 </span> essai(s)</button>
                 <button class="carte" id="8" onclick="carte(id)"></button>
                 <button class="carte" id="9" onclick="carte(id)"></button>
                 <button class="carte" id="10" onclick="carte(id)"></button>
