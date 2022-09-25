@@ -13,3 +13,11 @@ button{
     left: 0%;
     width: 100%;
 }
+
+#enter{
+    color: white;
+    background-color: #1e3250;
+    border-radius: 15%;
+    width: 10%;
+    height: 20%;
+}
