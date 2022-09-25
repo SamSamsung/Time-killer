@@ -60,12 +60,14 @@
 }
 
 #blanc {
-    position: relative;
     border-radius: 0 !important;
     background-color: white;
-    bottom: 11%;
-    margin-bottom: -5%;
 }
+
+.invisible {
+    visibility: hidden;
+}
+
 
 .emoji {
     margin-left: 20%;
