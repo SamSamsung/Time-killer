@@ -12,10 +12,9 @@
                 <h1>Bienvenue &agrave; vous sur notre site de jeu en ligne</h1>
             </div>
             <div class="jeux_dispos">
-                <a href="./pendu.html"><button>Pendu</button></a>
-                <a href="./quizz_binaire.html"><button>Quizz_bin</button></a>
-                <a href="./memo.html"><button>Memori</button></a>
+                <button type="button" onclick="location.href='./pendu.html'" class="jeux">Pendu</button>
+                <button type="button" onclick="location.href='./quizz_binaire.html'" class="jeux">Quizz_bin</button>
+                <button type="button" onclick="location.href='./memo.html'" class="jeux">Memori</button>
             </div>
         </div>
     </body>
-</html>
