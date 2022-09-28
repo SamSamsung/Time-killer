@@ -65,7 +65,7 @@ function carte(id){
                     if(document.getElementsByClassName("faits").length === 14){
                         
                         if((cpt_gagne_joueur_2) < (cpt_gagne_joueur_1)){
-                            document.getElementById("joueur_gagner").innerHTML = "Bravo au joueur 1 !"
+                            document.getElementById("joueur_gagner").innerHTML = "Le joueur 1 a gagné, Bravo !"
                         } else if(cpt_gagne_joueur_1 === cpt_gagne_joueur_2){
                             document.getElementById("joueur_gagner").innerHTML = "Aucun gagnant ! Bravo a tous"
                         }
@@ -86,11 +86,11 @@ function carte(id){
                     }
                     
                     if(cpt_perdu_1 === 0) {
-                        document.getElementById("joueur_perdu").innerHTML = "Le joueur 1 n'avait plus d'essais"
+                        document.getElementById("joueur_perdu").innerHTML = "Le joueur 1 n'avait plus d'essais, Dommage !"
                         document.getElementById("perdu").classList.add("show")
                         document.getElementById("overlay").classList.add("show")
                     } else if(cpt_perdu_2 == 0) {
-                        document.getElementById("joueur_perdu").innerHTML = "Le joueur 2 n'avait plus d'essais"
+                        document.getElementById("joueur_perdu").innerHTML = "Le joueur 2 n'avait plus d'essais, Dommage !"
                         document.getElementById("perdu").classList.add("show")
                         document.getElementById("overlay").classList.add("show")
                     }
