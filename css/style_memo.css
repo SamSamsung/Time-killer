@@ -70,7 +70,7 @@
 
 
 .emoji {
-    margin-left: 20%;
+    margin-left: 25%;
     margin-top: 15%;
 }
 
@@ -80,12 +80,12 @@
     background-color: white;
     width: 50%;
     height: 20%;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%) scale(0);	/* On met scale = 0 pour qu'il ne soit pas visible */
-	border: 1px solid black;
-	border-radius: 10px;
-	z-index: 12;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);	/* On met scale = 0 pour qu'il ne soit pas visible */
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 12;
 }
 
 .pop_up.show{
