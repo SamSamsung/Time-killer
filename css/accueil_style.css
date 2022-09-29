@@ -7,8 +7,9 @@
     top: 12.5%;
 }
 
-.titre {
-    background-color: #a9a9af;
+.titre {/*
+    background-color: #a9a9af*/
+    background-color: #FFC0CB;
     position: absolute;
     width: 100%;
     height: 19.5%;
