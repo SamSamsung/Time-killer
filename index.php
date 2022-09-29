@@ -15,6 +15,7 @@
                 <button type="button" onclick="location.href='./pendu.html'" class="jeux"><h1>Pendu</h1></button>
                 <button type="button" onclick="location.href='./quizz_binaire.html'" class="jeux"><h1>Quizz_bin</h1></button>
                 <button type="button" onclick="location.href='./memo.html'" class="jeux"><h1>Memori</h1></button>
+                <button type="button" onclick="location.href='./croix_ronds.html'" class="jeux"><h1>Croix et Ronds</h1></button>
             </div>
         </div>
     </body>
