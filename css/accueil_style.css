@@ -1,5 +1,5 @@
 .container {
-    background-color: #a9a9af;
+    
     height: 75%;
     width: 75%;
     position: absolute;
@@ -8,18 +8,18 @@
 }
 
 .titre {
-    
+    background-color: #a9a9af;
     position: absolute;
     width: 100%;
     height: 19.5%;
 }
+
 h1 {
     text-align: center;
-   
 }
 
 .jeux_dispos {
-    
+    background-color: #FFB6C1;
     position: absolute;
     border-top: 5px solid gray;
     top: 19.5%;
@@ -29,7 +29,8 @@ h1 {
 
 .jeux{
     cursor: pointer;
-    background-color: pink;
+    background-color: #ADD8E6;
+    color: black;
     border-radius: 20px;
     margin-top: 4%;
     margin-left: 13%;
