@@ -1,1 +1,14 @@
-
+.cell {
+    height: 30px;
+    width: 30px;
+    border: 1.5px solid grey;
+    border-style: inset;
+}
+ 
+.blackcell {
+    background-color: black;
+}
+ 
+.whitecell {
+    background-color: white;
+}
