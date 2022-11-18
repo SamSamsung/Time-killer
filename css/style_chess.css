@@ -1,14 +1,43 @@
-.cell {
-    height: 30px;
-    width: 30px;
-    border: 1.5px solid grey;
-    border-style: inset;
+html, 
+body {
+    height: 90%;
 }
- 
+
+.titre{
+    text-align: center;
+}
+
+#echequier{
+    width: 45%;
+    margin-top: 3%;
+    min-height: 100%;
+    margin-left: 29%;
+
+}
+
+.container{
+    height: 100%;
+    width: 100%;
+}
+
+.cell {
+    border:0;
+    margin-top: -.3%;
+    width: 100px; 
+    height: 100px; 
+    max-width: 20%; 
+    text-align: center;
+    
+}
+
 .blackcell {
-    background-color: black;
+    background-color: #769656;
 }
  
 .whitecell {
-    background-color: white;
+    background-color: #eeeed2;
+}
+
+.cell{
+    background-size: 95%;
 }
