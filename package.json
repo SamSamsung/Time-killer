@@ -2,5 +2,5 @@
   "author": "Samy35",
   "version": "1.0.0",
   "description": "A package for playing onlive",
-  "main": "index.html",
+  "main": "index.html"
 }
