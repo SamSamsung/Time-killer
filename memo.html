@@ -9,7 +9,7 @@
     <title>Memori</title>
 </head>
     <body>
-        <a href="./index.php" class="retour">⬅</a>
+        <a href="./index.html" class="retour">⬅</a>
         <div class="container">
             <div class="titre">
                 <h1 id="joueur">Joueur 1</h1>
@@ -19,12 +19,14 @@
                 <div id="overlay"></div>
                 <div class="pop_up" id="gagne">
                     <a href="memo.html"><button class="bouton_ferme">&times;</button></a>
-                    <h1 class="j_resultats" id="joueur_gagner">Le joueur 2 a gagné, Bravo !</h1>
+                    <h1>Congratulations</h1>
+                    <h1 class="j_resultats" id="joueur_gagner">Player 2 won !</h1>
                     <h1 class="emoji">😀</h1>
                 </div>
                 <div class="pop_up" id="perdu">
                     <a href="memo.html"><button class="bouton_ferme">&times;</button></a>
-                    <h1 class="j_resultats" id="joueur_perdu">Le joueur 2 n'avait plus d'essais, Dommage !</h1>
+                    <h1>Such a shame !</h1>
+                    <h1 class="j_resultats" id="joueur_perdu">Player 2 didn't have any more tries !</h1>
                     <h1 class="emoji">😞</h1>
                 </div>
                 <button class="carte" id="1" onclick="carte(id)"><span class="invisible">1</span><br><span class="invisible">1</span></button>
