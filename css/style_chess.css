@@ -5,6 +5,7 @@ body {
 
 .titre{
     text-align: center;
+    margin-top: -2.5%;
 }
 
 #echequier{
@@ -42,3 +43,11 @@ body {
 .cell{
     background-size: 95%;
 }
+
+.retour{
+    font-size: 300%;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+}
+
