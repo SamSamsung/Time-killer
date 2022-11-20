@@ -7,25 +7,25 @@
     <link rel="stylesheet" href="./css/style.css"> <!-- On importe le document style.css pour  utiliser le css-->
     <script src="./scripts/scripts.js"></script>
     
-    <title>Pendu</title>
+    <title>Hanged</title>
 </head>
     <body>
-        <a href="./index.php" class="retour">⬅</a>
+        <a href="./index.html" class="retour">⬅</a>
         <div class="container">
             <div class="titre">
-                <h1>Le jeu du Pendu</h1>
+                <h1>The game of the Hanged (in french)</h1>
             </div>
             <div class="jeu">
                 <div id="overlay"></div>
                 <div class="pop_up" id="gagne">
-                    <a href="pendu.html"><button class="bouton_ferme">&times;</button></a>
-                    <h1>Félicitation, vous avez gagné !</h1>
+                    <a href="hanged.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Congratulations, you won !</h1>
                     <h1 class="emoji">😀</h1>
                 </div>
                 <div class="pop_up" id="perdu">
-                    <a href="pendu.html"><button class="bouton_ferme">&times;</button></a>
-                    <h1>Dommage ! Vous avez perdu.</h1>
-                    <h2>Le mot &eacute;tait : <span id="mot"></span></h2>
+                    <a href="hanged.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Such a shame ! You lost.</h1>
+                    <h2>The word was : <span id="mot"></span></h2>
                     <h1 class="emoji">😞</h1>
                 </div>
                 <div class="image_pendu">
@@ -42,7 +42,7 @@
                 <div class="cases">
                     <h1 id="cases_lettres">_ </h1>
                 </div>
-                <h3 id="compteur">Vous avez 7 essais</h3>
+                <h3 id="compteur">You have 7 tries</h3>
                 <div class="lettres">
                     <button type="button" id ="A" onclick = "recupere_lettre('A')">A</button>
                     <button type="button" id="B" onclick="recupere_lettre('B')">B</button>
@@ -73,12 +73,12 @@
                 </div>
             </div>
             <div class="auteurs">
-                <p>Auteurs : Samuel et Alexandre</p>
+                <p>Authors : Samuel et Alexandre</p>
             </div>
         </div>
         <div class="container_utilisees">
             <div class="titre">
-                <h1>Lettres fausses</h1>
+                <h1>Incorrect letters</h1>
             </div>
             <div class="util">
                 <button type="button" id="A_dis">A</button>
@@ -109,7 +109,7 @@
                 <button type="button" id="Z_dis">Z</button>
             </div>
             <div class="auteurs">
-                <p>Auteurs: Samuel et Alexandre</p>
+                <p>Authors: Samuel et Alexandre</p>
             </div>
         </div>
     
