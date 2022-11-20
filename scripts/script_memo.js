@@ -31,11 +31,6 @@ console.log(images)
 
 
 
-setTimeout(function(){
-    
-  
-},18)
-
 
 function carte(id){
     if(document.getElementsByClassName("active").length < 2) {
