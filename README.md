@@ -1,4 +1,4 @@
-# <div align="center" style='color:red'> ___Time killer___ </div>
+# <div align="center" style="color:red;"> ___Time killer___ </div>
 
 ## ___Information on the code___
 
