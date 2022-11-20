@@ -1,11 +1,7 @@
 p, h1 {
     text-align: center;
-    font-size: 100%;
 }
 
-h1 {
-    font-size: 200%;
-}
 
 body {
     background-color: rgb(247, 247, 185);
@@ -16,7 +12,7 @@ body {
     position: absolute;
     margin-left: 22.5%;
     margin-top: 7.5%;
-    height: 50%;
+    height: 60%;
     width: 50%;
 }
 
@@ -25,7 +21,7 @@ body {
     position: absolute;
     margin-left: 79%;
     margin-top: 7.5%;
-    height: 50%;
+    height: 60%;
     width: 17.5%;
     overflow-wrap: break-word;
 }
@@ -41,6 +37,7 @@ body {
 
 .titre h1{
     position: relative;
+    font-size: 2vw;
     top: 10%;
     
 }
@@ -49,7 +46,7 @@ h3{
     position: absolute;
     left: 7.5%;
     bottom: 82.5%;
-    font-size: 22.5px;
+    font-size: 1.25vw;
 }
 
 .jeu{
@@ -90,8 +87,7 @@ h3{
 
 .cases h1{
     position: relative;
-    bottom: 10%;
-    font-size: 50px;
+    font-size: 2.75vw;
 }
 
 .lettres{
@@ -109,8 +105,8 @@ h3{
     margin-right: 4.25%;
     margin-top: 5%;
     border-radius: 30%;
-    height: 10%;
-    width: 5%;
+    height: 1.3vw;
+    width: 1.75vw;
     text-align: center;
     cursor: pointer;
 
@@ -147,6 +143,7 @@ button.non_active {
     height: 10%;
     width: 100%;
     position: absolute;
+    font-size: 1vw;
     bottom: 0%;
 }
 
