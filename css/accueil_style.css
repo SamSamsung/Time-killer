@@ -11,13 +11,15 @@
     background-color: #a9a9af*/
     background-color: #FFC0CB;
     position: absolute;
+    text-align: center;
     width: 100%;
     height: 19.5%;
-    font-size: 150%;
+    font-size: 1.25vw;
 }
 
-h1 {
+button h1 {
     text-align: center;
+    font-size: 1.25vw;
     
 }
 
