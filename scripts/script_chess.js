@@ -103,12 +103,15 @@ window.onclick = function(e) {
 
 
 function click(classes, id){
+    eat_or_move = false
     if(document.getElementById(id).querySelector("span").classList.length > 1){
         if(document.getElementById(id).querySelector("span").classList[1] == "show"){
             play(id)
+            
         } else{
             eat(classes, id)
-        }
+        } eat_or_move = true
+        
     }
 
     y = document.getElementsByClassName("show")
@@ -126,7 +129,7 @@ function click(classes, id){
     
 
 
-    if(classes[2] == "black_piece" || classes[2] == "white_piece"){
+    if((classes[2] == "black_piece" || classes[2] == "white_piece") && eat_or_move == false){
         if(classes[3] == "white_king" || classes[3] == "black_king"){
             if(0 <= id+1 && id+1 <= 63 && (Math.floor((id+1)/8) == Math.floor(id/8))){
                 if(document.getElementById(id+1).classList.length < 3){
