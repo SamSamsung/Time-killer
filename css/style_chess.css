@@ -24,10 +24,12 @@ body {
 .cell {
     border:0;
     margin-top: -.3%;
-    width: 100px; 
-    height: 100px; 
+    width: 12.5%; 
+    height: 100px; /* Doesn't work in pourcentage*/ 
     max-width: 20%; 
     text-align: center;
+    background-size: 95%;
+    z-index: 10;
     
 }
 
@@ -37,11 +39,6 @@ body {
  
 .whitecell {
     background-color: #eeeed2;
-}
-
-
-.cell{
-    background-size: 95%;
 }
 
 .retour{
