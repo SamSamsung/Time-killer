@@ -101,7 +101,7 @@ window.onclick = function(e) {
     console.log(array1[0].classList, parseInt(array1[0].id))
     
     click(array1[0].classList, parseInt(array1[0].id))
-})
+}
 
 
 function click(classes, id){
