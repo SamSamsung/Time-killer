@@ -92,8 +92,7 @@ for(i=0; i<8; i++){
 
     }
 }
-let touchEvent = "ontouchstart" in window ? "touchstart": "click";
-window.addEventListener(touchEvent,function(e) {
+window.onclick() = function(e) {
     array1 = e.path
     console.log(array1)
     if(array1[0].classList[0] == "hint"){
