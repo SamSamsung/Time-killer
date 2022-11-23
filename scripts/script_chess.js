@@ -92,8 +92,8 @@ for(i=0; i<8; i++){
 
     }
 }
-window.onclick = function(e) {
-    array1 = e.path
+window.addEventListener("click", (event) => {
+    array1 = event.path
     console.log(array1)
     if(array1[0].classList[0] == "hint"){
         array1.shift();
@@ -101,7 +101,7 @@ window.onclick = function(e) {
     console.log(array1[0].classList, parseInt(array1[0].id))
     
     click(array1[0].classList, parseInt(array1[0].id))
-}
+});
 
 
 function click(classes, id){
