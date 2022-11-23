@@ -372,73 +372,97 @@ for(i=0; i<8; i++){
     }
 }
 
-var joueurs = 0
-// window.onclick = function(e) {
-window.addEventListener("click", (event) => {
-    console.log(event);
-    array1 = event.path;
-    if(array1[0].classList[0] == "hint"){
-        array1.shift();
-    }
-    if((joueurs%2 == 0 && (array1[0].classList[2] =="white_piece" || array1[0].querySelector("span").classList[2] =="white_piece" )) || (joueurs%2 == 1 && (array1[0].classList[2] =="black_piece" || array1[0].querySelector("span").classList[2] =="black_piece" )) ){
-        // On gère le cas du cpt, donc si pair, c'est les blancs qui jouent, si impair, c'est les noirs.
-        // On a deux façons de vérifier si on veut jouer les blancs, soit la cause touchée détient une pièce et donc il suffit de voir si l'on trouve 'white_piece' ou 'black_piece'
-        // Mais si l'on clique sur les 'hint', on va chercher dans la classe, le nom.
-        click(array1[0].classList, parseInt(array1[0].id))
-    }
-    
-    
-});
 
-function click(classes, id){
-    eat_or_move = false
-    if(document.getElementById(id).querySelector("span").classList.length > 1){
-        console.log("hi")
-        if(document.getElementById(id).querySelector("span").classList[1] == "show"){
-            play(id)
-            
-        } else if (document.getElementById(id).querySelector("span").classList[1] == "active"){
-            eat(classes, id)
-        } eat_or_move = true
-        joueurs++;
-        // Problème, on ne peut utiliser le check, 
-        
-        
-        
-    } 
-    
-    y = document.getElementsByClassName("show")
-    x = document.getElementsByClassName("active")
-    w = document.getElementsByClassName("predict")
-    
-    if (y.length > 0){
-        for(i = y.length-1; i > -1; i-- ){
-            
-            document.getElementsByClassName("show")[i].setAttribute("class", "hint");
-        }
-    }
-    if (x.length > 0){
-        for(j = x.length-1; j > -1; j-- ){
-            document.getElementsByClassName("active")[j].setAttribute("class", "hint");
-        }
-    }
-    
-    if (w.length > 0){
-        for(j = w.length-1; j > -1; j-- ){
-            document.getElementsByClassName("predict")[j].setAttribute("class", "hint");
-        }
-    } 
-
-    all_moves_and_eat(classes, id, "active")
-    
-        
-    }
-    
 
 
 
 
 }, 10)
+var joueurs = 0;
+if (document.readyState === 'complete') {
+    callback();
+  } else {
+    
+    window.addEventListener('click', callback => {
+
+        console.log(callback);
+        array1 = callback.path;
+        if(array1[0].classList[0] == "hint"){
+            array1.shift();
+        }
+        if((joueurs%2 == 0 && (array1[0].classList[2] =="white_piece" || array1[0].querySelector("span").classList[2] =="white_piece" )) || (joueurs%2 == 1 && (array1[0].classList[2] =="black_piece" || array1[0].querySelector("span").classList[2] =="black_piece" )) ){
+            // On gère le cas du cpt, donc si pair, c'est les blancs qui jouent, si impair, c'est les noirs.
+            // On a deux façons de vérifier si on veut jouer les blancs, soit la cause touchée détient une pièce et donc il suffit de voir si l'on trouve 'white_piece' ou 'black_piece'
+            // Mais si l'on clique sur les 'hint', on va chercher dans la classe, le nom.
+            click(array1[0].classList, parseInt(array1[0].id))
+        }
 
 
 
+
+    });
+  }
+
+/*
+  // window.onclick = function(e) {
+  window.addEventListener("click", (event) => {
+      console.log(event);
+      array1 = event.path;
+      if(array1[0].classList[0] == "hint"){
+          array1.shift();
+      }
+      if((joueurs%2 == 0 && (array1[0].classList[2] =="white_piece" || array1[0].querySelector("span").classList[2] =="white_piece" )) || (joueurs%2 == 1 && (array1[0].classList[2] =="black_piece" || array1[0].querySelector("span").classList[2] =="black_piece" )) ){
+          // On gère le cas du cpt, donc si pair, c'est les blancs qui jouent, si impair, c'est les noirs.
+          // On a deux façons de vérifier si on veut jouer les blancs, soit la cause touchée détient une pièce et donc il suffit de voir si l'on trouve 'white_piece' ou 'black_piece'
+          // Mais si l'on clique sur les 'hint', on va chercher dans la classe, le nom.
+          click(array1[0].classList, parseInt(array1[0].id))
+      }
+      
+      
+  });
+  */
+  
+  function click(classes, id){
+      eat_or_move = false
+      if(document.getElementById(id).querySelector("span").classList.length > 1){
+          console.log("hi")
+          if(document.getElementById(id).querySelector("span").classList[1] == "show"){
+              play(id)
+              
+          } else if (document.getElementById(id).querySelector("span").classList[1] == "active"){
+              eat(classes, id)
+          } eat_or_move = true
+          joueurs++;
+          // Problème, on ne peut utiliser le check, 
+          
+          
+          
+      } 
+      
+      y = document.getElementsByClassName("show")
+      x = document.getElementsByClassName("active")
+      w = document.getElementsByClassName("predict")
+      
+      if (y.length > 0){
+          for(i = y.length-1; i > -1; i-- ){
+              
+              document.getElementsByClassName("show")[i].setAttribute("class", "hint");
+          }
+      }
+      if (x.length > 0){
+          for(j = x.length-1; j > -1; j-- ){
+              document.getElementsByClassName("active")[j].setAttribute("class", "hint");
+          }
+      }
+      
+      if (w.length > 0){
+          for(j = w.length-1; j > -1; j-- ){
+              document.getElementsByClassName("predict")[j].setAttribute("class", "hint");
+          }
+      } 
+  
+      all_moves_and_eat(classes, id, "active")
+      
+          
+      }
+      
