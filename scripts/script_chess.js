@@ -379,10 +379,10 @@ for(i=0; i<8; i++){
 
 }, 10)
 var joueurs = 0
-// window.onclick = function(e) {
-window.addEventListener("click", (event) => {
-    console.log(event);
-    array1 = event.path;
+window.onfocus = function(e) {
+//window.addEventListener("click", (event) => {
+    console.log(e);
+    array1 = e.path;
     if(array1[0].classList[0] == "hint"){
         array1.shift();
     }
@@ -394,7 +394,7 @@ window.addEventListener("click", (event) => {
     }
     
     
-});
+};
 
 function click(classes, id){
     eat_or_move = false
