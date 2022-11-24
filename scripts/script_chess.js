@@ -381,8 +381,8 @@ for(i=0; i<8; i++){
 var joueurs = 0
 window.onclick = function(e) {
 //window.addEventListener("click", (event) => {
-    console.log(e.composedPath);
-    array1 = e.composedPath;
+    console.log(e.composedPath());
+    array1 = e.composedPath();
     if(array1[0].classList[0] == "hint"){
         array1.shift();
     }
