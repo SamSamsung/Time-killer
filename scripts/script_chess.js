@@ -379,10 +379,10 @@ for(i=0; i<8; i++){
 
 }, 10)
 var joueurs = 0
-window.onfocus = function(e) {
+window.onclick = function(e) {
 //window.addEventListener("click", (event) => {
-    console.log(e);
-    array1 = e.path;
+    console.log(composedPath);
+    array1 = composedPath;
     if(array1[0].classList[0] == "hint"){
         array1.shift();
     }
