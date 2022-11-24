@@ -69,8 +69,8 @@
 }
 
 .hint{
-    height: 2.5vw;
-    width: 2.5vw;
+    height: 1.5vw;
+    width: 1.5vw;
     border-radius: 50%;
     border: solid transparent 5px;
     display: inline-block;
