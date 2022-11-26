@@ -3,8 +3,8 @@
     position: absolute;
     top: 7.5%;
     left: 7.5%;
-    height: 85%;
-    width: 85%;
+    height: 45vw;
+    width: 85vw;
 }
 
 .titre{
@@ -33,7 +33,7 @@
 }
 
 .tt_cartes{
-    height: 51vw;
+    height: 90%;
     width: 100%;
     background-color: red;
     position: absolute;
@@ -45,7 +45,7 @@
     background-size: 100% 100%;
     background-color: gray;
     border-radius: 20px;
-    margin-top: 4%;
+    margin-top: 3%;
     margin-left: 4%;
     height: 25%;
     width: 15%;
