@@ -1,10 +1,14 @@
+body {
+    height: 51vw;
+
+}
 .container{
     background-color: blue;
     position: absolute;
     top: 7.5%;
     left: 7.5%;
-    height: 45vw;
-    width: 85vw;
+    height: 85%;
+    width: 87%;
 }
 
 .titre{
