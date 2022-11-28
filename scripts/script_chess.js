@@ -229,7 +229,7 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
 
             } if(0 <= id - cpt_h && (Math.floor((id-cpt_h)/ 8) == Math.floor(id/8)-(cpt_h/8)) && bool_eat(-cpt_h, id)){
                 if(other_eat=="predict"){
-                   supp_move_predict(id, -cpt_h, 8)
+                   supp_move_predict(id, -cpt_h, 8, classes, other_eat)
                 }else {
                 
                    document.getElementById(id-cpt_h).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
@@ -267,7 +267,7 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
 
 
 
-function supp_move_predict(id, cpt, nb){
+function supp_move_predict(id, cpt, nb, classes, other_eat){
       if(document.getElementById(id+cpt).classList[3] != "white_king" || document.getElementById(id+cpt).classList[3] != "black_king"){
           document.getElementById(id+cpt).querySelector("span").classList.remove("predict")
           cpt -= nb
