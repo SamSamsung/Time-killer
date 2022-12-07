@@ -30,13 +30,16 @@ function shuffle(array) {
 images = shuffle(images)
 console.log(images)
 
-var cl = document.getElementById("load_images")
-for(i=1; i<15; i++){
-    img = document.createElement("img")
-    img.className = "load_image"
-    img.src = "./images/${images[i-1]}.jpg"
-    cl.appendChild(img)
+setTimeout(function() {
+    cl = document.getElementById("load_images")
+    for(i=1; i<15; i++){
+        img = document.createElement("img")
+        img.className = "load_image"
+        img.src = "./images/${images[i-1]}.jpg"
+        cl.appendChild(img)
 }
+},10)
+
 
 
 
