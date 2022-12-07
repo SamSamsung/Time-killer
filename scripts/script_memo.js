@@ -26,6 +26,11 @@ function shuffle(array) {
     return array;
 }
 
+cl = document.getElementById("load_images")
+for(i=1; i<15; i++){
+    console.log(i)
+}
+
 images = shuffle(images)
 console.log(images)
 
