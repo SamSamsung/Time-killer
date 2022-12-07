@@ -30,7 +30,7 @@ function shuffle(array) {
 images = shuffle(images)
 console.log(images)
 
-cl = document.getElementById("load_images")
+var cl = document.getElementById("load_images")
 for(i=1; i<15; i++){
     img = document.createElement("img")
     img.className = "load_image"
