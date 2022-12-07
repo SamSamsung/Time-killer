@@ -26,14 +26,17 @@ function shuffle(array) {
     return array;
 }
 
-cl = document.getElementById("load_images")
-for(i=1; i<15; i++){
-    console.log(i)
-}
 
 images = shuffle(images)
 console.log(images)
 
+cl = document.getElementById("load_images")
+for(i=1; i<15; i++){
+    img = document.createElement("img")
+    img.className = "load_image"
+    img.src = "./images/${images[i-1]}.jpg"
+    cl.appendChild(img)
+}
 
 
 
