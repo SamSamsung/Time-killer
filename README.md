@@ -3,7 +3,7 @@
 ## ___Information on the code___
 
 - Author : ___Samuel___
-- Website : ___https://jeux-societes.onrender.com___
+- Website : ___https://time-killer.onrender.com___
 - Context : 
 
 >This website allows you to play alone or/and with friends. It has (for now) 5 minigames :
