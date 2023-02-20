@@ -1,5 +1,9 @@
 /* Ce qu'il reste à faire:
-    - Gérer le cas des pièces ne pouvant qu'aider le roi lors de l'échec (presque fini -> compliqué)
+    - Gérer le cas des pièces ne pouvant qu'aider le roi lors de l'échec (presque fini -> très compliqué)
+       Cas spécifiques :
+       - Tours skip à des moments (des pièces ne sont pas joués mais le tour change)
+       - Protéger la case du roi ne marche qu'une seule fois
+       
     - Gérer le cas du clouage (très compliqué)
     - Gérer le cas de l'échec et mat (compliqué)
     - Gérer le cas de la conversion du pion en piece du choix du joueur (simple)
