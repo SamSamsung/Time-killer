@@ -227,53 +227,44 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                 cpt_h = cpt_h + 8;
                 
 
-            } if(0 <= id - cpt_h && (Math.floor((id-cpt_h)/ 8) == Math.floor(id/8)-(cpt_h/8)) && bool_eat(-cpt_h, id)){
-                if(other_eat=="predict"){
-                   supp_move_predict(id, -cpt_h, -8, classes, other_eat)
-                }else {
-                
-                   document.getElementById(id-cpt_h).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-                }
-                
+            } if(other_eat=="predict"){
+                supp_move_predict(id, -cpt_h, -8, classes, other_eat)
+            } else if(0 <= id - cpt_h && (Math.floor((id-cpt_h)/ 8) == Math.floor(id/8)-(cpt_h/8)) && bool_eat(-cpt_h, id)) {
+                document.getElementById(id-cpt_h).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+            }    
             }
 
             cpt_g = 1
             while(0 <= id-cpt_g && document.getElementById(id-cpt_g).classList.length == 2 && (Math.floor((id-cpt_g)/ 8) == Math.floor(id/8)) && bool_play_when_chess(-cpt_g, id)){
                 document.getElementById(id-cpt_g).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_g = cpt_g + 1;
-            } if(0 <= id - cpt_g && (Math.floor((id-cpt_g)/ 8) == Math.floor(id/8)) && bool_eat(-cpt_g, id)){
-                if(other_eat=="predict"){
-                   supp_move_predict(id, -cpt_g, -1, classes, other_eat)
-                }else {
-                
-                   document.getElementById(id-cpt_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-                }
-                
+            }if(other_eat=="predict"){
+                supp_move_predict(id, -cpt_g, -1, classes, other_eat)
+            } else if(0<= id - cpt_g && (Math.floor((id-cpt_g)/ 8) == Math.floor(id/8)) && bool_eat(-cpt_g, id)) {
+                document.getElementById(id-cpt_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+            }                
             }
 
             cpt_d = 1
             while(id + cpt_d <= 63 && document.getElementById(id+cpt_d).classList.length == 2 && (Math.floor((id+cpt_d)/ 8) == Math.floor(id/8)) && bool_play_when_chess(cpt_d, id)){
                 document.getElementById(id+cpt_d).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_d = cpt_d + 1;
-            } if(id + cpt_d <= 63 && (Math.floor((id+cpt_d)/ 8) == Math.floor(id/8)) && bool_eat(cpt_d, id)){
-                if(other_eat=="predict"){
-                   supp_move_predict(id, cpt_d, 1, classes, other_eat)
-                }else {
-                   document.getElementById(id+cpt_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-                }
+            } if(other_eat=="predict"){
+                supp_move_predict(id, cpt_d, 1, classes, other_eat)
+            } else if(id + cpt_d <= 63 && (Math.floor((id+cpt_d)/ 8) == Math.floor(id/8)) && bool_eat(cpt_d, id)) {
+                document.getElementById(id+cpt_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+            } 
             }
 
             cpt_b  = 8
             while(id + cpt_b <= 63 && document.getElementById(id+cpt_b).classList.length == 2 && (Math.floor((id+cpt_b)/ 8) == Math.floor(id/8)+(cpt_b/8)) && bool_play_when_chess(cpt_b, id)){
                 document.getElementById(id+cpt_b).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_b = cpt_b + 8;
-            } if(id + cpt_b <= 63 && (Math.floor((id+cpt_b)/ 8) == Math.floor(id/8)+(cpt_b/8)) && bool_eat(cpt_b, id)){
-                if(other_eat=="predict"){
-                   supp_move_predict(id, cpt_b, 8, classes, other_eat)
-                }else {
-                   document.getElementById(id+cpt_b).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-                }
-                
+            } if(other_eat=="predict"){
+                supp_move_predict(id, cpt_b, 8, classes, other_eat)
+            } else if(id + cpt_b <= 63 && (Math.floor((id+cpt_b)/ 8) == Math.floor(id/8)+(cpt_b/8)) && bool_eat(cpt_b, id)) {
+                document.getElementById(id+cpt_b).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+            }   
             }
         }
 }
@@ -284,7 +275,9 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
 
 function supp_move_predict(id, cpt, nb, classes, other_eat){
       if(document.getElementById(id+cpt).classList[3] != "white_king" && document.getElementById(id+cpt).classList[3] != "black_king"){
-          document.getElementById(id+cpt).querySelector("span").classList.remove("predict")
+          if(0<= id + cpt <= 63 && (Math.floor((id+cpt)/ 8) == Math.floor(id/8))){
+            document.getElementById(id+cpt).querySelector("span").classList.remove("predict")
+          }
           console.log(cpt)
           cpt -= nb
           console.log(cpt)
@@ -293,7 +286,7 @@ function supp_move_predict(id, cpt, nb, classes, other_eat){
                   document.getElementById(id+cpt).querySelector("span").classList.remove("predict_move")
                   cpt -= nb
           }
-      }else{
+      }else if(0<= id + cpt <= 63 && (Math.floor((id+cpt)/ 8) == Math.floor(id/8)) && bool_eat(cpt, id)){
         document.getElementById(id+cpt).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
       }
 
