@@ -295,7 +295,7 @@ function supp_move_predict_out(id, cpt, nb, classes, other_eat){
           console.log(cpt)
           document.getElementById(id+cpt).querySelector("span").classList.remove("predict_move")
           cpt -= nb
-    
+    }
 }
 
 function supp_move_predict(id, cpt, nb, classes, other_eat){
