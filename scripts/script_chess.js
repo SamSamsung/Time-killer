@@ -267,8 +267,7 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
             }   
 }
 }
-
-
+}
 
 
 function supp_move_predict(id, cpt, nb, classes, other_eat){
