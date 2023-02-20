@@ -189,32 +189,60 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                 
             }
             if((id-cpt_h_d >= 0) && (Math.floor((id-cpt_h_d)/ 8) == Math.floor(id/8)-(cpt_h_d/7)) && bool_eat(-cpt_h_d, id)){
-                document.getElementById(id-cpt_h_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-
+                if(other_eat=="predict"){
+                   supp_move_predict(id, -cpt_h_d, -7, classes, other_eat)
+                }else {
+                   document.getElementById(id-cpt_h_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
+                
+            } else{
+                supp_move_predict_out(id, -cpt_h_d, -7, classes, other_eat)
             }
+            
             cpt_h_g = 9
             while(0 <= id-cpt_h_g && document.getElementById(id-cpt_h_g).classList.length == 2 && (Math.floor((id-cpt_h_g)/ 8) == Math.floor(id/8)-(cpt_h_g/9)) && bool_play_when_chess(-cpt_h_g, id)){
                 document.getElementById(id-cpt_h_g).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_h_g = cpt_h_g + 9;
             } if((id-cpt_h_g >= 0) && (Math.floor((id-cpt_h_g)/ 8) == Math.floor(id/8)-(cpt_h_g/9)) && bool_eat(-cpt_h_g, id)){
-                document.getElementById(id-cpt_h_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-
+                if(other_eat=="predict"){
+                   supp_move_predict(id, -cpt_h_g, -9, classes, other_eat)
+                }else {
+                   document.getElementById(id-cpt_h_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
+                
+            } else{
+                supp_move_predict_out(id, -cpt_h_g, -9, classes, other_eat)
             }
+            
             cpt_b_d = 9
             while(id + cpt_b_d <= 63 && document.getElementById(id+cpt_b_d).classList.length == 2 && (Math.floor((id+cpt_b_d)/ 8) == Math.floor(id/8)+(cpt_b_d/9)) && bool_play_when_chess(cpt_b_d, id)){
                 document.getElementById(id+cpt_b_d).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_b_d = cpt_b_d + 9;
             } if((id+cpt_b_d <= 63) && (Math.floor((id+cpt_b_d)/ 8) == Math.floor(id/8)+(cpt_b_d/9)) && bool_eat(cpt_b_d, id)){
-                document.getElementById(id+cpt_b_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-
+                if(other_eat=="predict"){
+                   supp_move_predict(id, cpt_b_d, 9, classes, other_eat)
+                }else {
+                   document.getElementById(id+cpt_b_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
+                
+            } else{
+                supp_move_predict_out(id, cpt_b_d, 9, classes, other_eat)
             }
+                
             cpt_b_g  = 7
             while(id + cpt_b_g <= 63 && document.getElementById(id+cpt_b_g).classList.length == 2 && (Math.floor((id+cpt_b_g)/ 8) == Math.floor(id/8)+(cpt_b_g/7)) && bool_play_when_chess(cpt_b_g, id)){
                 document.getElementById(id+cpt_b_g).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_b_g = cpt_b_g + 7;
             }if((id+cpt_b_g <= 63) && (Math.floor((id+cpt_b_g)/ 8) == Math.floor(id/8)+(cpt_b_g/7)) && bool_eat(cpt_b_g, id)){
-                document.getElementById(id+cpt_b_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
-
+                if(other_eat=="predict"){
+                   supp_move_predict(id, cpt_b_g, 7, classes, other_eat)
+                }else {
+                
+                   document.getElementById(id+cpt_b_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
+                
+            } else{
+                supp_move_predict_out(id, cpt_b_g, 7, classes, other_eat)
             }
 
 
