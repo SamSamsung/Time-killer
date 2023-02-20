@@ -265,7 +265,6 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
             } else if(id + cpt_b <= 63 && (Math.floor((id+cpt_b)/ 8) == Math.floor(id/8)+(cpt_b/8)) && bool_eat(cpt_b, id)) {
                 document.getElementById(id+cpt_b).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
             }   
-            }
         }
 }
 }
