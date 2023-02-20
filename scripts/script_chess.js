@@ -235,6 +235,8 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                    document.getElementById(id-cpt_h).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
                 }
                 
+            } else{
+                supp_move_predict_out(id, -cpt_h, -8, classes, other_eat)
             }
 
             cpt_g = 1
@@ -249,6 +251,8 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                    document.getElementById(id-cpt_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
                 }
                 
+            } else{
+                supp_move_predict_out(id, -cpt_g, -1, classes, other_eat)
             }
 
             cpt_d = 1
@@ -261,6 +265,8 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                 }else {
                    document.getElementById(id+cpt_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
                 }
+            } else{
+                supp_move_predict_out(id, cpt_d, 1, classes, other_eat)
             }
 
             cpt_b  = 8
@@ -274,11 +280,23 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                    document.getElementById(id+cpt_b).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
                 }
                 
+            } else{
+                supp_move_predict_out(id, cpt_b, 8, classes, other_eat)
             }
+            
         }
 }
 }
 
+
+function supp_move_predict_out(id, cpt, nb, classes, other_eat){
+    cpt -= nb
+    while(cpt != 0){
+          console.log(cpt)
+          document.getElementById(id+cpt).querySelector("span").classList.remove("predict_move")
+          cpt -= nb
+    
+}
 
 function supp_move_predict(id, cpt, nb, classes, other_eat){
       if(document.getElementById(id+cpt).classList[3] != "white_king" && document.getElementById(id+cpt).classList[3] != "black_king"){
