@@ -242,7 +242,13 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                 document.getElementById(id-cpt_g).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_g = cpt_g + 1;
             } if(0 <= id - cpt_g && (Math.floor((id-cpt_g)/ 8) == Math.floor(id/8)) && bool_eat(-cpt_g, id)){
-                document.getElementById(id-cpt_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                if(other_eat=="predict"){
+                   supp_move_predict(id, -cpt_g, -1, classes, other_eat)
+                }else {
+                
+                   document.getElementById(id-cpt_g).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
+                
             }
 
             cpt_d = 1
@@ -250,7 +256,11 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                 document.getElementById(id+cpt_d).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_d = cpt_d + 1;
             } if(id + cpt_d <= 63 && (Math.floor((id+cpt_d)/ 8) == Math.floor(id/8)) && bool_eat(cpt_d, id)){
-                document.getElementById(id+cpt_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                if(other_eat=="predict"){
+                   supp_move_predict(id, cpt_d, 1, classes, other_eat)
+                }else {
+                   document.getElementById(id+cpt_d).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
             }
 
             cpt_b  = 8
@@ -258,7 +268,12 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
                 document.getElementById(id+cpt_b).querySelector("span").classList.add(predict_move, classes[2],classes[3], id)
                 cpt_b = cpt_b + 8;
             } if(id + cpt_b <= 63 && (Math.floor((id+cpt_b)/ 8) == Math.floor(id/8)+(cpt_b/8)) && bool_eat(cpt_b, id)){
-                document.getElementById(id+cpt_b).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                if(other_eat=="predict"){
+                   supp_move_predict(id, cpt_b, 8, classes, other_eat)
+                }else {
+                   document.getElementById(id+cpt_b).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
+                }
+                
             }
         }
 }
