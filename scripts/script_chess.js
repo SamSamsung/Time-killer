@@ -270,8 +270,11 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
 function supp_move_predict(id, cpt, nb, classes, other_eat){
       if(document.getElementById(id+cpt).classList[3] != "white_king" || document.getElementById(id+cpt).classList[3] != "black_king"){
           document.getElementById(id+cpt).querySelector("span").classList.remove("predict")
+          console.log(cpt)
           cpt -= nb
+          console.log(cpt)
           while(cpt != nb){
+                  console.log(cpt)
                   document.getElementById(id+cpt).querySelector("span").classList.remove("predict_move")
                   cpt -= nb
           }
