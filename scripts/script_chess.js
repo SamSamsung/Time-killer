@@ -273,7 +273,7 @@ function supp_move_predict(id, cpt, nb, classes, other_eat){
           console.log(cpt)
           cpt -= nb
           console.log(cpt)
-          while(cpt != nb){
+          while(cpt != 0){
                   console.log(cpt)
                   document.getElementById(id+cpt).querySelector("span").classList.remove("predict_move")
                   cpt -= nb
