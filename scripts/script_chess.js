@@ -282,9 +282,8 @@ function all_moves_and_eat(classes, id, other_eat, predict_move="show"){
 
 function supp_move_predict(id, cpt, nb, classes, other_eat){
       if(document.getElementById(id+cpt).classList[3] != "white_king" && document.getElementById(id+cpt).classList[3] != "black_king"){
-          if(0<= id + cpt <= 63 && (Math.floor((id+cpt)/ 8) == Math.floor(id/8))){
-            document.getElementById(id+cpt).querySelector("span").classList.remove("predict")
-          }
+          
+          document.getElementById(id+cpt).querySelector("span").classList.remove("predict")
           console.log(cpt)
           cpt -= nb
           console.log(cpt)
@@ -293,7 +292,7 @@ function supp_move_predict(id, cpt, nb, classes, other_eat){
                   document.getElementById(id+cpt).querySelector("span").classList.remove("predict_move")
                   cpt -= nb
           }
-      }else if(0<= id + cpt <= 63 && (Math.floor((id+cpt)/ 8) == Math.floor(id/8)) && bool_eat(cpt, id)){
+      }else {
         document.getElementById(id+cpt).querySelector("span").classList.add(other_eat, classes[2],classes[3], id)
       }
 
