@@ -1,0 +1,93 @@
+h1 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.container {
+    position: absolute;
+    left: 30%;
+    height: 80vh;
+    width: 70vh;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.board {
+    float: left;
+    width: 65%;
+    height: 100%;
+    border-right: 2px solid gray;
+}
+
+.inf {
+    float: right;
+    width: 34%;
+    height: 100%;
+    border-left: 2px solid gray;
+    margin-left: -1px;
+
+}
+
+.nxtmove{
+    width: 90%;
+    height: 25%;
+    margin-left: 5%;
+    border: 1px solid black;
+}
+
+.playboard {
+    height: 90%;
+    width: 90%;
+    margin-top: 8%;
+    margin-left: 5%;
+    border: 2px solid black
+}
+
+.cell{
+    width: 10%;
+    height: 5.58%;
+    float: left;
+}
+
+.cell_inf{
+    width: 25%;
+    height: 25%;
+    float: left;
+}
+/*
+10 en largeur
+18 en longueur
+
+*/
+
+.brick {
+    border: 1px solid;
+    box-sizing: border-box;
+    background-color: blue;
+}
+
+.O{
+    background-color: red;
+}
+
+.J{
+    background-color: plum;
+}
+
+.Z{
+    background-color: lime;
+}
+
+.S {
+    background-color: cyan;
+}
+
+.T{
+    background-color: yellow;
+}
+
+.I {
+    background-color: orangered;
+}
