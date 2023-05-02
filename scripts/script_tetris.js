@@ -5,7 +5,8 @@ var forms = ["L", "J", "O", "Z", "S", "T", "I"]
 var time = 400;
 var form = forms[random(forms.length)];
 
-var current_form = form;
+var current_form = forms[random(forms.length)];
+
 var current_state = 0;
 
 var score_lines = 0;
@@ -292,7 +293,7 @@ setTimeout(function(){
     init()
     init_next()
     show(array)
-    construct(array, 1, 4, forms[random(forms.length)])
+    construct(array, 1, 4, current_form)
     next_move(next, form) 
     /*
     construct(array, 0, 0, "O")
