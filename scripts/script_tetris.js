@@ -305,6 +305,18 @@ setTimeout(function(){
     show(array)
     speed(array)
     
+    document.getElementById("arrow-left").onclick = function() {
+        check_left(array)
+        show(array)
+    };
+    document.getElementById("arrow-right").onclick = function() {
+        check_right(array)
+        show(array)
+    };
+    document.getElementById("arrow-up").onclick = function() {
+        turn(array, current_form) 
+        show(array)
+    };
     
 }, 100);
 
