@@ -91,3 +91,10 @@ h1 {
 .I {
     background-color: orangered;
 }
+
+button{
+    width: 30%;
+    height: 10%;
+    background-color: aquamarine;
+    margin-top: 2%;
+}

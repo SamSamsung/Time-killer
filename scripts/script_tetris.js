@@ -1,3 +1,14 @@
+/* Travail réstant :
+- Corriger le bug de la brick qui ne veut pas descendre
+- Emepêcher de tourner sous certaines conditions
+- Centrer les bricks dans le next move
+- Rajouter le son
+- Gérer le score
+- Gérer le cas des niveaux et de l'accélération
+- Gérer le pause
+- Gérer les boutons
+*/
+
 var array = []
 var next = []
 var colors = ["green", "orange", "red", "cyan", "yellow", "blue", "purple"]
@@ -305,17 +316,23 @@ setTimeout(function(){
     show(array)
     speed(array)
     
-    document.getElementById("arrow-left").onclick = function() {
+    document.getElementById("arrow-left").onmousedown = function() {
         check_left(array)
         show(array)
     };
-    document.getElementById("arrow-right").onclick = function() {
+    document.getElementById("arrow-right").onmousedown = function() {
         check_right(array)
         show(array)
     };
-    document.getElementById("arrow-up").onclick = function() {
+    document.getElementById("arrow-up").onmousedown = function() {
         turn(array, current_form) 
         show(array)
+    };
+    document.getElementById("arrow-down").onmousedown = function() {
+        time = 40
+    };
+    document.getElementById("arrow-down").onmouseup = function() {
+        time = 400
     };
     
 }, 100);
