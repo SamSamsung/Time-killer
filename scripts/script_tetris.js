@@ -530,5 +530,146 @@ function turn(L, current_form){
             current_state = 0
         }
 
+    }else if(current_form == "Z"){
+        if(current_state == 0){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 4 && L[i][j+1] == 4 && L[i+1][j+1] == 4 && L[i+1][j+2] == 4){
+                        L[i][j+2] = 4
+                        L[i-1][j+2] = 4
+
+                        L[i][j] = 0
+                        L[i+1][j+2] = 0
+                    }
+                }
+            }
+            current_state = 1
+        } else if(current_state == 1){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 4 && L[i+1][j] == 4 && L[i+1][j-1] == 4 && L[i+2][j-1] == 4){
+                        L[i+1][j-2] = 4
+                        L[i+2][j] = 4
+
+                        L[i][j] = 0
+                        L[i+1][j] = 0
+                    }
+                    
+                }
+            }
+            current_state = 0
+        } 
+    }else if(current_form == "S"){
+        if(current_state == 0){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j+1] == 5 && L[i][j+2] == 5 && L[i+1][j] == 5 && L[i+1][j+1] == 5){
+                        L[i+1][j+2] = 5
+                        L[i-1][j+1] = 5
+
+                        L[i+1][j] = 0
+                        L[i+1][j+1] = 0
+                    }
+                }
+            }
+            current_state = 1
+        } else if(current_state == 1){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 5 && L[i+1][j] == 5 && L[i+1][j+1] == 5 && L[i+2][j+1] == 5){
+                        L[i+2][j] = 5
+                        L[i+2][j-1] = 5
+
+                        L[i][j] = 0
+                        L[i+2][j+1] = 0
+                    }
+                    
+                }
+            }
+            current_state = 0
+        } 
+    } else if(current_form == "T"){
+        if(current_state == 0){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 6 && L[i][j+1] == 6 && L[i][j+2] == 6 && L[i+1][j+1] == 6){
+                        L[i-1][j+1] = 6
+
+                        L[i][j+2] = 0
+                    }
+                }
+            }
+            current_state = 1
+        } else if(current_state == 1){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 6 && L[i-1][j+1] == 6 && L[i][j+1] == 6 && L[i+1][j+1] == 6){
+                        L[i][j+2] = 6
+                        
+                        L[i+1][j+1] = 0
+                    }
+                    
+                }
+            }
+            current_state = 2
+        } else if(current_state == 2){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 6 && L[i][j+1] == 6 && L[i][j+2] == 6 && L[i-1][j+1] == 6){
+                        L[i+1][j+1] = 6
+                       
+                        L[i][j] = 0
+                    }
+                    
+                }
+            }
+            current_state = 3
+        } else if(current_state == 3){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 6 && L[i-1][j] == 6 && L[i+1][j] == 6 && L[i][j+1] == 6){
+                        L[i][j-1] = 6
+                        
+                        L[i-1][j] = 0
+                    }
+                    
+                }
+            }
+            current_state = 0
+        }
+
+    }else if(current_form == "I"){
+        if(current_state == 0){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 7 && L[i][j+1] == 7 && L[i][j+2] == 7 && L[i][j+3] == 7){
+                        L[i+1][j+1] = 7
+                        L[i+2][j+1] = 7
+                        L[i-1][j+1] = 7
+
+                        L[i][j] = 0
+                        L[i][j+2] = 0
+                        L[i][j+3] = 0
+                    }
+                }
+            }
+            current_state = 1
+        } else if(current_state == 1){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 7 && L[i+1][j] == 7 && L[i+2][j] == 7 && L[i+3][j] == 7){
+                        L[i+1][j-1] = 7
+                        L[i+1][j+1] = 7
+                        L[i+1][j+2] = 7
+
+                        L[i][j] = 0
+                        L[i+2][j] = 0
+                        L[i+3][j] = 0
+                    }
+                    
+                }
+            }
+            current_state = 0
+        } 
     }
 }
