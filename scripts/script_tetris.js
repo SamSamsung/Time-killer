@@ -5,6 +5,9 @@ var forms = ["L", "J", "O", "Z", "S", "T", "I"]
 var time = 400;
 var form = forms[random(forms.length)];
 
+var current_form = form;
+var current_state = 0;
+
 var score_lines = 0;
 
 var DIC = {1 : "L", 2 : "J", 3 : "O", 4 : "Z", 5 : "S", 6 : "T", 7 : "I"}
@@ -74,12 +77,17 @@ function init_next(){
 
 
 
+
+
+
+
 function random(max) {
     return Math.floor(Math.random() * max);
 }
 
 
-function init(){   
+function init(){  
+    /* Initialise the board */ 
     parent = document.getElementById("playboard")
     let cpt = 0
     for(i=0; i<18; i++){
@@ -96,13 +104,13 @@ function init(){
 }
 
 
-
-
 function transform_id(i, j){
+    /* Transform the coordinates into the id */
     return i*10+ j
 }
 
 function construct(L, i, j, form){
+    /* Construct original forms */
     if(form == "L"){
         L[i][j] = 1
         L[i][j+1] = 1
@@ -180,11 +188,13 @@ function check_end(L){
             }
         }
     } if(chnge == true){
-        console.log(array)
-        change(L)
-        construct(L, 0, 4, form)
-        form = forms[random(forms.length)]
-        next_move(next, form)
+        console.log(array);
+        change(L);
+        construct(L, 0, 4, form);
+        current_state = 0;
+        current_form = form;
+        form = forms[random(forms.length)];
+        next_move(next, form);
     }
 }
 
@@ -306,14 +316,15 @@ setTimeout(function(){
 document.addEventListener("keydown", (e) => {
             e = e || window.event;
             if (e.key === "ArrowUp") {
-              console.log("up arrow pressed");
+              turn(array, current_form);
             } else if (e.key === "ArrowDown") {
-              time = 50;
+              time = 40;
             } else if (e.key === "ArrowLeft") {
               check_left(array);
             } else if (e.key === "ArrowRight") {
               check_right(array);
             }
+            show(array)
         });
 
     
@@ -325,7 +336,13 @@ document.addEventListener("keyup", (e) => {
 });
 
 
+
+
+
+
+
 function check_right(L){
+    /* Checks if the brick is allowed to move to the right and if so calls the fonction right() */
     can_right = true
     for(i=0; i<18; i++){
         for(j=9; j>=0;j--){
@@ -340,6 +357,7 @@ function check_right(L){
 }
 
 function check_left(L){
+    /* Checks if the brick is allowed to move to the left and if so calls the fonction left() */
     can_left = true
     for(i=0; i<18; i++){
         for(j=0; j<10;j++){
@@ -353,6 +371,7 @@ function check_left(L){
 }
 
 function right(L){
+    /* Move brick to the right */
     for(i=0; i<18; i++){
         for(j=9; j>=0;j--){
             if(0 < L[i][j] && L[i][j] < 8 && j != 9 && L[i][j+1] == 0){
@@ -364,6 +383,7 @@ function right(L){
 }
 
 function left(L){
+    /* Move brick to the left */
     for(i=0; i<18; i++){
         for(j=0; j<10;j++){
             if(0 < L[i][j] && L[i][j] < 8 && j != 0 && L[i][j-1] == 0){
@@ -371,5 +391,144 @@ function left(L){
                 L[i][j] = 0
             }
         }
+    }
+}
+
+
+
+
+function turn(L, current_form){
+    /* Fonction to make forms turn */
+    if(current_form == "L"){
+        if(current_state == 0){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 1 && L[i][j+1] == 1 && L[i][j+2] == 1 && L[i+1][j] == 1){
+                        L[i-1][j] = 1
+                        L[i-1][j+1] = 1
+                        L[i+1][j+1] = 1
+
+                        L[i][j] = 0
+                        L[i][j+2] = 0
+                        L[i+1][j] = 0
+                    }
+                }
+            }
+            current_state = 1
+        } else if(current_state == 1){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 1 && L[i][j+1] == 1 && L[i+1][j+1] == 1 && L[i+2][j+1] == 1){
+                        L[i][j+2] = 1
+                        L[i+1][j+2] = 1
+                        L[i+1][j] = 1
+
+                        L[i][j] = 0
+                        L[i][j+1] = 0
+                        L[i+2][j+1] = 0
+                    }
+                    
+                }
+            }
+            current_state = 2
+        } else if(current_state == 2){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 1 && L[i+1][j] == 1 && L[i+1][j-1] == 1 && L[i+1][j-2] == 1){
+                        L[i][j-1] = 1
+                        L[i+2][j-1] = 1
+                        L[i+2][j] = 1
+
+                        L[i][j] = 0
+                        L[i+1][j] = 0
+                        L[i+1][j-2] = 0
+                    }
+                    
+                }
+            }
+            current_state = 3
+        } else if(current_state == 3){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 1 && L[i+1][j] == 1 && L[i+2][j] == 1 && L[i+2][j+1] == 1){
+                        L[i+2][j-1] = 1
+                        L[i+1][j-1] = 1
+                        L[i+1][j+1] = 1
+
+                        L[i][j] = 0
+                        L[i+2][j] = 0
+                        L[i+2][j+1] = 0
+                    }
+                    
+                }
+            }
+            current_state = 0
+        }
+    }else if(current_form == "J"){
+        if(current_state == 0){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 2 && L[i][j+1] == 2 && L[i][j+2] == 2 && L[i+1][j+2] == 2){
+                        L[i+1][j] = 2
+                        L[i+1][j+1] = 2
+                        L[i-1][j+1] = 2
+
+                        L[i][j] = 0
+                        L[i][j+2] = 0
+                        L[i+1][j+2] = 0
+                    }
+                }
+            }
+            current_state = 1
+        } else if(current_state == 1){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+2][j] == 2 && L[i+2][j-1] == 2){
+                        L[i][j-1] = 2
+                        L[i+1][j-1] = 2
+                        L[i+1][j+1] = 2
+
+                        L[i][j] = 0
+                        L[i+2][j] = 0
+                        L[i+2][j-1] = 0
+                    }
+                    
+                }
+            }
+            current_state = 2
+        } else if(current_state == 2){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+1][j+1] == 2 && L[i+1][j+2] == 2){
+                        L[i][j+1] = 2
+                        L[i][j+2] = 2
+                        L[i+2][j+1] = 2
+
+                        L[i][j] = 0
+                        L[i+1][j] = 0
+                        L[i+1][j+2] = 0
+                    }
+                    
+                }
+            }
+            current_state = 3
+        } else if(current_state == 3){
+            for(i=0; i<18; i++){
+                for(j=0; j<10;j++){
+                    if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+2][j] == 2 && L[i][j+1] == 2){
+                        L[i+1][j-1] = 2
+                        L[i+2][j+1] = 2
+                        L[i+1][j+1] = 2
+
+                        L[i][j] = 0
+                        L[i][j+1] = 0
+                        L[i+2][j] = 0
+                    }
+                    
+                }
+            }
+            current_state = 0
+        }
+
     }
 }
