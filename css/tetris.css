@@ -63,7 +63,10 @@ h1 {
 */
 
 .brick {
-    border: 1px solid;
+    outline: 2px solid;
+    border-style: outset;
+    border-radius: 3px;
+    border-width :3px;
     box-sizing: border-box;
     background-color: blue;
 }

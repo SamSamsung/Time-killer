@@ -1,19 +1,21 @@
 /* Travail réstant :
-- Corriger le bug de la brick qui ne veut pas descendre
-- Emepêcher de tourner sous certaines conditions
-- Centrer les bricks dans le next move
-- Rajouter le son
-- Gérer le score
-- Gérer le cas des niveaux et de l'accélération
-- Gérer le pause
-- Gérer les boutons
+ FAIT : - Corriger le bug de la brick qui ne veut pas descendre -> Très dur
+ FAIT : - Gérer le cas de la border male faite -> Chiant
+ FAIT : - Rendre le jeu un peu plus esthétique -> Simple
+- Emepêcher de tourner sous certaines conditions -> Simple
+- Centrer les bricks dans le next move -> Simple
+- Rajouter le son -> Très simple
+- Gérer le score -> Chiant, Bof, trop galère, grosse flemme pour l'instant
+FAIT : - Gérer le cas des niveaux et de l'accélération
+- Rajouter le pause -> Dur
+FAIT : - Gérer les boutons -> Gérer le hold
 */
 
 var array = []
 var next = []
 var colors = ["green", "orange", "red", "cyan", "yellow", "blue", "purple"]
 var forms = ["L", "J", "O", "Z", "S", "T", "I"]
-var time = 400;
+
 var form = forms[random(forms.length)];
 
 var current_form = forms[random(forms.length)];
@@ -21,6 +23,8 @@ var current_form = forms[random(forms.length)];
 var current_state = 0;
 
 var score_lines = 0;
+var level = 1;
+var time = 500 * (0.85 ** (level - 1));
 
 var DIC = {1 : "L", 2 : "J", 3 : "O", 4 : "Z", 5 : "S", 6 : "T", 7 : "I"}
 /*
@@ -246,7 +250,9 @@ function checks_win(L){
             lines.push(i);
         }
     }
-    remove_lines(L, lines);
+    if(lines.length > 0){
+        remove_lines(L, lines);
+    }
 }
 
 function remove_lines(L, lines){
@@ -254,10 +260,26 @@ function remove_lines(L, lines){
         console.log(i, lines)
         for(j=0; j<10;j++){
             L[i][j] = 0
-        }
+        }/*bring_down_line(L, i)*/
     }
     bring_down(L, lines)
+    
 }
+
+/*function bring_down_line(L, line){
+    for(i=line-1; i >=0; i--){
+        for(j=0; j<10; j++){
+            if(L[i][j] == 8){
+                el = document.getElementById(transform_id(i, j))
+                L[i+1][j] = 8
+                document.getElementById(transform_id(i+1, j)).classList = el.classList
+                L[i][j] = 0 
+                el.setAttribute("class", "cell");
+            }
+        }
+    }
+}
+*/
 
 function bring_down(L, lines){
     cpt = 0;
@@ -265,15 +287,21 @@ function bring_down(L, lines){
         for(i=lines[cpt]-1; i >=0; i--){
             for(j=0; j<10; j++){
                 if(L[i][j] == 8){
+                    el = document.getElementById(transform_id(i, j))
                     L[i+1][j] = 8
+                    document.getElementById(transform_id(i+1, j)).classList = el.classList
                     L[i][j] = 0 
+                    el.setAttribute("class", "cell");
                 }
             }
         }
         cpt++;
     }
     score_lines = score_lines + cpt
+    level = 1 + Math.floor(score_lines / 10);
     document.getElementById("lines").innerHTML = score_lines
+    document.getElementById("level").innerHTML = level
+    time = 500 * (0.85 ** (level - 1));
 }
 
 function sleep(ms) {
@@ -306,40 +334,89 @@ setTimeout(function(){
     show(array)
     construct(array, 1, 4, current_form)
     next_move(next, form) 
-    /*
-    construct(array, 0, 0, "O")
-    construct(array, 0, 2, "I")
-    construct(array, 0, 6, "I")
-    construct(array, 1, 2, "I")
-    construct(array, 1, 6, "I")
-    */
+    
     show(array)
     speed(array)
-    
-    document.getElementById("arrow-left").onmousedown = function() {
-        check_left(array)
-        show(array)
-    };
-    document.getElementById("arrow-right").onmousedown = function() {
-        check_right(array)
-        show(array)
-    };
-    document.getElementById("arrow-up").onmousedown = function() {
-        turn(array, current_form) 
-        show(array)
-    };
-    document.getElementById("arrow-down").onmousedown = function() {
-        time = 40
-    };
-    document.getElementById("arrow-down").onmouseup = function() {
-        time = 400
-    };
+    arrows()
     
 }, 100);
 
 
+function arrows(){
+    document.getElementById("arrow-left").onmousedown = function() {
+        repeat_left = setInterval(function(){
+            check_left(array)
+            show(array)
+            color("left");
+        }, 100)
+    };
+    document.getElementById("arrow-right").onmousedown = function() {
+        repeat_right = setInterval(function(){ 
+            check_right(array)
+            show(array)
+            color("right");
+        }, 100)
+    };
+    document.getElementById("arrow-up").onmousedown = function() {
+        repeat_up = setInterval(function(){ 
+            turn(array, current_form) 
+            show(array)
+            color("up");
+        }, 100)
+    };
+    document.getElementById("arrow-down").onmousedown = function() {
+        repeat_down = setInterval(function(){ 
+            time = 40
+            color("down");
+    }, 100)
+    };
+    
+    
+    document.getElementById("arrow-down").onmouseup = function() {
+        clearInterval(repeat_down)
+        time = 500 * (0.8 ** (level - 1))
+        return_color("down");
+    };
+    document.getElementById("arrow-left").onmouseup = function() {
+        clearInterval(repeat_left)
+        return_color("left");
+    };
+    document.getElementById("arrow-right").onmouseup = function() {
+        clearInterval(repeat_right)
+        return_color("right");
+    };
+    document.getElementById("arrow-up").onmouseup = function() {
+        clearInterval(repeat_up)
+        return_color("up");
+    };
+
+    document.getElementById("arrow-down").onmouseleave = function() {
+        clearInterval(repeat_down)
+        time = 500 * (0.8 ** (level - 1))
+        return_color("down");
+    };
+    document.getElementById("arrow-left").onmouseleave = function() {
+        clearInterval(repeat_left)
+        return_color("left");
+    };
+    document.getElementById("arrow-right").onmouseleave = function() {
+        clearInterval(repeat_right)
+        return_color("right");
+    };
+    document.getElementById("arrow-up").onmouseleave = function() {
+        clearInterval(repeat_up)
+        return_color("up");
+    };
+}
 
 
+function color(direction){
+    document.getElementById("arrow-" + direction).style.backgroundColor = "#00c180";
+}
+
+function return_color(direction){
+    document.getElementById("arrow-" + direction).style.backgroundColor = "aquamarine";
+}
 
 
 
@@ -347,12 +424,16 @@ document.addEventListener("keydown", (e) => {
             e = e || window.event;
             if (e.key === "ArrowUp") {
               turn(array, current_form);
+              color("up");
             } else if (e.key === "ArrowDown") {
               time = 40;
+              color("down");
             } else if (e.key === "ArrowLeft") {
               check_left(array);
+              color("left");
             } else if (e.key === "ArrowRight") {
               check_right(array);
+              color("right");
             }
             show(array)
         });
@@ -361,8 +442,15 @@ document.addEventListener("keydown", (e) => {
 document.addEventListener("keyup", (e) => {
     e = e || window.event;
     if (e.key === "ArrowDown") {
-        time = 400;
-    } 
+        time = 500 * (0.85 ** (level - 1));
+        return_color("down")
+    } else if (e.key === "ArrowUp") {
+        return_color("up");
+    } else if (e.key === "ArrowLeft") {
+        return_color("left");
+    } else if (e.key === "ArrowRight") {
+        return_color("right");
+    }
 });
 
 
