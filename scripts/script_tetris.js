@@ -2,6 +2,7 @@
  FAIT : - Corriger le bug de la brick qui ne veut pas descendre -> Très dur
  FAIT : - Gérer le cas de la border male faite -> Chiant
  FAIT : - Rendre le jeu un peu plus esthétique -> Simple
+- Rajouter un icone à la page
 - Emepêcher de tourner sous certaines conditions -> Simple
 - Centrer les bricks dans le next move -> Simple
 - Rajouter le son -> Très simple
