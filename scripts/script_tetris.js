@@ -2,15 +2,16 @@
  FAIT : - Corriger le bug de la brick qui ne veut pas descendre -> Très dur
  FAIT : - Gérer le cas de la border male faite -> Chiant
  FAIT : - Rendre le jeu un peu plus esthétique -> Simple
- - Gérer la défaite -> Très simple
-- Rajouter un icone à la page -> Très simple
-- Emepêcher de tourner sous certaines conditions -> Simple
+ FAIT : - Rajouter un icone à la page -> Très simple -> A pris 30 ans a cause des formats
+ FAIT : - Emepêcher de tourner sous certaines conditions -> Compliqué, pas vu le current_state
+ FAIT : - Rajouter le son -> Très simple -> Juste le rotate fail, va avec le fait d'empecher de tourner 
+ FAIT : - Gérer le cas des niveaux et de l'accélération
+ FAIT : - Gérer les boutons -> Gérer le hold
 - Centrer les bricks dans le next move -> Simple
-- Rajouter le son -> Très simple
+- Gérer la défaite -> Très simple
 - Gérer le score -> Chiant, Bof, trop galère, grosse flemme pour l'instant
-FAIT : - Gérer le cas des niveaux et de l'accélération
 - Rajouter le pause -> Dur
-FAIT : - Gérer les boutons -> Gérer le hold
+- Gérer la possibilité de jouer sur Ipad
 */
 
 var array = []
@@ -194,6 +195,7 @@ function change(L){
             }
         }
     }
+    new Audio("./../tetris_sounds/SFX_PieceTouchDown.ogg").play();
 }
 
 function check_end(L){
@@ -225,6 +227,7 @@ function move(L){
             }
         }
     }
+    new Audio("./../tetris_sounds/SFX_PieceFall.ogg").play();
 }
 
 function checks_lost(L){
@@ -300,10 +303,15 @@ function bring_down(L, lines){
         cpt++;
     }
     score_lines = score_lines + cpt
+    old_lvl = level
     level = 1 + Math.floor(score_lines / 10);
     document.getElementById("lines").innerHTML = score_lines
     document.getElementById("level").innerHTML = level
     time = 500 * (0.85 ** (level - 1));
+    if(old_lvl != level){
+        new Audio("./../tetris_sounds/next-level.mp3").play();
+    }
+    new Audio("./../tetris_sounds/SFX_SpecialLineClearSingle.ogg").play();
 }
 
 function sleep(ms) {
@@ -322,7 +330,8 @@ async function speed(array){
         checks_win(array)
         if(checks_lost(array) == true){
             play = false
-            alert("you have lost")
+            new Audio("./../tetris_sounds/game-over.mp3").play();
+            /*alert("you have lost")*/
         }
         show(array)
         
@@ -331,9 +340,11 @@ async function speed(array){
 
 /* Starting code */
 setTimeout(function(){
+    new Audio("./../tetris_sounds/SFX_GameStart.ogg").play();
     init()
     init_next()
     show(array)
+    current_form = "T"
     construct(array, 1, 4, current_form)
     next_move(next, form) 
     
@@ -473,6 +484,9 @@ function check_right(L){
         }
     }if(can_right == true){
         right(L)
+        new Audio("./../tetris_sounds/SFX_PieceMoveLR.ogg").play();
+    } else{
+        new Audio("./../tetris_sounds/SFX_PieceTouchLR.ogg").play();
     }
 }
 
@@ -487,6 +501,9 @@ function check_left(L){
         }
     }if(can_left == true){
         left(L)
+        new Audio("./../tetris_sounds/SFX_PieceMoveLR.ogg").play();
+    } else{
+        new Audio("./../tetris_sounds/SFX_PieceTouchLR.ogg").play();
     }
 }
 
@@ -524,130 +541,182 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i][j+1] == 1 && L[i][j+2] == 1 && L[i+1][j] == 1){
-                        L[i-1][j] = 1
-                        L[i-1][j+1] = 1
-                        L[i+1][j+1] = 1
+                        if(i != 0 && i != 17 && j != 9 && L[i-1][j] == 0 && L[i-1][j+1] == 0 && L[i+1][j+1] == 0){
+                            L[i-1][j] = 1
+                            L[i-1][j+1] = 1
+                            L[i+1][j+1] = 1
 
-                        L[i][j] = 0
-                        L[i][j+2] = 0
-                        L[i+1][j] = 0
-                    }
+                            L[i][j] = 0
+                            L[i][j+2] = 0
+                            L[i+1][j] = 0
+                            current_state = 1
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
+                }
                 }
             }
-            current_state = 1
+            
         } else if(current_state == 1){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i][j+1] == 1 && L[i+1][j+1] == 1 && L[i+2][j+1] == 1){
-                        L[i][j+2] = 1
-                        L[i+1][j+2] = 1
-                        L[i+1][j] = 1
+                        if(j < 8 && i != 17 && L[i][j+2] == 0 && L[i+1][j+2] == 0 && L[i+1][j] == 0) {
+                            L[i][j+2] = 1
+                            L[i+1][j+2] = 1
+                            L[i+1][j] = 1
 
-                        L[i][j] = 0
-                        L[i][j+1] = 0
-                        L[i+2][j+1] = 0
-                    }
+                            L[i][j] = 0
+                            L[i][j+1] = 0
+                            L[i+2][j+1] = 0
+                            current_state = 2
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
+                }
                     
                 }
             }
-            current_state = 2
+            
         } else if(current_state == 2){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i+1][j] == 1 && L[i+1][j-1] == 1 && L[i+1][j-2] == 1){
-                        L[i][j-1] = 1
-                        L[i+2][j-1] = 1
-                        L[i+2][j] = 1
+                        if(j != 0 && i < 16 && L[i][j-1] == 0 && L[i+2][j-1] == 0 && L[i+2][j] == 0){
+                            L[i][j-1] = 1
+                            L[i+2][j-1] = 1
+                            L[i+2][j] = 1
 
-                        L[i][j] = 0
-                        L[i+1][j] = 0
-                        L[i+1][j-2] = 0
+                            L[i][j] = 0
+                            L[i+1][j] = 0
+                            L[i+1][j-2] = 0
+                            current_state = 3
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else{
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 3
+            
         } else if(current_state == 3){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i+1][j] == 1 && L[i+2][j] == 1 && L[i+2][j+1] == 1){
-                        L[i+2][j-1] = 1
-                        L[i+1][j-1] = 1
-                        L[i+1][j+1] = 1
+                        console.log(j)
+                        if(i < 16 && j != 0 && j != 9 && L[i+2][j-1] == 0 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0){
+                            L[i+2][j-1] = 1
+                            L[i+1][j-1] = 1
+                            L[i+1][j+1] = 1
 
-                        L[i][j] = 0
-                        L[i+2][j] = 0
-                        L[i+2][j+1] = 0
-                    }
+                            L[i][j] = 0
+                            L[i+2][j] = 0
+                            L[i+2][j+1] = 0
+                            current_state = 0
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        }else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
+                }
                     
                 }
             }
-            current_state = 0
+            
         }
     }else if(current_form == "J"){
         if(current_state == 0){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i][j+1] == 2 && L[i][j+2] == 2 && L[i+1][j+2] == 2){
-                        L[i+1][j] = 2
-                        L[i+1][j+1] = 2
-                        L[i-1][j+1] = 2
+                        if(i != 17 && i != 0 && j != 9 && L[i+1][j] == 0 && L[i+1][j+1] == 0 && L[i-1][j+1] == 0){
+                            L[i+1][j] = 2
+                            L[i+1][j+1] = 2
+                            L[i-1][j+1] = 2
 
-                        L[i][j] = 0
-                        L[i][j+2] = 0
-                        L[i+1][j+2] = 0
+                            L[i][j] = 0
+                            L[i][j+2] = 0
+                            L[i+1][j+2] = 0
+                            current_state = 1
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                 }
             }
-            current_state = 1
+            
         } else if(current_state == 1){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+2][j] == 2 && L[i+2][j-1] == 2){
-                        L[i][j-1] = 2
-                        L[i+1][j-1] = 2
-                        L[i+1][j+1] = 2
+                        if(j != 0 && j != 9 && i != 17 && L[i][j-1] == 0 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0){
+                            L[i][j-1] = 2
+                            L[i+1][j-1] = 2
+                            L[i+1][j+1] = 2
 
-                        L[i][j] = 0
-                        L[i+2][j] = 0
-                        L[i+2][j-1] = 0
+                            L[i][j] = 0
+                            L[i+2][j] = 0
+                            L[i+2][j-1] = 0
+                            current_state = 2
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else{
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
+
                     }
                     
                 }
             }
-            current_state = 2
+            
         } else if(current_state == 2){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+1][j+1] == 2 && L[i+1][j+2] == 2){
-                        L[i][j+1] = 2
-                        L[i][j+2] = 2
-                        L[i+2][j+1] = 2
+                        if(j < 8 && i < 16 && L[i][j+1] == 0 && L[i][j+2] == 0 && L[i+2][j+1] == 0){
+                            L[i][j+1] = 2
+                            L[i][j+2] = 2
+                            L[i+2][j+1] = 2
 
-                        L[i][j] = 0
-                        L[i+1][j] = 0
-                        L[i+1][j+2] = 0
+                            L[i][j] = 0
+                            L[i+1][j] = 0
+                            L[i+1][j+2] = 0
+                            current_state = 3
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else{
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 3
+            
         } else if(current_state == 3){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+2][j] == 2 && L[i][j+1] == 2){
-                        L[i+1][j-1] = 2
-                        L[i+2][j+1] = 2
-                        L[i+1][j+1] = 2
+                        if(i < 16 && j != 9 && j != 0 && L[i+1][j-1] == 0 && L[i+2][j+1] == 0 && L[i+1][j+1] == 0){
+                            L[i+1][j-1] = 2
+                            L[i+2][j+1] = 2
+                            L[i+1][j+1] = 2
 
-                        L[i][j] = 0
-                        L[i][j+1] = 0
-                        L[i+2][j] = 0
+                            L[i][j] = 0
+                            L[i][j+1] = 0
+                            L[i+2][j] = 0
+
+                            current_state = 0
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                            
+                        } else{
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 0
+            
         }
 
     }else if(current_form == "Z"){
@@ -655,107 +724,163 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 4 && L[i][j+1] == 4 && L[i+1][j+1] == 4 && L[i+1][j+2] == 4){
-                        L[i][j+2] = 4
-                        L[i-1][j+2] = 4
+                        if(j < 8 && i != 0 && L[i][j+2] == 0 && L[i-1][j+2] == 0){
+                            L[i][j+2] = 4
+                            L[i-1][j+2] = 4
 
-                        L[i][j] = 0
-                        L[i+1][j+2] = 0
+                            L[i][j] = 0
+                            L[i+1][j+2] = 0
+
+                            current_state = 1
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                 }
             }
-            current_state = 1
+            
         } else if(current_state == 1){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 4 && L[i+1][j] == 4 && L[i+1][j-1] == 4 && L[i+2][j-1] == 4){
-                        L[i+1][j-2] = 4
-                        L[i+2][j] = 4
+                        if(i < 16 && j > 1 && L[i+1][j-2] == 0 && L[i+2][j] == 0){
+                            L[i+1][j-2] = 4
+                            L[i+2][j] = 4
 
-                        L[i][j] = 0
-                        L[i+1][j] = 0
+                            L[i][j] = 0
+                            L[i+1][j] = 0
+
+                            current_state = 0
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 0
+            
         } 
     }else if(current_form == "S"){
         if(current_state == 0){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j+1] == 5 && L[i][j+2] == 5 && L[i+1][j] == 5 && L[i+1][j+1] == 5){
-                        L[i+1][j+2] = 5
-                        L[i-1][j+1] = 5
+                        if(i != 0 && i != 17 && j < 8 && L[i+1][j+2] == 0 && L[i-1][j+1] == 0){
+                            L[i+1][j+2] = 5
+                            L[i-1][j+1] = 5
 
-                        L[i+1][j] = 0
-                        L[i+1][j+1] = 0
+                            L[i+1][j] = 0
+                            L[i+1][j+1] = 0
+
+                            current_state = 1
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                 }
             }
-            current_state = 1
+            
         } else if(current_state == 1){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 5 && L[i+1][j] == 5 && L[i+1][j+1] == 5 && L[i+2][j+1] == 5){
-                        L[i+2][j] = 5
-                        L[i+2][j-1] = 5
+                        if(i < 16 && j != 0 && L[i+2][j] == 0 && L[i+2][j-1] == 0){
+                            L[i+2][j] = 5
+                            L[i+2][j-1] = 5
 
-                        L[i][j] = 0
-                        L[i+2][j+1] = 0
+                            L[i][j] = 0
+                            L[i+2][j+1] = 0
+
+                            current_state = 0
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 0
+           
         } 
     } else if(current_form == "T"){
         if(current_state == 0){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i][j+1] == 6 && L[i][j+2] == 6 && L[i+1][j+1] == 6){
-                        L[i-1][j+1] = 6
+                        if(i != 0 && j < 8 && L[i-1][j+1] == 0){
+                            L[i-1][j+1] = 6
 
-                        L[i][j+2] = 0
+                            L[i][j+2] = 0
+
+                            current_state = 1
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                 }
             }
-            current_state = 1
+            
         } else if(current_state == 1){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i-1][j+1] == 6 && L[i][j+1] == 6 && L[i+1][j+1] == 6){
-                        L[i][j+2] = 6
+                        if(i != 17 && j < 8 && L[i][j+2] == 0) {
+                            L[i][j+2] = 6
                         
-                        L[i+1][j+1] = 0
+                            L[i+1][j+1] = 0
+
+                            current_state = 2
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 2
+            
         } else if(current_state == 2){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i][j+1] == 6 && L[i][j+2] == 6 && L[i-1][j+1] == 6){
-                        L[i+1][j+1] = 6
+                        if(i != 17 && j != 9 && L[i+1][j+1] == 0){
+                            L[i+1][j+1] = 6
                        
-                        L[i][j] = 0
+                            L[i][j] = 0
+
+                            current_state = 3
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 3
+            
         } else if(current_state == 3){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i-1][j] == 6 && L[i+1][j] == 6 && L[i][j+1] == 6){
-                        L[i][j-1] = 6
-                        
-                        L[i-1][j] = 0
+                        if(j != 0 && i!= 0 && L[i][j-1] == 0){
+                            L[i][j-1] = 6
+                            
+                            L[i-1][j] = 0
+
+                            current_state = 0
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                     
                 }
             }
-            current_state = 0
+            
         }
 
     }else if(current_form == "I"){
@@ -763,33 +888,50 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 7 && L[i][j+1] == 7 && L[i][j+2] == 7 && L[i][j+3] == 7){
-                        L[i+1][j+1] = 7
-                        L[i+2][j+1] = 7
-                        L[i-1][j+1] = 7
+                        if(i < 16 && j != 9 && L[i+1][j+1] == 0 && L[i+2][j+1] == 0 && L[i-1][j+1] == 0){
+                            L[i+1][j+1] = 7
+                            L[i+2][j+1] = 7
+                            L[i-1][j+1] = 7
 
-                        L[i][j] = 0
-                        L[i][j+2] = 0
-                        L[i][j+3] = 0
+                            L[i][j] = 0
+                            L[i][j+2] = 0
+                            L[i][j+3] = 0
+
+                            current_state = 1
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
                     }
                 }
             }
-            current_state = 1
+            
         } else if(current_state == 1){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 7 && L[i+1][j] == 7 && L[i+2][j] == 7 && L[i+3][j] == 7){
-                        L[i+1][j-1] = 7
-                        L[i+1][j+1] = 7
-                        L[i+1][j+2] = 7
+                        if(i != 17 && j != 0 && j < 8 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0 && L[i+1][j+2] == 0){
+                            L[i+1][j-1] = 7
+                            L[i+1][j+1] = 7
+                            L[i+1][j+2] = 7
 
-                        L[i][j] = 0
-                        L[i+2][j] = 0
-                        L[i+3][j] = 0
+                            L[i][j] = 0
+                            L[i+2][j] = 0
+                            L[i+3][j] = 0
+
+                            current_state = 0
+                            new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
+                        } else {
+                            new Audio("./../tetris_sounds/SFX_PieceRotateFail.ogg").play();
+                        }
+
                     }
                     
                 }
             }
-            current_state = 0
+            
         } 
+    } else if(current_form == "O") {
+        new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
     }
 }
