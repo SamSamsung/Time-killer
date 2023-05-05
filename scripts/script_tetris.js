@@ -215,6 +215,7 @@ function check_end(L){
         current_form = form;
         form = forms[random(forms.length)];
         next_move(next, form);
+        time = 500 * (0.85 ** (level - 1)); /* Reset timing */
     }
 }
 
