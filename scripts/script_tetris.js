@@ -7,11 +7,11 @@
  FAIT : - Rajouter le son -> Très simple -> Juste le rotate fail, va avec le fait d'empecher de tourner 
  FAIT : - Gérer le cas des niveaux et de l'accélération
  FAIT : - Gérer les boutons -> Gérer le hold
+ FAIT : - Rajouter le pause -> Dur -> En vrai tranquille, galère a comprendre mais chatgpt quel bg
 - Centrer les bricks dans le next move -> Simple
 - Gérer la défaite -> Très simple
 - Gérer le score -> Chiant, Bof, trop galère, grosse flemme pour l'instant
-- Rajouter le pause -> Dur
-- Gérer la possibilité de jouer sur Ipad
+- Gérer la possibilité de jouer sur Ipad -> Dur
 */
 
 var array = []
@@ -30,6 +30,7 @@ var level = 1;
 var time = 500 * (0.85 ** (level - 1));
 
 var DIC = {1 : "L", 2 : "J", 3 : "O", 4 : "Z", 5 : "S", 6 : "T", 7 : "I"}
+var gamePaused = false;
 /*
 Les numéros : 
 - 0 : rien
@@ -215,7 +216,7 @@ function check_end(L){
         current_form = form;
         form = forms[random(forms.length)];
         next_move(next, form);
-        time = 500 * (0.85 ** (level - 1)); /* Reset timing */
+        time = 500 * (0.85 ** (level - 1)); /* Reset speed when new brick spawns */
     }
 }
 
@@ -315,6 +316,13 @@ function bring_down(L, lines){
     new Audio("./../tetris_sounds/SFX_SpecialLineClearSingle.ogg").play();
 }
 
+
+
+
+
+
+
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -326,17 +334,29 @@ async function speed(array){
     play = true
     while(play==true){
         await sleep(time)
-        check_end(array)
-        move(array)
-        checks_win(array)
-        if(checks_lost(array) == true){
-            play = false
-            new Audio("./../tetris_sounds/game-over.mp3").play();
-            /*alert("you have lost")*/
-        }
-        show(array)
-        
+        if(!gamePaused){
+            check_end(array)
+            move(array)
+            checks_win(array)
+            if(checks_lost(array) == true){
+                play = false
+                new Audio("./../tetris_sounds/game-over.mp3").play();
+                /*alert("you have lost")*/
+            }
+            show(array)
+        }         
     }
+}
+
+
+
+function pauseGame() {
+    if (gamePaused == false){
+        document.getElementById("pause").innerHTML = "play_circle_outline"
+    } else {
+        document.getElementById("pause").innerText = "pause_circle_outline"
+    }
+    gamePaused = !gamePaused;
 }
 
 /* Starting code */
@@ -351,75 +371,94 @@ setTimeout(function(){
     
     show(array)
     speed(array)
-    arrows()
+    arrows(onpointerdown, onpointerup)
+    
     
 }, 100);
 
 
-function arrows(){
-    document.getElementById("arrow-left").onmousedown = function() {
+
+
+
+function arrows(type_down, type_up){
+    document.getElementById("arrow-left").onpointerdown = function() {
+        isButtonDown_left = true
+        check_left(array)
+        show(array)
+        color("left");
+        setTimeout(function(){
         repeat_left = setInterval(function(){
+            if(isButtonDown_left){
             check_left(array)
             show(array)
             color("left");
-        }, 100)
+        } else {
+            clearInterval(repeat_left)
+            return_color("left");
+        }
+        }, 100)}, 500)
     };
-    document.getElementById("arrow-right").onmousedown = function() {
+    document.getElementById("arrow-right").onpointerdown = function() {
+        isButtonDown_right = true
+        check_right(array)
+        show(array)
+        color("right");
+        setTimeout(function(){
         repeat_right = setInterval(function(){ 
+            if(isButtonDown_right){
             check_right(array)
             show(array)
             color("right");
-        }, 100)
+        } else {
+            clearInterval(repeat_right)
+            return_color("right");
+        }
+        }, 100)}, 500)
     };
-    document.getElementById("arrow-up").onmousedown = function() {
-        repeat_up = setInterval(function(){ 
-            turn(array, current_form) 
-            show(array)
-            color("up");
-        }, 100)
-    };
-    document.getElementById("arrow-down").onmousedown = function() {
-        repeat_down = setInterval(function(){ 
-            time = 40
-            color("down");
-    }, 100)
-    };
-    
-    
-    document.getElementById("arrow-down").onmouseup = function() {
-        clearInterval(repeat_down)
-        time = 500 * (0.8 ** (level - 1))
-        return_color("down");
-    };
-    document.getElementById("arrow-left").onmouseup = function() {
-        clearInterval(repeat_left)
-        return_color("left");
-    };
-    document.getElementById("arrow-right").onmouseup = function() {
-        clearInterval(repeat_right)
-        return_color("right");
-    };
-    document.getElementById("arrow-up").onmouseup = function() {
-        clearInterval(repeat_up)
-        return_color("up");
+    document.getElementById("arrow-up").onpointerdown = function() {
+        isButtonDown_up = true
+        turn(array, current_form) 
+        show(array)
+        color("up");
+        setTimeout(function() {
+            repeat_up = setInterval(function() { 
+                if(isButtonDown_up){
+                turn(array, current_form); 
+                show(array);
+                color("up");
+            } else {
+                clearInterval(repeat_up);
+                return_color("up");
+            }
+              }, 50);}, 500);
     };
 
-    document.getElementById("arrow-down").onmouseleave = function() {
-        clearInterval(repeat_down)
+    
+    document.getElementById("arrow-down").onpointerdown = function() {
+        time = 40
+        color("down");
+    };
+    
+    
+    document.getElementById("arrow-down").onpointerup = function() {
         time = 500 * (0.8 ** (level - 1))
         return_color("down");
     };
-    document.getElementById("arrow-left").onmouseleave = function() {
+    document.getElementById("arrow-left").onpointerup = function() {
+        isButtonDown_left = false
         clearInterval(repeat_left)
         return_color("left");
     };
-    document.getElementById("arrow-right").onmouseleave = function() {
+    document.getElementById("arrow-right").onpointerup = function() {
+        isButtonDown_right = false
         clearInterval(repeat_right)
         return_color("right");
     };
-    document.getElementById("arrow-up").onmouseleave = function() {
-        clearInterval(repeat_up)
+    document.getElementById("arrow-up").onpointerup = function() {
+        isButtonDown_up = false
+        clearInterval(repeat_up);
         return_color("up");
+        console.log("mouseup event triggered");
     };
 }
 
@@ -483,7 +522,7 @@ function check_right(L){
                 can_right = false
             }
         }
-    }if(can_right == true){
+    }if(can_right == true && !gamePaused){
         right(L)
         new Audio("./../tetris_sounds/SFX_PieceMoveLR.ogg").play();
     } else{
@@ -500,7 +539,7 @@ function check_left(L){
                 can_left = false
             }
         }
-    }if(can_left == true){
+    }if(can_left == true && !gamePaused){
         left(L)
         new Audio("./../tetris_sounds/SFX_PieceMoveLR.ogg").play();
     } else{
@@ -542,7 +581,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i][j+1] == 1 && L[i][j+2] == 1 && L[i+1][j] == 1){
-                        if(i != 0 && i != 17 && j != 9 && L[i-1][j] == 0 && L[i-1][j+1] == 0 && L[i+1][j+1] == 0){
+                        if(i != 0 && i != 17 && j != 9 && L[i-1][j] == 0 && L[i-1][j+1] == 0 && L[i+1][j+1] == 0 && !gamePaused){
                             L[i-1][j] = 1
                             L[i-1][j+1] = 1
                             L[i+1][j+1] = 1
@@ -563,7 +602,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i][j+1] == 1 && L[i+1][j+1] == 1 && L[i+2][j+1] == 1){
-                        if(j < 8 && i != 17 && L[i][j+2] == 0 && L[i+1][j+2] == 0 && L[i+1][j] == 0) {
+                        if(j < 8 && i != 17 && L[i][j+2] == 0 && L[i+1][j+2] == 0 && L[i+1][j] == 0 && !gamePaused) {
                             L[i][j+2] = 1
                             L[i+1][j+2] = 1
                             L[i+1][j] = 1
@@ -585,7 +624,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i+1][j] == 1 && L[i+1][j-1] == 1 && L[i+1][j-2] == 1){
-                        if(j != 0 && i < 16 && L[i][j-1] == 0 && L[i+2][j-1] == 0 && L[i+2][j] == 0){
+                        if(j != 0 && i < 16 && L[i][j-1] == 0 && L[i+2][j-1] == 0 && L[i+2][j] == 0 && !gamePaused){
                             L[i][j-1] = 1
                             L[i+2][j-1] = 1
                             L[i+2][j] = 1
@@ -608,7 +647,7 @@ function turn(L, current_form){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 1 && L[i+1][j] == 1 && L[i+2][j] == 1 && L[i+2][j+1] == 1){
                         console.log(j)
-                        if(i < 16 && j != 0 && j != 9 && L[i+2][j-1] == 0 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0){
+                        if(i < 16 && j != 0 && j != 9 && L[i+2][j-1] == 0 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0 && !gamePaused){
                             L[i+2][j-1] = 1
                             L[i+1][j-1] = 1
                             L[i+1][j+1] = 1
@@ -632,7 +671,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i][j+1] == 2 && L[i][j+2] == 2 && L[i+1][j+2] == 2){
-                        if(i != 17 && i != 0 && j != 9 && L[i+1][j] == 0 && L[i+1][j+1] == 0 && L[i-1][j+1] == 0){
+                        if(i != 17 && i != 0 && j != 9 && L[i+1][j] == 0 && L[i+1][j+1] == 0 && L[i-1][j+1] == 0 && !gamePaused){
                             L[i+1][j] = 2
                             L[i+1][j+1] = 2
                             L[i-1][j+1] = 2
@@ -653,7 +692,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+2][j] == 2 && L[i+2][j-1] == 2){
-                        if(j != 0 && j != 9 && i != 17 && L[i][j-1] == 0 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0){
+                        if(j != 0 && j != 9 && i != 17 && L[i][j-1] == 0 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0 && !gamePaused){
                             L[i][j-1] = 2
                             L[i+1][j-1] = 2
                             L[i+1][j+1] = 2
@@ -676,7 +715,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+1][j+1] == 2 && L[i+1][j+2] == 2){
-                        if(j < 8 && i < 16 && L[i][j+1] == 0 && L[i][j+2] == 0 && L[i+2][j+1] == 0){
+                        if(j < 8 && i < 16 && L[i][j+1] == 0 && L[i][j+2] == 0 && L[i+2][j+1] == 0 && !gamePaused){
                             L[i][j+1] = 2
                             L[i][j+2] = 2
                             L[i+2][j+1] = 2
@@ -698,7 +737,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 2 && L[i+1][j] == 2 && L[i+2][j] == 2 && L[i][j+1] == 2){
-                        if(i < 16 && j != 9 && j != 0 && L[i+1][j-1] == 0 && L[i+2][j+1] == 0 && L[i+1][j+1] == 0){
+                        if(i < 16 && j != 9 && j != 0 && L[i+1][j-1] == 0 && L[i+2][j+1] == 0 && L[i+1][j+1] == 0 && !gamePaused){
                             L[i+1][j-1] = 2
                             L[i+2][j+1] = 2
                             L[i+1][j+1] = 2
@@ -725,7 +764,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 4 && L[i][j+1] == 4 && L[i+1][j+1] == 4 && L[i+1][j+2] == 4){
-                        if(j < 8 && i != 0 && L[i][j+2] == 0 && L[i-1][j+2] == 0){
+                        if(j < 8 && i != 0 && L[i][j+2] == 0 && L[i-1][j+2] == 0 && !gamePaused){
                             L[i][j+2] = 4
                             L[i-1][j+2] = 4
 
@@ -745,7 +784,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 4 && L[i+1][j] == 4 && L[i+1][j-1] == 4 && L[i+2][j-1] == 4){
-                        if(i < 16 && j > 1 && L[i+1][j-2] == 0 && L[i+2][j] == 0){
+                        if(i < 16 && j > 1 && L[i+1][j-2] == 0 && L[i+2][j] == 0 && !gamePaused){
                             L[i+1][j-2] = 4
                             L[i+2][j] = 4
 
@@ -768,7 +807,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j+1] == 5 && L[i][j+2] == 5 && L[i+1][j] == 5 && L[i+1][j+1] == 5){
-                        if(i != 0 && i != 17 && j < 8 && L[i+1][j+2] == 0 && L[i-1][j+1] == 0){
+                        if(i != 0 && i != 17 && j < 8 && L[i+1][j+2] == 0 && L[i-1][j+1] == 0 && !gamePaused){
                             L[i+1][j+2] = 5
                             L[i-1][j+1] = 5
 
@@ -788,7 +827,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 5 && L[i+1][j] == 5 && L[i+1][j+1] == 5 && L[i+2][j+1] == 5){
-                        if(i < 16 && j != 0 && L[i+2][j] == 0 && L[i+2][j-1] == 0){
+                        if(i < 16 && j != 0 && L[i+2][j] == 0 && L[i+2][j-1] == 0 && !gamePaused){
                             L[i+2][j] = 5
                             L[i+2][j-1] = 5
 
@@ -811,7 +850,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i][j+1] == 6 && L[i][j+2] == 6 && L[i+1][j+1] == 6){
-                        if(i != 0 && j < 8 && L[i-1][j+1] == 0){
+                        if(i != 0 && j < 8 && L[i-1][j+1] == 0 && !gamePaused){
                             L[i-1][j+1] = 6
 
                             L[i][j+2] = 0
@@ -829,7 +868,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i-1][j+1] == 6 && L[i][j+1] == 6 && L[i+1][j+1] == 6){
-                        if(i != 17 && j < 8 && L[i][j+2] == 0) {
+                        if(i != 17 && j < 8 && L[i][j+2] == 0 && !gamePaused) {
                             L[i][j+2] = 6
                         
                             L[i+1][j+1] = 0
@@ -848,7 +887,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i][j+1] == 6 && L[i][j+2] == 6 && L[i-1][j+1] == 6){
-                        if(i != 17 && j != 9 && L[i+1][j+1] == 0){
+                        if(i != 17 && j != 9 && L[i+1][j+1] == 0 && !gamePaused){
                             L[i+1][j+1] = 6
                        
                             L[i][j] = 0
@@ -867,7 +906,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 6 && L[i-1][j] == 6 && L[i+1][j] == 6 && L[i][j+1] == 6){
-                        if(j != 0 && i!= 0 && L[i][j-1] == 0){
+                        if(j != 0 && i!= 0 && L[i][j-1] == 0 && !gamePaused){
                             L[i][j-1] = 6
                             
                             L[i-1][j] = 0
@@ -889,7 +928,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 7 && L[i][j+1] == 7 && L[i][j+2] == 7 && L[i][j+3] == 7){
-                        if(i < 16 && j != 9 && L[i+1][j+1] == 0 && L[i+2][j+1] == 0 && L[i-1][j+1] == 0){
+                        if(i < 16 && j != 9 && L[i+1][j+1] == 0 && L[i+2][j+1] == 0 && L[i-1][j+1] == 0 && !gamePaused){
                             L[i+1][j+1] = 7
                             L[i+2][j+1] = 7
                             L[i-1][j+1] = 7
@@ -911,7 +950,7 @@ function turn(L, current_form){
             for(i=0; i<18; i++){
                 for(j=0; j<10;j++){
                     if(L[i][j] == 7 && L[i+1][j] == 7 && L[i+2][j] == 7 && L[i+3][j] == 7){
-                        if(i != 17 && j != 0 && j < 8 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0 && L[i+1][j+2] == 0){
+                        if(i != 17 && j != 0 && j < 8 && L[i+1][j-1] == 0 && L[i+1][j+1] == 0 && L[i+1][j+2] == 0 && !gamePaused){
                             L[i+1][j-1] = 7
                             L[i+1][j+1] = 7
                             L[i+1][j+2] = 7

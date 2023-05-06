@@ -95,9 +95,14 @@ h1 {
     background-color: orangered;
 }
 
-button{
+.arrow{
     width: 30%;
     height: 10%;
     background-color: aquamarine;
     margin-top: 2%;
+}
+
+#pause {
+    cursor: pointer;
+    font-size: 500%;
 }
