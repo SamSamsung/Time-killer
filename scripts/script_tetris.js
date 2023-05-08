@@ -989,28 +989,66 @@ function turn(L, current_form){
 
 /* Ipad et Iphone */
 document.addEventListener('swiped-left', function(e) {
-    console.log(e.target); // element that was swiped
-    console.log(e.detail); // see event data below
     first_id = e.target.id
-    
     first_j = transform_with_id_to_j(first_id)
+
     second_id = document.elementFromPoint(e.detail.xEnd, e.detail.yEnd).id
     second_j = transform_with_id_to_j(second_id)
-    swipe_left(array, first_j, second_j)
+
+    swipe_left_right(array, first_j, second_j, "left")
     
   });
 
 
-async function swipe_left(array, first_j, second_j){
-    diff = parseInt(first_j)-parseInt(second_j)
+  document.addEventListener('swiped-right', function(e) {
+    first_id = e.target.id
+    first_j = transform_with_id_to_j(first_id)
+
+    second_id = document.elementFromPoint(e.detail.xEnd, e.detail.yEnd).id
+    second_j = transform_with_id_to_j(second_id)
+
+    swipe_left_right(array, first_j, second_j, "right")
+    
+  });
+  
+  document.addEventListener('swiped-down', function() {
+    other_swipe(array, "down", current_form)
+    
+  });
+  
+  document.addEventListener('click', function(e){
+    other_swipe(array, "up", current_form)
+  });
+
+
+
+async function swipe_left_right(array, first_j, second_j, swipe_type){
+    
+    diff = Math.abs(parseInt(first_j)-parseInt(second_j))
     document.getElementById("swipe").innerText = diff + "," + first_j +"," + second_j
     for(index=0;index<diff; index++){
-        await sleep(100)
         document.getElementById("swipe").innerText = index
-        check_left(array)
+        if(swipe_type == "left"){
+            check_left(array)
+        } else if(swipe_type == "right"){
+            check_right(array)
+        } 
         show(array)
-        color("left");
-    }
-    return_color("left");
+        color(swipe_type);
+        await sleep(50)
+    }return_color(swipe_type);
+}
 
+async function other_swipe(array, swipe_type, current_form){
+    if(swipe_type == "down"){
+        time = 10
+        show(array)
+        color(swipe_type);
+        await sleep(500)
+    } else {
+        turn(array, current_form);
+        color(swipe_type);
+        await sleep(50)
+    } 
+    return_color(swipe_type)
 }
