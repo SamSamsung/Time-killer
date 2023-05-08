@@ -9,7 +9,7 @@
  FAIT : - Gérer les boutons -> Gérer le hold
  FAIT : - Rajouter le pause -> Dur -> En vrai tranquille, galère a comprendre mais chatgpt quel bg
  FAIT : - Centrer les bricks dans le next move -> Simple
-- Gérer la défaite -> Très simple
+ FAIT : - Gérer la défaite -> Très simple
 - Gérer le score - > Chiant, Bof, trop galère, grosse flemme pour l'instant
 - Gérer la possibilité de jouer sur Ipad -> Dur -> Presue fini
 */
@@ -25,6 +25,7 @@ var current_form = forms[random(forms.length)];
 
 var current_state = 0;
 
+var score = 0;
 var score_lines = 0;
 var level = 1;
 var time = 500 * (0.85 ** (level - 1));
@@ -348,6 +349,11 @@ async function speed(array){
             checks_win(array)
             if(checks_lost(array) == true){
                 play = false
+                document.getElementById("overlay").classList.add("show")
+                document.getElementById("perdu").classList.add("active")
+                document.getElementById("level_end").innerText = level;
+                document.getElementById("lines_end").innerText = score_lines;
+                document.getElementById("score_end").innerText = score;
                 new Audio("./../tetris_sounds/game-over.mp3").play();
                 /*alert("you have lost")*/
             }
@@ -369,7 +375,9 @@ function pauseGame() {
 
 /* Starting code */
 setTimeout(function(){
-    new Audio("./../tetris_sounds/SFX_GameStart.ogg").play();
+    main_theme = new Audio("./../tetris_sounds/Tetris_Theme_Officiel.mp3");
+    main_theme.loop = true
+    main_theme.play();
     init()
     init_next()
     show(array)
@@ -1020,7 +1028,7 @@ document.addEventListener('swiped-left', function(e) {
   });
   
   document.addEventListener('click', function(e){
-    if(e.target.classList[0] != "arrow" && e.target.classList[0] != "bi") {
+    if(e.target.classList[0] != "arrow" && e.target.classList[0] != "bi" && e.target.classList[0] != "show") {
         other_swipe(array, "up", current_form)
     }   
   });

@@ -13,6 +13,14 @@
 </head>
 <body>
     <h1>Tetris</h1>
+    <div id="overlay"></div>
+    <div class="pop_up" id="perdu">
+        <a href="tetris.html"><button class="bouton_ferme">&times;</button></a>
+        <h1>Such a shame ! You lost.</h1>
+        <h1>You got to level <span id="level_end"></span></h1>
+        <h1>You cleared <span id="lines_end"></span> lines</h1>
+        <h1>Your score was <span id="score_end"></span></h1>
+    </div>
     <div class="container">
         <div class="board">
             <div class="playboard" id="playboard"></div>
