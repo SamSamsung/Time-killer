@@ -8,10 +8,10 @@
  FAIT : - Gérer le cas des niveaux et de l'accélération
  FAIT : - Gérer les boutons -> Gérer le hold
  FAIT : - Rajouter le pause -> Dur -> En vrai tranquille, galère a comprendre mais chatgpt quel bg
-- Centrer les bricks dans le next move -> Simple
+ FAIT : - Centrer les bricks dans le next move -> Simple
 - Gérer la défaite -> Très simple
-- Gérer le score -> Chiant, Bof, trop galère, grosse flemme pour l'instant
-- Gérer la possibilité de jouer sur Ipad -> Dur
+- Gérer le score - > Chiant, Bof, trop galère, grosse flemme pour l'instant
+- Gérer la possibilité de jouer sur Ipad -> Dur -> Presue fini
 */
 
 var array = []
@@ -54,7 +54,11 @@ function transform_id_next_move(i,j){
 
 function next_move(next, form){
     reset(next)
-    construct(next, 2, 0, form)
+    if(form == "I"){
+        construct(next, 1, 0, form)
+     }else {
+    construct(next, 1, 1, form)
+    }
     for(i=0; i<4; i++){
         for(j=0; j<4;j++){
             id = 1000 + transform_id_next_move(i,j)
@@ -238,7 +242,7 @@ function move(L){
 
 function checks_lost(L){
     for(j=0; j<10;j++){
-        if(L[2][j] == 8){
+        if(L[2][j] == 8 && j >= 4 && j <= 7){
             return true
         }
     }
@@ -369,7 +373,6 @@ setTimeout(function(){
     init()
     init_next()
     show(array)
-    current_form = "T"
     construct(array, 1, 4, current_form)
     next_move(next, form) 
     
@@ -1017,7 +1020,9 @@ document.addEventListener('swiped-left', function(e) {
   });
   
   document.addEventListener('click', function(e){
-    other_swipe(array, "up", current_form)
+    if(e.target.classList[0] != "arrow" && e.target.classList[0] != "bi") {
+        other_swipe(array, "up", current_form)
+    }   
   });
 
 
