@@ -129,6 +129,10 @@ function transform_id(i, j){
     return i*10+ j
 }
 
+function transform_with_id_to_j(id){
+    return id%10
+}
+
 function construct(L, i, j, form){
     /* Construct original forms */
     if(form == "L"){
@@ -974,4 +978,39 @@ function turn(L, current_form){
     } else if(current_form == "O") {
         new Audio("./../tetris_sounds/SFX_PieceRotateLR.ogg").play();
     }
+}
+
+
+
+
+
+
+
+
+/* Ipad et Iphone */
+document.addEventListener('swiped-left', function(e) {
+    console.log(e.target); // element that was swiped
+    console.log(e.detail); // see event data below
+    first_id = e.target.id
+    
+    first_j = transform_with_id_to_j(first_id)
+    second_id = document.elementFromPoint(e.detail.xEnd, e.detail.yEnd).id
+    second_j = transform_with_id_to_j(second_id)
+    swipe_left(array, first_j, second_j)
+    
+  });
+
+
+async function swipe_left(array, first_j, second_j){
+    diff = parseInt(first_j)-parseInt(second_j)
+    document.getElementById("swipe").innerText = diff + "," + first_j +"," + second_j
+    for(index=0;index<diff; index++){
+        await sleep(100)
+        document.getElementById("swipe").innerText = index
+        check_left(array)
+        show(array)
+        color("left");
+    }
+    return_color("left");
+
 }
