@@ -32,6 +32,7 @@ var time = 500 * (0.85 ** (level - 1));
 
 var DIC = {1 : "L", 2 : "J", 3 : "O", 4 : "Z", 5 : "S", 6 : "T", 7 : "I"}
 var gamePaused = false;
+var is_swiping = false;
 /*
 Les numéros : 
 - 0 : rien
@@ -377,7 +378,6 @@ function pauseGame() {
 setTimeout(function(){
     main_theme = new Audio("./../tetris_sounds/Tetris_Theme_Officiel.mp3");
     main_theme.loop = true
-    main_theme.play();
     init()
     init_next()
     show(array)
@@ -1000,6 +1000,8 @@ function turn(L, current_form){
 
 /* Ipad et Iphone */
 document.addEventListener('swiped-left', function(e) {
+    if(is_swiping == false){
+    is_swiping = true
     first_id = e.target.id
     first_j = transform_with_id_to_j(first_id)
 
@@ -1007,11 +1009,12 @@ document.addEventListener('swiped-left', function(e) {
     second_j = transform_with_id_to_j(second_id)
 
     swipe_left_right(array, first_j, second_j, "left")
-    
+    setTimeout(function(){is_swiping = false},100)}
   });
 
 
   document.addEventListener('swiped-right', function(e) {
+    is_swiping = true
     first_id = e.target.id
     first_j = transform_with_id_to_j(first_id)
 
@@ -1019,16 +1022,20 @@ document.addEventListener('swiped-left', function(e) {
     second_j = transform_with_id_to_j(second_id)
 
     swipe_left_right(array, first_j, second_j, "right")
+    setTimeout(function(){is_swiping = false},100)
+    
     
   });
   
   document.addEventListener('swiped-down', function() {
+    is_swiping = true
     other_swipe(array, "down", current_form)
+    is_swiping = false
     
   });
   
   document.addEventListener('click', function(e){
-    if(e.target.classList[0] != "arrow" && e.target.classList[0] != "bi" && e.target.classList[0] != "show") {
+    if(e.target.classList[0] != "arrow" && e.target.classList[0] != "bi" && e.target.classList[0] != "show" && is_swiping == false && e.target.id != "pause") {
         other_swipe(array, "up", current_form)
     }   
   });
@@ -1061,6 +1068,7 @@ async function other_swipe(array, swipe_type, current_form){
     } else {
         turn(array, current_form);
         color(swipe_type);
+        show(array);
         await sleep(50)
     } 
     return_color(swipe_type)
