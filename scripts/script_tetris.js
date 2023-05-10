@@ -378,6 +378,7 @@ function pauseGame() {
 setTimeout(function(){
     main_theme = new Audio("./../tetris_sounds/Tetris_Theme_Officiel.mp3");
     main_theme.loop = true
+    main_theme.play();
     init()
     init_next()
     show(array)
