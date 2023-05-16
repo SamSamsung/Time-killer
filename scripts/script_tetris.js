@@ -251,6 +251,40 @@ function checks_lost(L){
     return false
 }
 
+function put_back_lines(L, lines){
+    for(t=0;t<lines.length;t++){
+        for(p=0;p<10;p++){
+            document.getElementById(transform_id(lines[t], p)).setAttribute("class", "cell brick animation");
+        }
+    }
+}
+
+
+async function animation_clear_line(L, lines){
+    
+    /*for(m=0;m<lines.length;m++){
+        brick_class = []
+        for(n=0;n<10;n++){
+            brick_class.push(document.getElementById(transform_id(lines[m], n)).classList)
+
+        }
+        
+    }*/
+    
+    new Audio("./../tetris_sounds/SFX_SpecialLineClearSingle.ogg").play();
+    remove_lines(L, lines);
+    show(L)
+    await sleep(150)
+    put_back_lines(L, lines)
+    await sleep(150)
+    show(L)
+    await sleep(150)
+    put_back_lines(L, lines)
+    show(L)
+        
+    
+    
+}
 
 
 function checks_win(L){
@@ -268,7 +302,12 @@ function checks_win(L){
         }
     }
     if(lines.length > 0){
-        remove_lines(L, lines);
+        gamePaused = true
+        animation_clear_line(L, lines)
+        setTimeout(function(){
+            bring_down(L, lines)
+            gamePaused = false
+        },500) 
     }
 }
 
@@ -279,7 +318,7 @@ function remove_lines(L, lines){
             L[i][j] = 0
         }/*bring_down_line(L, i)*/
     }
-    bring_down(L, lines)
+    
     
 }
 
@@ -323,7 +362,7 @@ function bring_down(L, lines){
     if(old_lvl != level){
         new Audio("./../tetris_sounds/next-level.mp3").play();
     }
-    new Audio("./../tetris_sounds/SFX_SpecialLineClearSingle.ogg").play();
+    
 }
 
 
@@ -381,10 +420,13 @@ setTimeout(function(){
     main_theme.play();
     init()
     init_next()
-    show(array)
+    show(array)/*
     construct(array, 1, 4, current_form)
     next_move(next, form) 
-    
+    */
+    construct(array, 1,0, "I")
+    construct(array, 1, 4, "I")
+    construct(array, 0, 8, "O")
     show(array)
     speed(array)
     arrows(onpointerdown, onpointerup)
