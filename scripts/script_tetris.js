@@ -274,11 +274,11 @@ async function animation_clear_line(L, lines){
     new Audio("./../tetris_sounds/SFX_SpecialLineClearSingle.ogg").play();
     remove_lines(L, lines);
     show(L)
-    await sleep(150)
+    await sleep(200)
     put_back_lines(L, lines)
-    await sleep(150)
+    await sleep(200)
     show(L)
-    await sleep(150)
+    await sleep(200)
     put_back_lines(L, lines)
     show(L)
         
@@ -307,7 +307,7 @@ function checks_win(L){
         setTimeout(function(){
             bring_down(L, lines)
             gamePaused = false
-        },500) 
+        },700) 
     }
 }
 
@@ -420,13 +420,9 @@ setTimeout(function(){
     main_theme.play();
     init()
     init_next()
-    show(array)/*
+    show(array)
     construct(array, 1, 4, current_form)
     next_move(next, form) 
-    */
-    construct(array, 1,0, "I")
-    construct(array, 1, 4, "I")
-    construct(array, 0, 8, "O")
     show(array)
     speed(array)
     arrows(onpointerdown, onpointerup)
