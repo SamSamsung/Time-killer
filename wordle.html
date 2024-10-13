@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css"> <!-- On importe le document style.css pour  utiliser le css-->
+    <link rel="stylesheet" href="./css/style_wordle.css"> <!-- On importe le document style.css pour  utiliser le css-->
+    <script src="./scripts/wordle.js"></script>
+    
+    <title>Wordle</title>
+</head>
+    <body>
+        <a href="./index.html" class="retour">⬅</a>
+        <div class="container">
+            <div class="titre">
+                <h1>Wordle</h1>
+            </div>
+            <div class="jeu">
+                <div id="overlay"></div>
+                <div class="pop_up" id="gagne">
+                    <a href="wordle.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Congratulations, you won !</h1>
+                    <h1 class="emoji">😀</h1>
+                </div>
+                <div class="pop_up" id="perdu">
+                    <a href="wordle.html"><button class="bouton_ferme">&times;</button></a>
+                    <h1>Such a shame ! You lost.</h1>
+                    <h2>The word was : <span id="mot"></span></h2>
+                    <h1 class="emoji">😞</h1>
+                </div>
+                <div id="playboard">
+                </div>
+            </div>
+            <div class="auteurs">
+                <p>Author : Samuel</p>
+            </div>
+        </div>
+       
+    </body>
+</html>

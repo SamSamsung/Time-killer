@@ -1,0 +1,63 @@
+
+button{
+    margin-left: 0% !important;
+    margin-right: 0% !important;
+}
+
+.container{
+    background-color: black;
+}
+
+#playboard{
+    margin: auto;
+    margin-top: 2%;
+    width: 50%;
+    height: 80%;
+    box-sizing: border-box; 
+}
+
+#enter{
+    color: white;
+    background-color: #1e3250;
+    border-radius: 15%;
+    width: 10%;
+    height: 20%;
+}
+
+
+.words{
+    height: 18.6%;
+    width: 100%;
+
+}
+
+.cell{
+    width: 19%;
+    height: 100%;
+    margin: 0.5%;
+    border: 1px white solid;
+    border-radius: 10%;
+    box-sizing: border-box; 
+    color: white;
+    text-align: center;
+    float: left;
+}
+
+.active{
+    border: 3px cyan solid;
+}
+
+p.letters{
+    height: 100%;
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    cursor: text;
+}
+
+
+@keyframes rotation {
+    100% {
+      transform: rotateX(360deg);
+    }
+  }
+  

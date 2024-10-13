@@ -11,7 +11,7 @@
  FAIT : - Centrer les bricks dans le next move -> Simple
  FAIT : - Gérer la défaite -> Très simple
 - Gérer le score - > Chiant, Bof, trop galère, grosse flemme pour l'instant
-- Gérer la possibilité de jouer sur Ipad -> Dur -> Presue fini
+FAIT :- Gérer la possibilité de jouer sur Ipad -> Dur -> Presue fini
 */
 
 var array = []
