@@ -1,0 +1,55 @@
+html, 
+body {
+    height: 90%;
+}
+
+.titre{
+    text-align: center;
+    margin-top: -2.5%;
+}
+
+#echequier{
+    width: 45%;
+    margin-top: 3%;
+    min-height: 100%;
+    margin-left: 29%;
+
+}
+
+.container{
+    height: 100%;
+    width: 100%;
+}
+
+.cell {
+    border:0;
+    margin-top: -.3%;
+    width: 12.5%; 
+    height: 5.4vw;; /* Doesn't work in pourcentage*/ 
+    max-width: 20%; 
+    text-align: center;
+    background-size: 95%;
+    z-index: 10;
+    
+}
+
+.blackcell {
+    background-color: #769656;
+}
+ 
+.whitecell {
+    background-color: #eeeed2;
+}
+
+.retour{
+    font-size: 300%;
+    color: black;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#check{
+    margin-top: -1%;
+    margin-bottom: -2.5%;
+    color: transparent;
+}

@@ -1,0 +1,75 @@
+.pawn.black{
+    background-image: url(chess_pieces/black_pawn.png);
+}
+
+.rock.black{
+    background-image: url(chess_pieces/black_rock.png);
+}
+
+.knight.black{
+    background-image: url(chess_pieces/black_knight.png);
+}   
+
+.bishop.black{
+    background-image: url(chess_pieces/black_bishop.png);
+}
+
+.queen.black{
+    background-image: url(chess_pieces/black_queen.png);
+}
+
+.king.black{
+    background-image: url(chess_pieces/black_king.png);
+}
+
+
+
+.pawn.white {
+    background-image: url(chess_pieces/white_pawn.png);
+}
+
+.white.rock{
+    background-image: url(chess_pieces/white_rock.png);
+}
+
+.white.knight{
+    background-image: url(chess_pieces/white_knight.png);
+}   
+
+.white.bishop{
+    background-image: url(chess_pieces/white_bishop.png);
+}
+
+.white.queen{
+    background-image: url(chess_pieces/white_queen.png);
+}
+
+.white.king{
+    background-image: url(chess_pieces/white_king.png);
+}
+
+
+.pawn,
+.rock,
+.knight,
+.bishop,
+.queen,
+.king{
+    cursor: grab;
+}
+
+.hint.show{
+    background-color: #bbb;
+}
+
+.hint{
+    height: 1.5vw;
+    width: 1.5vw;
+    border-radius: 50%;
+    border: solid transparent 5px;
+    display: inline-block;
+}
+
+.hint.active{
+    border: solid #bbb 5px;
+}
