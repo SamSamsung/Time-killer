@@ -1,18 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./css/style.css"> <!-- On importe le document style.css pour  utiliser le css-->
     <link rel="stylesheet" href="./css/map.css"> <!-- On importe le document style.css pour  utiliser le css-->
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.control.locate/dist/L.Control.Locate.min.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet.control.locate/dist/L.Control.Locate.min.js"></script>
     <title>Map</title>
 </head>
     <body>
@@ -23,9 +20,68 @@
             <button class="verif_button" style="background-color: red;" onclick="pop_up_close()">NON</button>
         </div>
         <div class="pop_up" id="informations">
-            <p>Bravo !</p>
+            <p>Qui est l'heureux·se élu·e ?</p>
+            <select id="dropdown_name">
+                <option>Samuel</option>
+                <option>Benjamin</option>
+                <option>Louis</option>
+                <option>Nolwenn</option>
+                <option>Alex</option>
+            </select>
+            <p>Partenaire·s</p>
+            <textarea id="partenaire" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
+            <p>Lieu</p>
+            <textarea id="lieu" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
+            <p>Position·s</p>
+            <ul>
+                <li><input type="checkbox" id="doggy-style" class="cb"/>
+                  <label for="doggy-style" title="La levrette - Doggy style"><img src="icons_map/dog.png" /></label>
+                </li>
+                <li><input type="checkbox" id="lazy-doggy-style" class="cb"/>
+                    <label for="lazy-doggy-style" title="L'union de l'éléphant (Levrette allongée) - The Lazy doggy style"><img src="icons_map/anal.png" /></label>
+                </li>
+                <li><input type="checkbox" id="standing-doggy-style" class="cb"/>
+                      <label for="standing-doggy-style" title="La vache (levrette debout) - The Standing doggy style"><img src="icons_map/doggy.png" /></label>
+                </li>
+                <li><input type="checkbox" id="missionary" class="cb" />
+                  <label for="missionary" title="Missionaire - Missionary"><img src="icons_map/sex-2.png"></label>
+                </li>
+                <li><input type="checkbox" id="cowgirl" class="cb"/>
+                  <label for="cowgirl" title="L'andromaque - Cowgirl"><img src="icons_map/cowgirl.png" /></label>
+                </li>
+                <li><input type="checkbox" id="cunnilingus" class="cb" />
+                    <label for="cunnilingus" title="Le cunnilingus - The cunnilingus"><img src="icons_map/licking.png"></label>
+                </li>
+                <li><input type="checkbox" id="blowjob" class="cb"/>
+                    <label for="blowjob" title="La fellation - The Blowjob"><img src="icons_map/oral-sex-2.png" /></label>
+                </li>
+                <li><input type="checkbox" id="lazy-blowjob" class="cb"/>
+                    <label for="lazy-blowjob" title="La fellation allongée - The lazy Blowjob"><img src="icons_map/oral-sex.png" /></label>
+                </li>
+                <li><input type="checkbox" id="upstanding-citizen" class="cb" />
+                    <label for="upstanding-citizen" title="L'Homme debout - The Upstanding citizen"><img src="icons_map/front.png"></label>
+                </li>
+                <li><input type="checkbox" id="reversed-cowgirl" class="cb"/>
+                    <label for="reversed-cowgirl" title="L'andromaque inversée - Reversed cowgirl"><img src="icons_map/back.png" /></label>
+                </li>
+                <li><input type="checkbox" id="leapfrog" class="cb" />
+                      <label for="leapfrog" title="La grenouille à la nage - The Leapfrog"><img src="icons_map/back (1).png"></label>
+                </li>
+                <li><input type="checkbox" id="69" class="cb"/>
+                      <label for="69" title="Le 69"><img src="icons_map/man.png" /></label>
+                </li>
+                <li><input type="checkbox" id="lotus" class="cb"/>
+                      <label for="lotus" title="Le Totus - The Lotus"><img src="icons_map/sex.png" /></label>
+                </li>
+            </ul>
+            <p>Date</p>
+            <input id="date" type="date"/>
+            <br>
             <button class="verif_button" style="background-color: lightgreen;" onclick="yes()">Enregistrer</button>
             <button class="verif_button" style="background-color: red;" onclick="pop_up_close()">Annuler</button>
+        </div>
+        <div id="map-controls">
+            <button id="locate-button"><img src="./icons_map/target.png" alt="Localiser"></button>
         </div>
         <div id="map">
         </div>
@@ -33,7 +89,7 @@
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-            import { getDatabase, ref, push, set, get, onValue } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+            import { getDatabase, ref, push, set, get, onValue, remove } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
           
@@ -60,9 +116,11 @@
             window.ref = ref;
             window.push = push;
             window.set = set;
-            window.get = get; // Assurez-vous d'exposer `get` aussi
+            window.get = get;
             window.onValue = onValue;
+            window.remove = remove;
         </script>
+        
         <script src="./scripts/script_map.js"></script>
         
     </body>
