@@ -172,7 +172,7 @@ button.non_active {
 
 
 .pop_up{
-    position: fixed;
+    position: absolute;
     background-color: white;
     width: 50%;
     height: 20%;

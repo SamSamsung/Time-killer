@@ -1,0 +1,25 @@
+#map { 
+    height: 600px;
+    position: relative;
+}
+
+
+.leaflet-control { z-index: 0 !important}
+.leaflet-pane { z-index: 0 !important}
+.leaflet-top, .leaflet-bottom {z-index: 0 !important}
+
+
+
+.verif_button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pop_up{
+    text-align: center;
+    width: 25%;
+    height: 15%;
+}
