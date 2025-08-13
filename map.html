@@ -10,6 +10,8 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet.control.locate/dist/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <title>Map</title>
 </head>
     <body>
@@ -24,16 +26,19 @@
             <select id="dropdown_name">
                 <option>Samuel</option>
                 <option>Benjamin</option>
+                <option>Gabrielle</option>
                 <option>Louis</option>
                 <option>Nolwenn</option>
                 <option>Alex</option>
             </select>
             <p>Partenaire·s</p>
             <textarea id="partenaire" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
+            <p>Date</p>
+            <input id="date" type="date"/>
             <p>Lieu</p>
             <textarea id="lieu" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
             <p>Position·s</p>
-            <ul>
+            <ul id="positions">
                 <li><input type="checkbox" id="doggy-style" class="cb"/>
                   <label for="doggy-style" title="La levrette - Doggy style"><img src="icons_map/dog.png" /></label>
                 </li>
@@ -73,9 +78,11 @@
                 <li><input type="checkbox" id="lotus" class="cb"/>
                       <label for="lotus" title="Le Totus - The Lotus"><img src="icons_map/sex.png" /></label>
                 </li>
+                <li><input type="checkbox" id="others" class="cb"/>
+                    <label for="others" title="Autres..."><img src="icons_map/autre.png" /></label>
+              </li>
             </ul>
-            <p>Date</p>
-            <input id="date" type="date"/>
+            
             <br>
             <button class="verif_button" style="background-color: lightgreen;" onclick="yes()">Enregistrer</button>
             <button class="verif_button" style="background-color: red;" onclick="pop_up_close()">Annuler</button>

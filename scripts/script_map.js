@@ -4,6 +4,10 @@
 
 var map = L.map('map');
 
+// Ajouter le contrôle de géocodage à la carte
+L.Control.geocoder().addTo(map);
+
+
 
 function initMap(lat, lon, zoom = 13) {
   map.setView([lat, lon], zoom);
@@ -76,12 +80,17 @@ function getPopupContent(popupContent, key) {
 }
 
 // Sauvegarder un marqueur dans Realtime Database
-function saveMarker(position, popupContent, icon=null) {
+function saveMarker(position, popupContent, icon=null, name, partenaires, date, lieu, positions) {
     const markersRef = ref(db, 'markers');
     const newMarkerRef = push(markersRef);
     const markerData = {
         position: [position.lat, position.lng],
-        popupContent: popupContent
+        popupContent: popupContent,
+        name: name,
+        partenaires: partenaires,
+        date: date,
+        lieu: lieu,
+        positions: positions
     };
     if (icon) {
         markerData.icon = icon;
@@ -119,6 +128,21 @@ function removeMarker(key) {
 }
 
 
+function getPositions(){
+    var listpopup = ['<img src="icons_map/dog.png" id="doggy-style-popup" alt="Image 1" />', '<img src="icons_map/anal.png" id="lazy-doggy-style-popup" alt="Image 2" />', '<img src="icons_map/doggy.png" id="standing-doggy-style-popup" alt="Image 3" />', '<img src="icons_map/sex-2.png" id="missionary-popup" alt="Image 4" />', '<img src="icons_map/cowgirl.png" id="cowgirl-popup" alt="Image 5" />', '<img src="icons_map/licking.png" id="cunnilingus-popup" alt="Image 6" />', '<img src="icons_map/oral-sex-2.png" id="blowjob-popup" alt="Image 7" />', '<img src="icons_map/oral-sex.png" id="lazy-blowjob-popup" alt="Image 8" />', '<img src="icons_map/front.png" id="upstanding-citizen-popup" alt="Image 9" />', '<img src="icons_map/back.png" id="reversed-cowgirl-popup" alt="Image 10" />', '<img src="icons_map/back (1).png" id="leapfrog-popup" alt="Image 11" />', '<img src="icons_map/man.png" id="69-popup" alt="Image 12" />', '<img src="icons_map/sex.png"  id="lotus-popup" alt="Image 13" />', '<img src="icons_map/autre.png"  id="others-popup" alt="Image 13" />']
+    var textepopup = ''
+    var L = []
+    var all = document.getElementById("positions").children
+    for(i = 0; i < all.length; i++){
+        if(all[i].children[0].checked){
+            textepopup += listpopup[i]
+            L.push(all[i].children[0].id)
+        }
+    }
+    return [L,textepopup]
+}
+
+
 var customIcon = L.icon({
     iconUrl: '../icons_map/boutique-de-sexe-black.png',
     iconSize:     [32, 32], // taille de l'icône
@@ -153,6 +177,9 @@ function onMapClick(e) {
     var popupContent = `
     <div>
         <p>Voici un popup avec des boutons !</p>
+        <div class="popup-images">
+            
+        </div>
     </div>
     `;
 
@@ -186,31 +213,68 @@ function yes(){
     var position = tempMarker.getLatLng();
     var popupContent = tempMarker.getPopup().getContent();
     var icon = tempMarker.getIcon();
-
     var name = document.getElementById("dropdown_name").value;
+    var partenaires = document.getElementById("partenaire").value
+    var lieu = document.getElementById("lieu").value
+    var date = document.getElementById("date").value
+    var variable = getPositions()
+    var positions = variable[0]
+    var popuptexte = variable[1]
+
+
+
+    var popupContent = `
+    <div>
+        <p class="header_popup">L'heureux·se élu·e</p>
+        <p>${name}</p>
+        <p class="header_popup">Partenaire·s</p>
+        <p>${partenaires}</p>
+        <p class="header_popup">Date</p>
+        <p>${date}</p>
+        <p class="header_popup">Lieu</p>
+        <p>${lieu}</p>
+        <p class="header_popup">Les positions</p>
+        <div class="popup-images">
+            ${popuptexte}
+        </div>
+    </div>
+    `;
+    
+    
     if(name === "Benjamin"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-blue.png';
     } else if(name === "Louis"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-orange.png';
     } else if(name === "Nolwenn"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-lightgreen.png';
     } else if(name === "Alex"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-green.png';
-    } 
+    } else if(name === "Samuel"){
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-black.png';
+    } else if(name === "Gabrielle"){
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
+    }
     var customIcon = L.icon({
         iconUrl: icon.options.iconUrl,
         iconSize:     [32, 32], // taille de l'icône
         iconAnchor: [16, 16], // point de l'icône qui correspondra à la position du marqueur
         popupAnchor: [0, -16] // point à partir duquel le popup devrait s'ouvrir relativement à l'iconAnchor
     });
+
     tempMarker.setIcon(customIcon);
+    tempMarker.getPopup().setContent(popupContent);
+
+
+
+
+    
     // Sauvegarder le marqueur dans Realtime Database
     saveMarker(position, popupContent,{
         iconUrl: icon.options.iconUrl,
         iconSize: icon.options.iconSize,
         iconAnchor: icon.options.iconAnchor,
         popupAnchor: icon.options.popupAnchor
-    });
+    }, name, partenaires, date, lieu, positions);
 
 }
 
