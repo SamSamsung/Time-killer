@@ -1,6 +1,7 @@
 #map { 
     height: 760px;
     position: relative;
+    overflow: visible;
 }
 
 
@@ -48,9 +49,13 @@
 
 .pop_up{
     text-align: center;
-    top: 500px;
+    top: 0%;
     width: 50%;
     height: auto;
+}
+
+.pop_up.active{
+    transform: translate(-45%, 30%) scale(1.5);
 }
 
 
