@@ -80,7 +80,7 @@ function getPopupContent(popupContent, key) {
 }
 
 // Sauvegarder un marqueur dans Realtime Database
-function saveMarker(position, popupContent, icon=null, name, partenaires, date, lieu, positions) {
+function saveMarker(position, popupContent, icon=null, name, partenaires, date, lieu, positions, note_num, commentaires) {
     const markersRef = ref(db, 'markers');
     const newMarkerRef = push(markersRef);
     const markerData = {
@@ -90,7 +90,9 @@ function saveMarker(position, popupContent, icon=null, name, partenaires, date, 
         partenaires: partenaires,
         date: date,
         lieu: lieu,
-        positions: positions
+        positions: positions,
+        note: note_num,
+        commentaires: commentaires
     };
     if (icon) {
         markerData.icon = icon;
@@ -142,6 +144,17 @@ function getPositions(){
     return [L,textepopup]
 }
 
+
+// Fonction pour récupérer la note sélectionnée
+function getSelectedRating() {
+    const selectedRating = document.querySelector('input[name="rating"]:checked');
+    if (selectedRating) {
+        // Trouver le label associé à l'input radio sélectionné
+        const label = document.querySelector(`label[for="${selectedRating.id}"]`);
+        return label ? [label.textContent,selectedRating.value] : null;
+    }
+    return null;
+}
 
 var customIcon = L.icon({
     iconUrl: '../icons_map/boutique-de-sexe-black.png',
@@ -220,6 +233,10 @@ function yes(){
     var variable = getPositions()
     var positions = variable[0]
     var popuptexte = variable[1]
+    var notes = getSelectedRating()
+    var note_emoji = notes[0]
+    var note_num = notes[1];
+    var commentaires = document.getElementById("commentaires").value
 
 
 
@@ -237,6 +254,10 @@ function yes(){
         <div class="popup-images">
             ${popuptexte}
         </div>
+        <p class="header_popup">La note</p>
+        <p>${note_emoji} - ${note_num}/10</p>
+        <p class="header_popup">Les commentaires</p>
+        <p>${commentaires}</p>
     </div>
     `;
     
@@ -274,7 +295,7 @@ function yes(){
         iconSize: icon.options.iconSize,
         iconAnchor: icon.options.iconAnchor,
         popupAnchor: icon.options.popupAnchor
-    }, name, partenaires, date, lieu, positions);
+    }, name, partenaires, date, lieu, positions, note_num, commentaires);
 
 }
 
