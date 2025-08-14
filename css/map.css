@@ -234,3 +234,55 @@ li {
         gap: 4px; /* Espacement réduit sur mobile */
     }
 }
+
+/* Ajustements pour petits écrans (mobile) */
+@media (max-width: 600px) {
+    #positions li {
+        margin: 4px;
+    }
+
+    #positions label {
+        padding: 4px;
+        width: 40px;
+        height: 40px;
+    }
+
+    #positions label img {
+        height: 28px;
+        width: 28px;
+    }
+
+    #positions label::before {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        top: -4px;
+        left: -4px;
+    }
+}
+
+/* Ajustements pour très petits écrans */
+@media (max-width: 400px) {
+    #positions li {
+        margin: 3px;
+    }
+
+    #positions label {
+        padding: 3px;
+        width: 32px;
+        height: 32px;
+    }
+
+    #positions label img {
+        height: 22px;
+        width: 22px;
+    }
+
+    #positions label::before {
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        top: -3px;
+        left: -3px;
+    }
+}
