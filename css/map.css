@@ -162,36 +162,75 @@ li {
     font-weight: bold;
 }
 
+/* Section de notation */
 .emoji-rating {
     display: flex;
-    justify-content: center;
-    gap: 2px;
-    margin-bottom: 10px;
+    flex-wrap: wrap; /* Permet le retour à la ligne automatique */
+    justify-content: center; /* Centre les emojis */
+    gap: 6px; /* Espacement entre les emojis */
+    margin: 10px 0;
+    max-width: 100%; /* Limite la largeur */
 }
+
 
 .emoji-rating input[type="radio"] {
     display: none;
 }
 
+/* Style des labels (emojis) */
 .emoji-rating label {
-    display: inline-block;
-    font-size: 32px;
+    display: block; /* Chaque emoji est un bloc */
+    font-size: 28px; /* Taille des emojis */
     cursor: pointer;
-    transition: transform 0.2s;
-    padding: 5px;
+    transition: all 0.2s ease;
+    width: 40px; /* Largeur fixe */
+    height: 40px; /* Hauteur fixe */
+    line-height: 40px; /* Centrage vertical */
+    text-align: center;
+    border-radius: 50%; /* Forme ronde */
 }
 
 .emoji-rating label:hover {
-    transform: scale(1.2);
+    transform: scale(1.15);
 }
 
+/* Effet quand sélectionné */
 .emoji-rating input[type="radio"]:checked + label {
-    transform: scale(1.3);
+    transform: scale(1.25);
     filter: drop-shadow(0 0 2px gold);
+    background-color: rgba(255, 215, 0, 0.2);
+}
+
+/* Style spécifique pour l'emoji "❌" (plus petit) */
+.emoji-rating label:last-child {
+    font-size: 24px;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
 }
 
 .selected-rating {
     font-size: 14px;
     color: #666;
     margin-top: 10px;
+}
+
+
+/* Adaptation pour petits écrans */
+@media (max-width: 450px) {
+    .emoji-rating label {
+        font-size: 24px;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+    }
+    .emoji-rating label:last-child {
+        font-size: 22px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+    }
+    .emoji-rating {
+        gap: 4px; /* Espacement réduit sur mobile */
+    }
 }
