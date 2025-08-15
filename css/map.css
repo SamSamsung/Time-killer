@@ -254,7 +254,7 @@ li {
 
 
 #comment_box{
-    width: 100%; /* Largeur maximale = 100% du conteneur */
+    width: 90%; /* Largeur maximale = 100% du conteneur */
     max-width: 500px; /* Largeur maximale sur grand écran */
     min-width: 200px; /* Largeur minimale sur petit écran */
     box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */

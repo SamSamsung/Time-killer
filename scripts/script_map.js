@@ -72,7 +72,7 @@ function getPopupContent(popupContent, key) {
         ${popupContent}
         <button class="popup-button" style="background-color: lightblue" onclick="modifyMarker('${key}')">Modifier</button>
         <button class="popup-button" style="background-color: red" onclick="removeMarker('${key}')">Supprimer</button>
-        <button class="popup-button" style="background-color: green" onclick="showCommentPopup('${key}')">Ajouter un commentaire</button>
+        <button class="popup-button" style="background-color: lightgreen" onclick="showCommentPopup('${key}')">Ajouter un commentaire</button>
     </div>
     `;
 }
