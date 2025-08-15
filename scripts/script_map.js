@@ -245,19 +245,6 @@ var customIcon = L.icon({
     iconAnchor: [16, 16], // point de l'icône qui correspondra à la position du marqueur
     popupAnchor: [0, -16] // point à partir duquel le popup devrait s'ouvrir relativement à l'iconAnchor
 });
-
-
-
-
-
-// Ajouter un marqueur
-L.marker([51.5, -0.09]).addTo(map)
-    .bindPopup('Un endroit sympa !')
-    .openPopup();
-
-
-var popup = L.popup();
-
 // Variable pour stocker le marqueur temporaire
 var tempMarker = null;
 
@@ -392,6 +379,7 @@ function yes(){
             positions: positions,
             note: note_num,
             commentaires: commentaires,
+            creator_id: creator,
             icon: {
                 iconUrl: icon.options.iconUrl,
                 iconSize: icon.options.iconSize,
