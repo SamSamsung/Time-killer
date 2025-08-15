@@ -352,7 +352,7 @@ function yes(){
         <p>${note_emoji} - ${note_num}/10</p>
         <p class="header_popup">Les commentaires</p>
         <p>${commentaires}</p>
-        <p class="header_popup">Les commentaires exterieurs</p>
+        <p class="header_popup">Section commentaire</p>
     `;
     
     
