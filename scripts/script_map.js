@@ -70,14 +70,15 @@ function getPopupContent(popupContent, key) {
     return `
     <div>
         ${popupContent}
-        <button class="popup-button" style="background-color: lightblue;border-radius:10px;" onclick="modifyMarker('${key}')">Modifier</button>
-        <button class="popup-button" style="background-color: red;border-radius:10px;" onclick="removeMarker('${key}')">Supprimer</button>
+        <button class="popup-button" style="background-color: lightblue" onclick="modifyMarker('${key}')">Modifier</button>
+        <button class="popup-button" style="background-color: red" onclick="removeMarker('${key}')">Supprimer</button>
+        <button class="popup-button" style="background-color: green" onclick="showCommentPopup('${key}')">Ajouter un commentaire</button>
     </div>
     `;
 }
 
 // Sauvegarder un marqueur dans Realtime Database
-function saveMarker(position, popupContent, icon=null, name, partenaires, date, lieu, positions, note_num, commentaires) {
+function saveMarker(position, popupContent, icon=null, name, partenaires, date, lieu, positions, note_num, commentaires, creator) {
     const markersRef = ref(db, 'markers');
     const newMarkerRef = push(markersRef);
     const markerData = {
@@ -89,7 +90,8 @@ function saveMarker(position, popupContent, icon=null, name, partenaires, date, 
         lieu: lieu,
         positions: positions,
         note: note_num,
-        commentaires: commentaires
+        commentaires: commentaires,
+        creator_id: creator
     };
     if (icon) {
         markerData.icon = icon;
@@ -110,20 +112,40 @@ function saveMarker(position, popupContent, icon=null, name, partenaires, date, 
 // Supprimer un marqueur de la base de données
 function removeMarker(key) {
     const markerRef = ref(db, `markers/${key}`);
-    remove(markerRef)
-        .then(() => {
-            console.log("Marqueur supprimé avec succès !");
-            // Recharger les marqueurs pour mettre à jour la carte
-            map.eachLayer(function(layer) {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
+
+    // On empeche de supprimer les markers qui ne sont pas les siens.
+    get(markerRef).then((snapshot) => {
+        const markerData = snapshot.val();
+        if (!markerData) {
+            console.error("Aucune donnée trouvée pour ce marqueur.");
+            return;
+        }
+        // On empeche n'importe qui de modifier les markers des autres
+        if(window.auth.currentUser.uid != markerData.creator_id){
+            alert("Vous essayez de supprimer un marker que vous n'avez pas créé et ce n'est pas autorisé")
+            return;
+        }
+        
+        // On supprime s'il n'y a aucun soucis
+        remove(markerRef)
+            .then(() => {
+                console.log("Marqueur supprimé avec succès !");
+                // Recharger les marqueurs pour mettre à jour la carte
+                map.eachLayer(function(layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+                loadMarkers();
+            })
+            .catch((error) => {
+                console.error("Erreur lors de la suppression du marqueur :", error);
             });
-            loadMarkers();
-        })
-        .catch((error) => {
-            console.error("Erreur lors de la suppression du marqueur :", error);
-        });
+
+    }).catch((error) => {
+        console.error("Erreur lors de la récupération des données du marqueur :", error);
+    });
+    
 }
 
 
@@ -134,6 +156,12 @@ function modifyMarker(key) {
         const markerData = snapshot.val();
         if (!markerData) {
             console.error("Aucune donnée trouvée pour ce marqueur.");
+            return;
+        }
+
+        // On empeche n'importe qui de modifier les markers des autres
+        if(window.auth.currentUser.uid != markerData.creator_id){
+            alert("Vous essayez de modifier un marker que vous n'avez pas créé et ce n'est pas autorisé")
             return;
         }
 
@@ -174,6 +202,14 @@ function modifyMarker(key) {
     }).catch((error) => {
         console.error("Erreur lors de la récupération des données du marqueur :", error);
     });
+}
+
+
+function showCommentPopup(key){
+        document.getElementById("overlay").classList.add("show");
+        document.getElementById("comments").classList.add("active");
+        document.getElementById("pseudo").innerText = window.auth.currentUser.displayName;
+        document.getElementById("key").innerHTML = key;
 }
 
 
@@ -267,6 +303,14 @@ function pop_up_close(){
     window.currentEditingKey = null;
 }
 
+
+function pop_up_close_comments(){
+    document.getElementById("comments").classList.remove("active")
+    document.getElementById("overlay").classList.remove("show")
+    ocument.querySelector('#map').style.pointerEvents = 'auto';
+}
+
+
 function yes(){
     document.getElementById("informations").classList.remove("active")
     document.getElementById("overlay").classList.remove("show")
@@ -288,10 +332,10 @@ function yes(){
     var note_num = notes[1];
     var commentaires = document.getElementById("commentaires").value
 
+    var creator = window.auth.currentUser.uid; // Utiliser l'ID de l'utilisateur
 
 
     var popupContent = `
-    <div>
         <p class="header_popup">L'heureux·se élu·e</p>
         <p>${name}</p>
         <p class="header_popup">Partenaire·s</p>
@@ -308,7 +352,7 @@ function yes(){
         <p>${note_emoji} - ${note_num}/10</p>
         <p class="header_popup">Les commentaires</p>
         <p>${commentaires}</p>
-    </div>
+        <p class="header_popup">Les commentaires exterieurs</p>
     `;
     
     
@@ -374,7 +418,7 @@ function yes(){
             iconSize: icon.options.iconSize,
             iconAnchor: icon.options.iconAnchor,
             popupAnchor: icon.options.popupAnchor
-        }, name, partenaires, date, lieu, positions, note_num, commentaires)
+        }, name, partenaires, date, lieu, positions, note_num, commentaires, creator)
         .then(() => {
             window.tempMarker = null;
         })
@@ -384,6 +428,115 @@ function yes(){
         });
     }
 
+}
+
+
+function yes_comments(){
+    document.getElementById("comments").classList.remove("active")
+    document.getElementById("overlay").classList.remove("show")
+    document.querySelector('#map').style.pointerEvents = 'auto';
+
+    var key = document.getElementById("key").innerHTML;
+
+    var pseudo = window.auth.currentUser.displayName;
+    var photo = window.auth.currentUser.photoURL;
+    var texte = document.getElementById("comment_box").value;
+
+    // 1. Utiliser un proxy CORS pour les images Google
+    const proxyImageURL = photo ?
+        `https://images.weserv.nl/?url=${encodeURIComponent(photo)}&w=100&h=100&t=circle` :
+        'icons_map/default-avatar.png';
+
+    const markerRef = ref(db, `markers/${key}`);
+    get(markerRef).then((snapshot) => {
+        const markerData = snapshot.val();
+        if (!markerData) {
+            console.error("Aucune donnée trouvée pour ce marqueur.");
+            return;
+        }
+
+
+        const currentContent = markerData.popupContent;
+        const newContent = `
+        ${currentContent}
+        <div class="custom-comment-container" style="
+            margin-top: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            display: flex;
+            width: calc(100% - 20px); /* Largeur = 100% du popup - marges */
+        ">
+            <!-- Partie gauche : Image de profil -->
+            <div style="
+                flex: 0 0 60px;
+                margin-right: 10px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            ">
+                <img src="${proxyImageURL}"
+                     style="
+                        width: 50px;
+                        height: 50px;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        border: 2px solid #4285F4;
+                        margin-bottom: 5px;
+                     "
+                     onerror="this.src='icons_map/default-avatar.png'">
+            </div>
+
+            <!-- Partie droite : Pseudo et texte -->
+            <div style="
+                flex: 1;
+                min-width: 0;
+            ">
+                <!-- Pseudo en haut -->
+                <div style="
+                    font-weight: bold;
+                    color: #4285F4;
+                    margin-bottom: 5px;
+                    border-bottom: 1px solid #eee;
+                    padding-bottom: 5px;
+                    font-size: 14px;
+                ">
+                    ${pseudo}
+                </div>
+
+                <!-- Texte du commentaire -->
+                <div style="
+                    font-size: 13px;
+                    color: #333;
+                    word-break: break-word;
+                ">
+                    ${texte}
+                </div>
+            </div>
+        </div>
+        `;
+
+
+        update(markerRef,{
+            popupContent: newContent,
+        }).then(() => {
+            console.log("Marqueur mis à jour avec succès !");
+            // Recharger les marqueurs pour mettre à jour la carte
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            loadMarkers();
+            // Réinitialiser
+            window.currentEditingKey = null;
+            window.tempMarker = null;
+        });
+    }).catch((error) => {
+        console.error("Erreur lors de la récupération des données du marqueur :", error);
+    });
+    
 }
 
 
@@ -428,6 +581,14 @@ function login_pop_up_close() {
 // Mettre à jour l'UI en fonction de l'état de connexion
 function updateUI(user) {
     if (user) {
+        // Utilisateur connecté
+        const displayName = user.displayName || "Utilisateur inconnu";
+        const email = user.email || "Aucun email";
+        const photoURL = user.photoURL || "./icons_map/default-avatar.png"; // URL de la photo de profil
+
+        console.log("Nom:", displayName);
+        console.log("Email:", email);
+        console.log("Photo:", photoURL);
         // Activer la carte
         document.getElementById('map').removeAttribute('disabled');
         document.getElementById('logout-button').style.display = 'inline';

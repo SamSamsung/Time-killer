@@ -46,18 +46,30 @@
     cursor: pointer;
 }
 
-.pop_up{
+.popup-button{
+    padding: 10px 10px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.pop_up {
     text-align: center;
-    top: 0%;
     width: 50%;
     transform: translate(-50%, 30%) scale(0);
     height: auto;
 }
 
-.pop_up.active{
+
+.pop_up.active#informations{
     transform: translate(-50%, 30%) scale(1.5);
+    top: 0%;
 }
 
+.pop_up.active#comments{
+    transform: translate(-50%, -50%) scale(1.5);
+}
 
 li {
     display: inline-block;
