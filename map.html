@@ -10,8 +10,9 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/leaflet.control.locate/dist/L.Control.Locate.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" /> <!-- Barre de recherche CSS-->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- Barre de recherche JS-->
+    <script type="module" src="https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js"></script> <!-- Authentification JS-->
     <title>Map</title>
 </head>
     <body>
@@ -123,16 +124,30 @@
             <button class="verif_button" style="background-color: lightgreen;" onclick="yes()">Enregistrer</button>
             <button class="verif_button" style="background-color: red;" onclick="pop_up_close()">Annuler</button>
         </div>
+        
         <div id="map-controls">
             <button id="locate-button"><img src="./icons_map/target.png" alt="Localiser"></button>
+            <button id="logout-button" class="verif_button" style="background-color: red; display: none;">Déconnexion</button>
         </div>
+        
         <div id="map">
+        </div>
+        
+        <!-- Popup de connexion (style identique à tes autres popups) -->
+        <div class="pop_up" id="login-popup">
+            <h2>Connexion requise</h2>
+            <p>Pour utiliser la carte, connecte-toi avec ton compte Google.</p>
+            <button id="google-login-button" class="verif_button" style="background-color: #4285F4; color: white;">
+                Se connecter avec Google
+            </button>
         </div>
         <script type="module">
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
             import { getDatabase, ref, push, set, get, onValue, remove } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+            import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+            
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
           
@@ -162,6 +177,16 @@
             window.get = get;
             window.onValue = onValue;
             window.remove = remove;
+            window.app = app
+
+
+            const auth = getAuth(app);
+            const provider = new GoogleAuthProvider();
+            window.auth = auth;
+            window.onAuthStateChanged = onAuthStateChanged;
+            window.signOut = signOut;
+            window.signInWithPopup = signInWithPopup;
+            window.provider = provider;
         </script>
         
         <script src="./scripts/script_map.js"></script>

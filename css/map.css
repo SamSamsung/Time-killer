@@ -128,14 +128,14 @@ li {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    z-index: 1000;
+    z-index: 1 !important;
 }
 
 #locate-button {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    z-index: 1000;
+    z-index: 0 !important;
     padding: 8px;
     background-color: white;
     border: 1px solid #ccc;
@@ -214,6 +214,32 @@ li {
     color: #666;
     margin-top: 10px;
 }
+
+/* Style du popup de connexion */
+#login-popup {
+    text-align: center;
+    padding: 20px;
+    max-width: 400px;
+    width: 90%;
+}
+
+
+/* Désactiver la carte quand non connecté */
+#map[disabled] {
+    pointer-events: none;
+    opacity: 0.3;
+    filter: grayscale(100%);
+}
+
+#logout-button{
+    position: absolute;
+    bottom: 7px;
+    left: 50px;
+    padding: 8px;
+   
+    display: flex;
+}
+
 
 
 /* Adaptation pour petits écrans */

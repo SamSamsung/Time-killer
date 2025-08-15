@@ -1,6 +1,4 @@
-
-
-
+//import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 var map = L.map('map');
 
@@ -72,8 +70,7 @@ function getPopupContent(popupContent, key) {
     return `
     <div>
         ${popupContent}
-        <p>Clé du marqueur : ${key}</p>
-        <button class="popup-button" style="background-color: lightblue;border-radius:10px;" onclick="alert('Bouton 1 cliqué !')">Modifier</button>
+        <button class="popup-button" style="background-color: lightblue;border-radius:10px;" onclick="modifyMarker('${key}')">Modifier</button>
         <button class="popup-button" style="background-color: red;border-radius:10px;" onclick="removeMarker('${key}')">Supprimer</button>
     </div>
     `;
@@ -127,6 +124,56 @@ function removeMarker(key) {
         .catch((error) => {
             console.error("Erreur lors de la suppression du marqueur :", error);
         });
+}
+
+
+function modifyMarker(key) {
+    // 1. Récupérer les données du marqueur depuis Firebase
+    const markerRef = ref(db, `markers/${key}`);
+    get(markerRef).then((snapshot) => {
+        const markerData = snapshot.val();
+        if (!markerData) {
+            console.error("Aucune donnée trouvée pour ce marqueur.");
+            return;
+        }
+
+        // 2. Pré-remplir le formulaire avec les données existantes
+        document.getElementById("dropdown_name").value = markerData.name || "Samuel";
+        document.getElementById("partenaire").value = markerData.partenaires || "";
+        document.getElementById("date").value = markerData.date || new Date().toISOString().slice(0, 10);
+        document.getElementById("lieu").value = markerData.lieu || "";
+        document.getElementById("commentaires").value = markerData.commentaires || "";
+
+        // 3. Gérer les positions (cocher les cases correspondantes)
+        const positions = markerData.positions || [];
+        document.querySelectorAll("#positions input[type=checkbox]").forEach(checkbox => {
+            checkbox.checked = positions.includes(checkbox.id);
+        });
+
+        // 4. Gérer la note (sélectionner le radio button correspondant)
+        const note = markerData.note;
+        if (note) {
+            document.querySelector(`input[name="rating"][value="${note}"]`).checked = true;
+        }
+
+        // 5. Afficher le popup de modification
+        document.getElementById("informations").classList.add("active");
+        document.getElementById("overlay").classList.add("show");
+        document.querySelector('#map').style.pointerEvents = 'none';
+
+        // 6. Stocker la clé du marqueur en cours de modification (pour la sauvegarde)
+        window.currentEditingKey = key;
+
+        // 7. Stocker le marqueur temporaire (pour mise à jour visuelle)
+        const position = markerData.position;
+        const popupContent = markerData.popupContent;
+        const icon = markerData.icon || customIcon;
+        window.tempMarker = L.marker(position, { icon: L.icon(icon) }).addTo(map)
+            .bindPopup(popupContent)
+            .openPopup();
+    }).catch((error) => {
+        console.error("Erreur lors de la récupération des données du marqueur :", error);
+    });
 }
 
 
@@ -215,6 +262,9 @@ function pop_up_close(){
         map.removeLayer(tempMarker);
         tempMarker = null;
     }
+
+    // Réinitialiser le mode modification
+    window.currentEditingKey = null;
 }
 
 function yes(){
@@ -254,7 +304,7 @@ function yes(){
         <div class="popup-images">
             ${popuptexte}
         </div>
-        <p class="header_popup">La note</p>
+        <p class="header_popup">Note</p>
         <p>${note_emoji} - ${note_num}/10</p>
         <p class="header_popup">Les commentaires</p>
         <p>${commentaires}</p>
@@ -285,23 +335,129 @@ function yes(){
     tempMarker.setIcon(customIcon);
     tempMarker.getPopup().setContent(popupContent);
 
-
-
-
-    
-    // Sauvegarder le marqueur dans Realtime Database
-    saveMarker(position, popupContent,{
-        iconUrl: icon.options.iconUrl,
-        iconSize: icon.options.iconSize,
-        iconAnchor: icon.options.iconAnchor,
-        popupAnchor: icon.options.popupAnchor
-    }, name, partenaires, date, lieu, positions, note_num, commentaires);
+    if (window.currentEditingKey) {
+        // Mode modification : mettre à jour le marqueur existant
+        const markerRef = ref(db, `markers/${window.currentEditingKey}`);
+        set(markerRef, {
+            position: [position.lat, position.lng],
+            popupContent: popupContent,
+            name: name,
+            partenaires: partenaires,
+            date: date,
+            lieu: lieu,
+            positions: positions,
+            note: note_num,
+            commentaires: commentaires,
+            icon: {
+                iconUrl: icon.options.iconUrl,
+                iconSize: icon.options.iconSize,
+                iconAnchor: icon.options.iconAnchor,
+                popupAnchor: icon.options.popupAnchor
+            }
+        }).then(() => {
+            console.log("Marqueur mis à jour avec succès !");
+            // Recharger les marqueurs pour mettre à jour la carte
+            map.eachLayer(layer => {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            loadMarkers();
+            // Réinitialiser
+            window.currentEditingKey = null;
+            window.tempMarker = null;
+        });
+    } else {
+        // Mode création : sauvegarder un nouveau marqueur
+        saveMarker(position, popupContent, {
+            iconUrl: icon.options.iconUrl,
+            iconSize: icon.options.iconSize,
+            iconAnchor: icon.options.iconAnchor,
+            popupAnchor: icon.options.popupAnchor
+        }, name, partenaires, date, lieu, positions, note_num, commentaires)
+        .then(() => {
+            window.tempMarker = null;
+        })
+        .catch((error) => {
+            console.error("Erreur lors de la création :", error);
+            alert("Erreur lors de la sauvegarde.");
+        });
+    }
 
 }
 
 
+// Fonction de connexion avec Google
+function loginWithGoogle() {
+    window.signInWithPopup(window.auth, window.provider)
+        .then((result) => {
+            // Connexion réussie
+            login_pop_up_close();
+        })
+        .catch((error) => {
+            console.error("Erreur de connexion :", error);
+        });
+}
+
+// Fonction de déconnexion
+function logout() {
+    window.signOut(window.auth)
+        .then(() => {
+            // Rafraîchir la page après une déconnexion réussie
+            window.location.reload();
+        })
+        .catch((error) => {
+            console.error("Erreur de déconnexion :", error);
+        });
+}
+
+// Afficher le popup de connexion
+function show_login_popup() {
+    document.getElementById("login-popup").classList.add("active");
+    document.getElementById("overlay").classList.add("show");
+    document.querySelector('#map').style.pointerEvents = 'none';
+}
+
+// Fermer le popup (fonction existante, déjà définie dans ton code)
+function login_pop_up_close() {
+    document.getElementById("login-popup").classList.remove("active");
+    document.getElementById("overlay").classList.remove("show");
+    document.querySelector('#map').style.pointerEvents = 'auto';
+}
+
+// Mettre à jour l'UI en fonction de l'état de connexion
+function updateUI(user) {
+    if (user) {
+        // Activer la carte
+        document.getElementById('map').removeAttribute('disabled');
+        document.getElementById('logout-button').style.display = 'inline';
+        loadMarkers(); // Charger les marqueurs de l'utilisateur
+    } else {
+        // Désactiver la carte et afficher le popup
+        document.getElementById('map').setAttribute('disabled', 'true');
+        document.getElementById('logout-button').style.display = 'none';
+        show_login_popup(); // Afficher le popup de connexion
+    }
+}
+
+
+
+// Écouteur pour le bouton de connexion Google
+document.getElementById('google-login-button').addEventListener('click', loginWithGoogle);
+// Écouteur pour le bouton de déconnexion
+document.getElementById('logout-button').addEventListener('click', logout);
+
 document.addEventListener('DOMContentLoaded', function() {
-    loadMarkers();
+    // Désactiver la carte par défaut
+    document.getElementById('map').setAttribute('disabled', 'true');
+
+    
+    window.onAuthStateChanged(window.auth, (user) => {
+        updateUI(user);
+    });
+    
+    
+    //loadMarkers();
     // Ajouter le contrôle de géolocalisation
     
     // Ajouter le gestionnaire d'événement pour le bouton de localisation
@@ -345,4 +501,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     map.on('locationerror', onLocationError);
+
+    
 });
