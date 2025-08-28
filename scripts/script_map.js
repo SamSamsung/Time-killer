@@ -350,11 +350,15 @@ function yes(){
     } else if(name === "Nolwenn"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-lightgreen.png';
     } else if(name === "Alex"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-green.png';
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-gray.png';
     } else if(name === "Samuel"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-black.png';
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-red.png';
     } else if(name === "Gabrielle"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
+    } else if(name === "Tim"){
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-green.png';
+    }  else {
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-black.png';
     }
     var customIcon = L.icon({
         iconUrl: icon.options.iconUrl,
