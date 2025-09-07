@@ -354,10 +354,12 @@ function yes(){
     } else if(name === "Samuel"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-red.png';
     } else if(name === "Gabrielle"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-magenta.png';
     } else if(name === "Tim"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-green.png';
-    }  else {
+    } else if(name === "Iloë"){
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
+    } else {
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-black.png';
     }
     var customIcon = L.icon({
