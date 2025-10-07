@@ -359,6 +359,8 @@ function yes(){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-green.png';
     } else if(name === "Iloë"){
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
+    } else if(name === "Maurange"){
+        icon.options.iconUrl = '../icons_map/boutique-de-sexe-yellow.png';
     } else {
         icon.options.iconUrl = '../icons_map/boutique-de-sexe-black.png';
     }
