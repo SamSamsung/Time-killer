@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fiche de Révision : Calcul Différentiel</title>
+    <!-- Chargement de Tailwind CSS pour le style -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Style pour la scrollbar (optionnel, mais améliore le look) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* gris foncé */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748; /* gris très foncé */
+        }
+        /* Style pour un affichage fluide du scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+        /* Style personnalisé pour les listes de fiches */
+        .fiche-liste li {
+            position: relative;
+            padding-left: 1.5rem; /* Espace pour l'icône */
+            margin-bottom: 0.75rem;
+        }
+        .fiche-liste li::before {
+            content: '•'; /* Puce personnalisée */
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+            line-height: 1.5rem; /* Aligner avec le texte */
+        }
+        /* Couleurs pour les types d'énoncés */
+        .def::before { color: #67e8f9; } /* cyan */
+        .theo::before { color: #facc15; } /* jaune */
+        .prop::before { color: #a78bfa; } /* violet */
+        .lemme::before { color: #f87171; } /* rouge */
+        .coro::before { color: #4ade80; } /* vert */
+
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 font-sans leading-relaxed">
+
+    <!-- En-tête -->
+    <header class="bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <h1 class="text-3xl font-bold text-white">Calcul Différentiel & Équations Différentielles</h1>
+            <p class="text-lg text-gray-400">Fiche de Révision Détaillée (Basé sur le PDF)</p>
+        </div>
+    </header>
+
+    <!-- Contenu principal (Layout flexible) -->
+    <div class="flex flex-col md:flex-row container mx-auto px-6 py-8 gap-8">
+
+        <!-- Barre latérale : Le Plan du Cours (Navigation) -->
+        <aside class="w-full md:w-1/4 lg:w-1/5">
+            <div class="sticky top-24 p-4 bg-gray-800 rounded-lg shadow-inner">
+                <h2 class="text-xl font-semibold text-white mb-4 border-b border-gray-600 pb-2">Plan du Cours</h2>
+                <nav>
+                    <ul class="space-y-3">
+                        <li>
+                            <h3 class="font-bold text-lg text-cyan-400">Chap 1 : Apps Continues</h3>
+                            <ul class="ml-4 mt-2 space-y-2 text-gray-300">
+                                <li><a href="#chap1-1" class="hover:text-white transition-colors duration-200 text-sm">Continuité</a></li>
+                                <li><a href="#chap1-2" class="hover:text-white transition-colors duration-200 text-sm">Complétude</a></li>
+                                <li><a href="#chap1-3" class="hover:text-white transition-colors duration-200 text-sm">Compacité</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3 class="font-bold text-lg text-cyan-400">Chap 2 : Apps Différentiables</h3>
+                            <ul class="ml-4 mt-2 space-y-2 text-gray-300">
+                                <li><a href="#chap2-1" class="hover:text-white transition-colors duration-200 text-sm">Différentiabilité</a></li>
+                                <li><a href="#chap2-2" class="hover:text-white transition-colors duration-200 text-sm">Calcul Différentiel</a></li>
+                                <li><a href="#chap2-3" class="hover:text-white transition-colors duration-200 text-sm">Ordre Supérieur</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3 class="font-bold text-lg text-cyan-400">Chap 3 : Inversion Locale</h3>
+                            <ul class="ml-4 mt-2 space-y-2 text-gray-300">
+                                <li><a href="#chap3-1" class="hover:text-white transition-colors duration-200 text-sm">Th. Inversion Locale</a></li>
+                                <li><a href="#chap3-2" class="hover:text-white transition-colors duration-200 text-sm">Th. Fonctions Implicites</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <h3 class="font-bold text-lg text-cyan-400">Chap 4 : Équations Diff.</h3>
+                            <ul class="ml-4 mt-2 space-y-2 text-gray-300">
+                                <li><a href="#chap4-1" class="hover:text-white transition-colors duration-200 text-sm">Cauchy-Lipschitz</a></li>
+                                <li><a href="#chap4-2" class="hover:text-white transition-colors duration-200 text-sm">Équadiffs Linéaires</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Contenu principal : Les Fiches -->
+        <main class="w-full md:w-3/4 lg:w-4/5">
+            
+            <div class="bg-gray-800 rounded-lg shadow-xl p-6 md:p-8">
+                
+                <!-- CHAPITRE 1 -->
+                <section id="chap1" class="mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-600 pb-3">Chapitre 1 : Applications Continues</h2>
+                    
+                    <h3 id="chap1-1" class="text-2xl font-semibold text-cyan-400 mb-4">I. Continuité</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                        <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">Continuité en $a$ :</strong> $f: X \to Y$ est continue en $a$ si $\lim_{x \to a} f(x) = f(a)$. (Déf. en $\epsilon / \delta$).</li>
+                            <li class="prop"><strong class="text-purple-300">Caractérisation Séquentielle :</strong> $f$ est continue en $a$ $\iff$ pour toute suite $(x_n) \to a$, on a $(f(x_n)) \to f(a)$.</li>
+                            <li class="prop"><strong class="text-purple-300">Caractérisation Topologique :</strong> $f$ est continue sur $X$ $\iff$ l'image réciproque de tout ouvert de $Y$ est un ouvert de $X$.</li>
+                            <li class="prop"><strong class="text-purple-300">Composition :</strong> La composée d'applications continues est continue.</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="chap1-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Complétude (EVN)</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                         <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">Suite de Cauchy :</strong> $(x_n)$ est de Cauchy si $\forall \epsilon > 0, \exists N, \forall p,q \ge N, d(x_p, x_q) < \epsilon$.</li>
+                            <li class="prop"><strong class="text-purple-300">Propriétés :</strong> Toute suite convergente est de Cauchy. Toute suite de Cauchy est bornée.</li>
+                            <li class="def"><strong class="text-cyan-300">Espace Complet :</strong> Un espace métrique où toute suite de Cauchy converge.</li>
+                            <li class="def"><strong class="text-cyan-300">Espace de Banach :</strong> Un Espace Vectoriel Normé (EVN) qui est complet.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème :</strong> Tout EVN de dimension finie est un espace de Banach.</li>
+                            <li class="prop"><strong class="text-purple-300">Complétude et Fermeture :</strong> Un sous-espace $F$ d'un espace complet $E$ est complet $\iff$ $F$ est fermé dans $E$.</li>
+                            <li class="prop"><strong class="text-purple-300">Cas de $\mathcal{L}_c(E,F)$ :</strong> Si $F$ est un Banach, alors $\mathcal{L}_c(E,F)$ (applications linéaires continues de $E$ dans $F$) est un Banach.</li>
+                         </ul>
+                    </div>
+
+                    <h3 id="chap1-3" class="text-2xl font-semibold text-cyan-400 mb-4">III. Compacité & Connexité</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner">
+                         <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">Compacité (Heine-Borel) :</strong> $K$ est compact si de tout recouvrement de $K$ par des ouverts, on peut extraire un sous-recouvrement fini.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème (Bolzano-Weierstrass) :</strong> En dimension finie, $K$ est compact $\iff$ $K$ est fermé et borné.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème (Image d'un compact) :</strong> L'image d'un compact $K$ par une application continue $f$ est compacte.</li>
+                            <li class="coro"><strong class="text-green-400">Corollaire (Th. des Extrema) :</strong> Une fonction continue $f: K \to \mathbb{R}$ sur un compact $K \neq \emptyset$ est bornée et atteint ses bornes.</li>
+                            <li class="prop"><strong class="text-purple-300">Image d'un connexe :</strong> L'image d'un espace connexe par une application continue est connexe.</li>
+                            <li class="coro"><strong class="text-green-400">Corollaire (Th. des Valeurs Intermédiaires) :</strong> $f: [a,b] \to \mathbb{R}$ continue. Pour tout $k$ entre $f(a)$ et $f(b)$, $\exists c \in [a,b]$ tel que $f(c) = k$.</li>
+                         </ul>
+                    </div>
+                </section>
+
+                <!-- CHAPITRE 2 -->
+                <section id="chap2" class="mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-600 pb-3">Chapitre 2 : Applications Différentiables</h2>
+                    
+                    <h3 id="chap2-1" class="text-2xl font-semibold text-cyan-400 mb-4">I. Différentiabilité</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                        <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">Différentiable en $a$ :</strong> $f: U \to F$ est diff. en $a \in U$ s'il existe $L \in \mathcal{L}_c(E,F)$ (la différentielle $df_a$) t.q. $f(a+h) = f(a) + L(h) + o(||h||)$ qd $h \to 0$.</li>
+                            <li class="prop"><strong class="text-purple-300">Unicité :</strong> Si $f$ est diff. en $a$, sa différentielle $df_a$ est unique.</li>
+                            <li class="prop"><strong class="text-purple-300">Lien avec Continuité :</strong> Si $f$ est différentiable en $a$, alors $f$ est continue en $a$.</li>
+                            <li class="def"><strong class="text-cyan-300">Matrice Jacobienne :</strong> Si $E = \mathbb{R}^p$ et $F = \mathbb{R}^n$, $J_f(a) = \left( \frac{\partial f_i}{\partial x_j}(a) \right) \in \mathcal{M}_{n,p}(\mathbb{R})$ est la matrice de $df_a$ dans les bases canoniques.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème ($C^1$ et dérivées partielles) :</strong> $f$ est de classe $C^1$ sur $U$ $\iff$ toutes ses dérivées partielles existent et sont continues sur $U$.</li>
+                        </ul>
+                    </div>
+                    
+                    <h3 id="chap2-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Calcul Différentiel</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                        <ul class="fiche-liste">
+                            <li class="prop"><strong class="text-purple-300">Linéarité :</strong> $d(f+g)_a = df_a + dg_a$. L'espace $\mathcal{C}^1(U,F)$ est un EV.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème (Composition - Chain Rule) :</strong> $d(g \circ f)_a = dg_{f(a)} \circ df_a$. <br>Matriciellement : $J_{g \circ f}(a) = J_g(f(a)) \times J_f(a)$.</li>
+                            <li class="theo"><strong class="text-yellow-400">Inégalité des Accroissements Finis (IAF) :</strong> Si $f$ est $C^1$ sur $U$ (convexe) et $||df_x|| \le k$ pour tout $x \in U$, alors $||f(b) - f(a)|| \le k ||b-a||$ pour tous $a,b \in U$.</li>
+                            <li class="coro"><strong class="text-green-400">Corollaire (Différentielle nulle) :</strong> Si $U$ est connexe et $df_x = 0$ pour tout $x \in U$, alors $f$ est constante sur $U$.</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="chap2-3" class="text-2xl font-semibold text-cyan-400 mb-4">III. Différentielles d'Ordre Supérieur</h3>
+                     <div class="bg-gray-900 p-4 rounded-lg shadow-inner">
+                        <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">Application $C^k$ :</strong> $f$ est $C^k$ si elle est $C^{k-1}$ et son application différentielle $df: U \to \mathcal{L}_c(E, F)$ est $C^{k-1}$.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème de Schwarz :</strong> Si $f$ est de classe $C^2$, sa différentielle seconde $d^2f$ est symétrique. <br>Conséquence : $\frac{\partial^2 f}{\partial x_i \partial x_j} = \frac{\partial^2 f}{\partial x_j \partial x_i}$.</li>
+                            <li class="theo"><strong class="text-yellow-400">Formule de Taylor-Young (ordre 2) :</strong> Si $f$ est $C^2$ : <br> $f(a+h) = f(a) + df_a(h) + \frac{1}{2} d^2f_a(h,h) + o(||h||^2)$.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- CHAPITRE 3 -->
+                <section id="chap3" class="mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-600 pb-3">Chapitre 3 : Inversion Locale & Fonctions Implicites</h2>
+                    
+                    <h3 id="chap3-1" class="text-2xl font-semibold text-cyan-400 mb-4">I. Théorème d'Inversion Locale</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                        <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">$C^k$-difféomorphisme :</strong> $f: U \to V$ est un $C^k$-difféomorphisme si $f$ est bijective, et $f$ et $f^{-1}$ sont de classe $C^k$.</li>
+                            <li class="lemme"><strong class="text-red-400">Lemme (Perturbation d'isomorphisme) :</strong> L'ensemble $\text{Isom}(E,F)$ des isomorphismes est un ouvert de $\mathcal{L}_c(E,F)$.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème d'Inversion Locale (TIL) :</strong> Soit $f: U \to F$ ($E,F$ Banach) de classe $C^1$. Soit $a \in U$. <br>Si $df_a: E \to F$ est un isomorphisme, <br>Alors $f$ est un $C^1$-difféomorphisme local de $U$ (voisinage de $a$) sur $V=f(U)$ (voisinage de $f(a)$).</li>
+                            <li class="prop"><strong class="text-purple-300">Application (Jacobien) :</strong> En dim finie ($E=F=\mathbb{R}^n$), la condition $df_a$ isomorphisme $\iff \det(J_f(a)) \neq 0$.</li>
+                            <li class="coro"><strong class="text-green-400">Corollaire (Application ouverte) :</strong> Si $f$ est $C^1$ et $df_x$ est un isomorphisme *partout* sur $U$, alors $f$ est une application ouverte.</li>
+                        </ul>
+                    </div>
+                    
+                    <h3 id="chap3-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Théorème des Fonctions Implicites</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner">
+                        <ul class="fiche-liste">
+                            <li class="theo"><strong class="text-yellow-400">Théorème des Fonctions Implicites (TFI) :</strong> Soit $f: U \times V \to W$ (Banach) de classe $C^1$. Soit $(a,b) \in U \times V$ t.q. $f(a,b) = 0$. <br>Si la différentielle partielle $\frac{\partial f}{\partial y}(a,b): V \to W$ est un isomorphisme, <br>Alors il existe un voisinage $U'$ de $a$ et une unique fonction $\phi: U' \to V$ (la "fonction implicite") de classe $C^1$ t.q. $\phi(a) = b$ et $\forall x \in U', f(x, \phi(x)) = 0$.</li>
+                            <li class="prop"><strong class="text-purple-300">Calcul de la différentielle implicite :</strong> $d\phi_x = - \left( \frac{\partial f}{\partial y}(x, \phi(x)) \right)^{-1} \circ \left( \frac{\partial f}{\partial x}(x, \phi(x)) \right)$.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                 <!-- CHAPITRE 4 -->
+                <section id="chap4" class="mb-10">
+                    <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-600 pb-3">Chapitre 4 : Équations Différentielles</h2>
+                    
+                    <h3 id="chap4-1" class="text-2xl font-semibold text-cyan-400 mb-4">I. Théorème de Cauchy-Lipschitz</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                        <ul class="fiche-liste">
+                            <li class="def"><strong class="text-cyan-300">Problème de Cauchy :</strong> $y' = f(t,y)$ avec la condition initiale $y(t_0) = y_0$.</li>
+                            <li class="def"><strong class="text-cyan-300">Localement Lipschitzienne :</strong> $f$ est loc. lipschitzienne en $y$ si pour tout $(t_0, y_0)$, il existe un voisinage où $||f(t,y_1) - f(t,y_2)|| \le k ||y_1 - y_2||$.</li>
+                            <li class="prop"><strong class="text-purple-300">Propriété :</strong> Si $f$ est de classe $C^1$, alors $f$ est localement lipschitzienne.</li>
+                            <li class="lemme"><strong class="text-red-400">Lemme de Gronwall :</strong> Permet de contrôler une fonction par son intégrale, essentiel pour prouver l'unicité.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème de Cauchy-Lipschitz (Global) :</strong> Si $f$ est continue et *globalement* lipschitzienne en $y$, alors pour tout $(t_0, y_0)$, il existe une unique solution globale $y: I \to U$.</li>
+                            <li class="theo"><strong class="text-yellow-400">Théorème (Local) :</strong> Si $f$ est continue et *localement* lipschitzienne en $y$, alors pour tout $(t_0, y_0)$, il existe une unique solution *maximale*.</li>
+                            <li class="prop"><strong class="text-purple-300">Théorème de sortie des compacts :</strong> Une solution maximale $y(t)$ est définie sur un intervalle $]T_-, T_+[$. Si $T_+ < \infty$, alors $y(t)$ "sort de tout compact" de $U$ quand $t \to T_+$.</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="chap4-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Équations Différentielles Linéaires</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner">
+                        <ul class="fiche-liste">
+                            <li class="prop"><strong class="text-purple-300">Solutions Globales :</strong> Pour une équadiff linéaire $y' = A(t)y + b(t)$, si $A$ et $b$ sont continues sur $I$, alors toutes les solutions maximales sont globales (définies sur $I$ tout entier).</li>
+                            <li class="prop"><strong class="text-purple-300">Structure des solutions :</strong> $S = y_p + S_H$, où $y_p$ est une solution particulière et $S_H$ est l'espace vectoriel des solutions de l'équation homogène ($b=0$).</li>
+                            <li class="prop"><strong class="text-purple-300">Dimension de $S_H$ :</strong> Si $E$ est de dimension $n$, alors $S_H$ est un espace vectoriel de dimension $n$.</li>
+                            <li class="def"><strong class="text-cyan-300">Wronskien :</strong> Le déterminant $W(t)$ d'un système de $n$ solutions $(y_1, ..., y_n)$ dans la base canonique. $W(t) \neq 0 \iff$ le système est une base de $S_H$.</li>
+                            <li class="prop"><strong class="text-purple-300">Méthode de Variation de la Constante :</strong> Technique pour trouver une solution particulière $y_p$ à partir de la solution homogène $y_h$.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Fin du document -->
+                <div class="text-center text-gray-500 italic p-10 border-2 border-dashed border-gray-700 rounded-lg">
+                    <p>Fin de la fiche de révision.</p>
+                    <p>Le document PDF source s'arrête brusquement à la page 61 (au milieu d'une proposition sur les hypersurfaces). Cette fiche couvre l'essentiel du contenu jusqu'à ce point.</p>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <!-- Pied de page -->
+    <footer class="text-center p-6 mt-10 text-gray-500 text-sm">
+        Fiche de révision générée automatiquement à partir du document fourni.
+    </footer>
+
+    <!-- Script pour charger MathJax pour le rendu LaTeX -->
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          processEscapes: true
+        },
+        svg: {
+          fontCache: 'global'
+        }
+      };
+    </script>
+
+</body>
+</html>
+
