@@ -73,9 +73,10 @@
                         <li>
                             <h3 class="font-bold text-lg text-cyan-400">Chap 2 : Apps Différentiables</h3>
                             <ul class="ml-4 mt-2 space-y-2 text-gray-300">
-                                <li><a href="#chap2-1" class="hover:text-white transition-colors duration-200 text-sm">I. Différentiabilité</a></li>
-                                <li><a href="#chap2-2" class="hover:text-white transition-colors duration-200 text-sm">II. Règles de Calcul</a></li>
-                                <li><a href="#chap2-3" class="hover:text-white transition-colors duration-200 text-sm">III. Théorème de la Moyenne</a></li>
+                                <li><a href="#chap2-1" class="hover:text-white transition-colors duration-200 text-sm">I. Différentiabilité & C¹</a></li>
+                                <li><a href="#chap2-2" class="hover:text-white transition-colors duration-200 text-sm">II. Suites d'Apps C¹</a></li>
+                                <li><a href="#chap2-3" class="hover:text-white transition-colors duration-200 text-sm">III. Règles de Calcul</a></li>
+                                <li><a href="#chap2-4" class="hover:text-white transition-colors duration-200 text-sm">IV. Théorème de la Moyenne</a></li>
                             </ul>
                         </li>
                         <li>
@@ -100,7 +101,7 @@
                 <section id="chap2" class="mb-10">
                     <h2 class="text-3xl font-bold text-white mb-6 border-b border-gray-600 pb-3">Chapitre 2 : Applications Différentiables</h2>
                     
-                    <h3 id="chap2-1" class="text-2xl font-semibold text-cyan-400 mb-4">I. Différentiabilité</h3>
+                    <h3 id="chap2-1" class="text-2xl font-semibold text-cyan-400 mb-4">I. Différentiabilité et Classe $C^1$</h3>
                     <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
                         <ul class="fiche-liste">
                             <li class="def enonce enonce-def"><strong class="text-cyan-300">Différentiabilité en un point</strong><br>
@@ -110,10 +111,62 @@
                                 $$f(a+h) = f(a) + L(h) + o(||h||_E) \quad \text{quand } h \to 0$$
                                 L'application $L$, si elle existe, est unique et est appelée la <strong>différentielle</strong> de $f$ en $a$, notée $df_a$.
                             </li>
+                            <li class="prop enonce enonce-prop"><strong class="text-purple-300">Propriétés (Si $f$ est différentiable)</strong><br>
+                                Si $f: U \to F$ est différentiable en $a \in U$, alors :
+                                <ol class="list-decimal ml-6 mt-2">
+                                    <li>$f$ est <strong>continue</strong> en $a$.</li>
+                                    <li>Si $E = \mathbb{R}^n$, les <strong>dérivées partielles</strong> $\frac{\partial f}{\partial x_i}(a)$ existent pour tout $i=1..n$.</li>
+                                </ol>
+                            </li>
+                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Dérivée Partielle</strong><br>
+                                Soit $E = E_1 \times ... \times E_n$ et $a = (a_1, ..., a_n) \in U$. L'application partielle $f_i(x) = f(a_1, ..., a_{i-1}, x, a_{i+1}, ..., a_n)$ est la $i$-ème application partielle.
+                                <br>
+                                Si $f_i$ est différentiable en $a_i$, on note $\frac{\partial f}{\partial x_i}(a) = df_i(a_i) \in \mathcal{L}_c(E_i, F)$.
+                            </li>
+                            <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Théorème (Condition Suffisante de Différentiabilité)</strong><br>
+                                Soit $f: U \subset E \to F$ (où $E$ est de <strong>dimension finie</strong>, $F$ est un EVN).
+                                <br>
+                                Si toutes les dérivées partielles $\frac{\partial f}{\partial x_i}$ existent au voisinage de $a \in U$ et sont <strong>continues en $a$</strong>,
+                                <br>
+                                ALORS $f$ est différentiable en $a$.
+                            </li>
+                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Application de Classe $C^1$</strong><br>
+                                Soient $E, F$ des EVN, $U \subset E$ un ouvert.
+                                <br>
+                                $f: U \to F$ est dite de <strong>classe $C^1$</strong> si $f$ est différentiable en tout point $a \in U$, et si l'application "différentielle" :
+                                $$ d_f: U \to \mathcal{L}_c(E,F), \quad a \mapsto df_a $$
+                                est <strong>continue</strong> sur $U$.
+                            </li>
+                            <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Théorème (Équivalence $C^1$ en dim finie)</strong><br>
+                                Soit $E$ de <strong>dimension finie</strong>, $F$ un Banach. Soit $f: U \subset E \to F$.
+                                <br>
+                                $f$ est de <strong>classe $C^1$</strong> sur $U$ $\iff$ les dérivées partielles $\frac{\partial f}{\partial x_i}$ existent et sont <strong>continues</strong> sur $U$.
+                            </li>
+                            <li class="prop enonce enonce-prop"><strong class="text-purple-300">Composition d'applications $C^1$</strong><br>
+                                Si $f: U \subset E \to V \subset F$ est $C^1$ et $g: V \subset F \to G$ est $C^1$, alors $g \circ f$ est $C^1$.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h3 id="chap2-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Suites d'Applications $C^1$</h3>
+                    <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
+                        <ul class="fiche-liste">
+                            <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Théorème de convergence $C^1$</strong><br>
+                                Soit $E$ un Banach, $F$ un Banach, $U \subset E$ un ouvert. Soit $(f_n)_{n \in \mathbb{N}}$ une suite d'applications $C^1$ de $U$ dans $F$.
+                                <br>
+                                On suppose que :
+                                <ol class="list-decimal ml-6 mt-2">
+                                    <li>$(f_n)$ converge <strong>simplement</strong> vers $f: U \to F$.</li>
+                                    <li>$(df_n)$ converge <strong>uniformément sur tout compact</strong> de $U$ vers $g: U \to \mathcal{L}_c(E,F)$.</li>
+                                </ol>
+                                Alors $f$ est de classe $C^1$ sur $U$ et $df = g$.
+                                <br>
+                                <strong class="text-gray-400 italic">Note:</strong> Si $U$ est convexe et $(df_n)$ converge uniformément sur $U$ (pas seulement sur les compacts), alors $(f_n)$ converge aussi uniformément sur $U$.
+                            </li>
                         </ul>
                     </div>
                     
-                    <h3 id="chap2-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Règles de Calcul Différentiel</h3>
+                    <h3 id="chap2-3" class="text-2xl font-semibold text-cyan-400 mb-4">III. Règles de Calcul Différentiel</h3>
                     <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
                         <p class="text-gray-400 mb-4 italic">Soient $f, g: U \subset E \to F$ et $H: U \subset E \to G$ différentiables en $a \in U$. $E, F, G$ sont des EVN.</p>
                         <ul class="fiche-liste">
@@ -148,22 +201,25 @@
                         </ul>
                     </div>
 
-                    <h3 id="chap2-3" class="text-2xl font-semibold text-cyan-400 mb-4">III. Théorème de la Moyenne (IAF)</h3>
+                    <h3 id="chap2-4" class="text-2xl font-semibold text-cyan-400 mb-4">IV. Théorème de la Moyenne (IAF)</h3>
                      <div class="bg-gray-900 p-4 rounded-lg shadow-inner">
                         <ul class="fiche-liste">
-                            <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Inégalité des Accroissements Finis (IAF)</strong><br>
-                                Soit $f: U \to F$ une application de classe $C^1$ sur un ouvert <strong>convexe</strong> $U$.
+                            <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Inégalité des Accroissements Finis (Forme Générale sur $\mathbb{R}$)</strong><br>
+                                Soit $I$ un intervalle <strong>compact</strong> de $\mathbb{R}$, $F$ un EVN de <strong>dimension finie</strong>.
+                                Soient $\phi: I \to F$ et $\varphi: I \to \mathbb{R}$ deux applications continues sur $I$ et dérivables sur $\mathring{I}$ (l'intérieur de $I$).
                                 <br>
-                                S'il existe $k \ge 0$ tel que $\forall x \in U, |||df_x|||_{\mathcal{L}_c(E,F)} \le k$, alors :
-                                $$\forall (a,b) \in U^2, \quad ||f(b) - f(a)||_F \le k ||b-a||_E$$
+                                Si l'on a $\forall t \in \mathring{I}, ||\phi'(t)||_F \le \varphi'(t)$, alors :
+                                $$\forall (a,b) \in I^2 \text{ avec } a \le b, \quad ||\phi(b) - \phi(a)||_F \le \varphi(b) - \varphi(a)$$
                             </li>
                              <li class="coro enonce enonce-coro"><strong class="text-green-400">Corollaire (Différentielle nulle)</strong><br>
                                 Soit $f: U \to F$ différentiable sur un ouvert <strong>connexe</strong> $U$.
                                 <br>
                                 Si $df_x = 0$ pour tout $x \in U$, alors $f$ est constante sur $U$.
                             </li>
-                            <li class="coro enonce enonce-coro"><strong class="text-green-400">Corollaire (Contrôle des accroissements)</strong><br>
-                                Si $f$ est $C^1$ sur un ouvert convexe $U$ et $\forall x \in U, |||df_x|||_{\mathcal{L}_c(E,F)} \le k$, alors :
+                            <li class="coro enonce enonce-coro"><strong class="text-green-400">Corollaire (Contrôle des accroissements / IAF Cas Général)</strong><br>
+                                Soit $f: U \to F$ de classe $C^1$ sur un ouvert <strong>convexe</strong> $U$ d'un EVN $E$.
+                                <br>
+                                S'il existe $k \ge 0$ tel que $\forall x \in U, |||df_x|||_{\mathcal{L}_c(E,F)} \le k$, alors :
                                 $$\forall (a,b) \in U^2, \quad ||f(b) - f(a)||_F \le k ||b-a||_E$$
                             </li>
                         </ul>
@@ -250,6 +306,9 @@
                                 <br>
                                 $f$ est un $C^1$-difféomorphisme $\iff$ $\forall x \in U, df_x$ est un isomorphisme.
                             </li>
+                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Fonction Propre</strong><br>
+                                Soient $E, F$ des espaces topologiques (p.ex. des EVN). Une application $f: E \to F$ est dite <strong>propre</strong> si l'image réciproque de tout compact $K \subset F$ est un compact de $E$.
+                            </li>
                             <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Théorème d'Inversion Globale</strong><br>
                                 Soient $E, F$ des espaces de <strong>Banach</strong>, $U \subset E$ un ouvert.
                                 Soit $f: U \to F$ une application.
@@ -261,9 +320,6 @@
                                     <li>$\forall x \in U, df_x$ est <strong>inversible</strong> (un isomorphisme).</li>
                                 </ol>
                                 Alors $f(U)$ est un ouvert de $F$, et $f$ est un $C^1$-difféomorphisme de $U$ sur $f(U)$.
-                            </li>
-                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Fonction Propre</strong><br>
-                                Soient $E, F$ des espaces topologiques (p.ex. des EVN). Une application $f: E \to F$ est dite <strong>propre</strong> si l'image réciproque de tout compact $K \subset F$ est un compact de $E$.
                             </li>
                         </ul>
                     </div>
