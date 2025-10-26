@@ -151,17 +151,31 @@
                     <h3 id="chap2-2" class="text-2xl font-semibold text-cyan-400 mb-4">II. Suites d'Applications $C^1$</h3>
                     <div class="bg-gray-900 p-4 rounded-lg shadow-inner mb-6">
                         <ul class="fiche-liste">
-                            <li class="theo enonce enonce-theo"><strong class="text-yellow-400">Théorème de convergence $C^1$</strong><br>
-                                Soit $E$ un Banach, $F$ un Banach, $U \subset E$ un ouvert. Soit $(f_n)_{n \in \mathbb{N}}$ une suite d'applications $C^1$ de $U$ dans $F$.
+                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Convergence Uniforme (CU)</strong><br>
+                                Une suite $(f_n: U \to F)$ CVU vers $f$ si $\sup_{x \in U} ||f_n(x) - f(x)||_F \to 0$.
+                            </li>
+                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Convergence Locale Uniforme (CVLU)</strong><br>
+                                Une suite $(f_n: U \to F)$ CVLU vers $f$ si $\forall a \in U$, il existe un voisinage $V_a \subset U$ de $a$ tel que $(f_n|_{V_a})$ CVU vers $f|_{V_a}$.
+                            </li>
+                            <li class="def enonce enonce-def"><strong class="text-cyan-300">Convergence Uniforme sur tout Compact (CUK)</strong><br>
+                                Une suite $(f_n: U \to F)$ CUK vers $f$ si pour tout compact $K \subset U$, $(f_n|_K)$ CVU vers $f|_K$.
+                            </li>
+                            <li class="prop enonce enonce-prop"><strong class="text-purple-300">Proposition (Équivalence des Convergences)</strong><br>
+                                Pour une suite d'applications $f_n: U \to F$ (où $U$ est un ouvert d'un EVN $E$) :
+                                <br>
+                                La <strong>Convergence Locale Uniforme (CVLU)</strong> est <strong>équivalente</strong> à la <strong>Convergence Uniforme sur tout Compact (CUK)</strong>.
+                            </li>
+                            <li class="prop enonce enonce-prop"><strong class="text-purple-300">Proposition (Convergence $C^1$)</strong><br>
+                                Soient $E$ et $F$ des espaces de Banach.
                                 <br>
                                 On suppose que :
                                 <ol class="list-decimal ml-6 mt-2">
-                                    <li>$(f_n)$ converge <strong>simplement</strong> vers $f: U \to F$.</li>
-                                    <li>$(df_n)$ converge <strong>uniformément sur tout compact</strong> de $U$ vers $g: U \to \mathcal{L}_c(E,F)$.</li>
+                                    <li>$U \subset E$ est un ouvert <strong>connexe</strong>.</li>
+                                    <li>$(H_n)_{n \ge 0}$ est une suite d'applications de classe $C^1$ de $U$ dans $F$.</li>
+                                    <li>$\exists a \in U$ tel que la suite $(H_n(a))_{n \ge 0}$ soit convergente.</li>
+                                    <li>La suite $(DH_n)_{n \ge 0}$ converge <strong>localement uniformément</strong> (ou CUK) vers une application $L: U \to \mathcal{L}_c(E,F)$.</li>
                                 </ol>
-                                Alors $f$ est de classe $C^1$ sur $U$ et $df = g$.
-                                <br>
-                                <strong class="text-gray-400 italic">Note:</strong> Si $U$ est convexe et $(df_n)$ converge uniformément sur $U$ (pas seulement sur les compacts), alors $(f_n)$ converge aussi uniformément sur $U$.
+                                Alors la suite $(H_n)_{n \ge 0}$ converge <strong>uniformément sur les parties compactes</strong> de $U$ vers une application $H$, $H$ est de classe $C^1$ sur $U$, et $DH = L$.
                             </li>
                         </ul>
                     </div>
@@ -342,7 +356,7 @@
 
     <!-- Script pour charger MathJax pour le rendu LaTeX -->
     <script type="text/javascript" id="MathJax-script" async
-      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?v=4">
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js?v=5">
     </script>
     <script>
       MathJax = {
