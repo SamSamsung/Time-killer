@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CM 14 : Chimie analytique</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #005a9c; /* Bleu foncé */
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            font-weight: 700;
+        }
+        h2 {
+            color: #007bff; /* Bleu moyen */
+            margin-top: 2rem;
+            font-weight: 700;
+        }
+        h3, h4 {
+            color: #343a40;
+            margin-top: 1.5rem;
+            font-weight: 700;
+        }
+        p, li {
+            margin-bottom: 0.75em;
+        }
+        ul, ol {
+            padding-left: 30px;
+        }
+        strong, b {
+            color: #d90429; /* Rouge pour l'accentuation */
+        }
+        .explication {
+            background-color: #e6f7ff; /* Bleu très clair */
+            border-left: 5px solid #007bff; /* Bordure bleue */
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        .explication h4 {
+            margin-top: 0;
+            color: #005a9c;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .image-placeholder {
+            font-style: italic;
+            color: #555;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #fdfdfd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f3f5;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+        /* Styles pour QCM */
+        .qa-section {
+            background-color: #fdfbf3;
+            border: 1px solid #faeecd;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border-radius: 8px;
+        }
+        .correction {
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 8px;
+        }
+        .correction-note {
+            background-color: #fffbeb;
+            border: 1px solid #fef3c7;
+            padding: 0.5rem 1rem;
+            margin-top: 0.5rem;
+            border-radius: 6px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CM 14 : Chimie analytique</h1>
+        <p><strong>Méthodes analytiques utilisées pour le contrôle de la qualité d’un principe actif</strong></p>
+
+        <h2>I. Initiation au Contrôle de la qualité d’un principe actif</h2>
+        <p>Avant la mise sur le marché d’un médicament il faut absolument maitriser la qualité des matières premières/ PA du médicament.</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>"Maîtriser la qualité" signifie être capable de prouver, à chaque étape, que le produit est bien ce qu'il prétend être (identité), qu'il est à la bonne concentration (pureté, dosage) et qu'il n'est pas contaminé (impuretés). C'est une exigence légale non négociable pour garantir la sécurité du patient.</p>
+        </div>
+        
+        <p>Pour cela, il faut identifier certains paramètres :</p>
+        
+        <div class="image-placeholder">
+            [Image : Schéma récapitulatif du contrôle qualité. 
+            Il montre un flux : "Matières premières" -> "Produit fini : Principe Actif (PA)" -> "Médicaments". 
+            Des flèches "Maitrise de la qualité (assurance qualité)" pointent vers le PA et les Médicaments.
+            Une accolade relie le "Produit fini" à deux listes d'actions :
+            1.  <strong>Identification</strong> : Détermination de la formule brute (Analyse élémentaire, Spectrométrie de masse), Identification par les caractères (Aspect, Solubilité, Stabilité, etc.), Identification spectrale (UV, IR, RMN...).
+            2.  <strong>Dosage</strong> : PA (pureté 99-101%), Impuretés de synthèse, Stabilité du PA.]
+        </div>
+        <div class="explication">
+            <h4>Explication du Schéma</h4>
+            <p>Ce schéma montre que le contrôle qualité s'effectue à deux niveaux : sur les "Matières premières" avant de commencer, et sur le "Produit fini" (le Principe Actif) avant de le mettre dans le médicament.</p>
+            <p>Les deux grandes questions sont :</p>
+            <ol>
+                <li><strong>Identification :</strong> Est-ce que c'est bien la bonne molécule ? (Qualitatif)</li>
+                <li><strong>Dosage :</strong> Quelle est sa pureté ? Y a-t-il des contaminants ? (Quantitatif)</li>
+            </ol>
+        </div>
+
+        <p><strong>Contrôle et qualité fondamentaux !!</strong></p>
+
+        <div class="explication">
+            <h4>Explication : Contrôle Qualité vs. Assurance Qualité</h4>
+            <p>Ces deux termes sont souvent confondus, mais ils sont distincts :</p>
+            <ul>
+                <li><strong>L'Assurance Qualité (AQ)</strong> : C'est un ensemble d'actions <strong>pro-actives</strong> et préventives. Elle définit les règles, les procédures et les standards pour *s'assurer* que le produit sera de bonne qualité (par exemple, "Voici comment la production doit être faite").</li>
+                <li><strong>Le Contrôle Qualité (CQ)</strong> : C'est une action <strong>ré-active</strong> ou de vérification. Il consiste à inspecter, tester et analyser le produit *fini* (ou en cours de route) pour *vérifier* qu'il est conforme aux standards définis par l'AQ (par exemple, "Le produit fabriqué est-il conforme à 99% de pureté ?").</li>
+            </ul>
+        </div>
+
+        <h3>Identification</h3>
+        <p>L’identification c’est une méthode qualitative qui consiste d’abord en :</p>
+        <ul>
+            <li>Une <strong>analyse élémentaire</strong> (moins utilisée) ou une <strong>spectrométrie de masse</strong> (technique plus moderne qui détermine la masse molaire exacte de votre principe actif.)</li>
+        </ul>
+        <p>= Permet de <strong>déterminer formule brute du médicament, du PA.</strong></p>
+        <div class="explication">
+            <h4>Explication : Analyse Élémentaire vs. Spectrométrie de Masse</h4>
+            <p><strong>L'analyse élémentaire</strong> (ancienne méthode) brûle le produit pour déterminer son pourcentage de Carbone, Hydrogène, Azote (% C,H,N). C'est peu précis.</p>
+            <p><strong>La spectrométrie de masse (SM)</strong> (méthode moderne) "pèse" la molécule avec une précision extrême (souvent à 4 décimales). Elle donne la masse molaire exacte (ex: 180,0634 g/mol), ce qui permet de confirmer sans ambiguïté la formule brute (ex: C9H8O4 pour l'aspirine).</p>
+        </div>
+
+        <p>Ensuite on vient <strong>identifier par les caractères physico- chimiques</strong> :</p>
+        <ul>
+            <li>L’aspect (solide, liquide)</li>
+            <li>La solubilité (dans l’eau ou dans les solvants ou milieux aqueux)</li>
+            <li>Pouvoir rotatoire</li>
+            <li>Définir la stabilité sous l’influence de différents paramètres</li>
+            <li>Déterminer le point de fusion/le point d’ébullition</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : L'importance du Pouvoir Rotatoire</h4>
+            <p>Le <strong>pouvoir rotatoire</strong> est crucial pour les médicaments "chiraux". Une molécule chirale existe sous deux formes identiques mais non superposables (comme vos mains gauche et droite), appelées énantiomères.</p>
+            <p>Souvent, un seul énantiomère est le principe actif efficace, tandis que l'autre est inactif ou, pire, toxique (comme dans le drame de la Thalidomide). Le pouvoir rotatoire mesure la façon dont la molécule dévie la lumière polarisée et permet de confirmer qu'on a bien le bon énantiomère.</p>
+        </div>
+
+        <p>Étape d’<strong>identification spectrale</strong> = déterminer le spectre du visible, le spectre de fluorescence, l’infrarouge, mais aussi éventuellement le spectre RAMAN et le spectre RMN</p>
+        <div class="explication">
+            <h4>Explication : Les Spectres comme "Empreintes Digitales"</h4>
+            <p>Chaque méthode spectrale donne une "signature" unique de la molécule :</p>
+            <ul>
+                <li><strong>UV-visible :</strong> Renseigne sur les électrons (doubles liaisons conjuguées).</li>
+                <li><strong>Infrarouge (IR) :</strong> Identifie les "groupes fonctionnels" (les liaisons C=O, O-H, N-H...). C'est une vraie carte d'identité des fonctions chimiques présentes.</li>
+                <li><strong>RMN (Résonance Magnétique Nucléaire) :</strong> Donne la structure complète, le "squelette" de la molécule en montrant comment les atomes (H, C) sont connectés entre eux.</li>
+            </ul>
+        </div>
+        
+        <h3>Dosage du principe actif :</h3>
+        <p>Règles à suivre pour déterminer la pureté du composé.</p>
+        <p>On considère qu’il y a une <strong>pureté du PA entre 99% et 101%</strong> en point.</p>
+        <div class="explication">
+            <h4>Explication : Pourquoi 99% à 101% ?</h4>
+            <p><strong>Pourquoi pas 100% ?</strong> Il est impossible de synthétiser un produit pur à 100,000% sans aucune impureté.</p>
+            <p><strong>Pourquoi 101% ?</strong> Cela semble illogique, mais c'est une question de "marge d'erreur". Les méthodes de dosage ne sont jamais parfaites à 100%. Une mesure de 101% peut signifier que le produit est pur à 100% mais que la machine a une petite incertitude de mesure de +1%. Cette fourchette (99-101%) est la plage de confiance acceptée par les autorités de santé (comme la Pharmacopée) pour dire que le lot est conforme.</p>
+        </div>
+
+        <p>Il faut déterminer les <strong>impuretés de synthèse</strong> car on peut avoir la dégradation de notre composé ou alors des réactifs de synthèse qui sont présents, donc il faut déterminer la quantité par rapport au principe actif et aussi rechercher la <strong>stabilité de notre principe actif</strong>, et rechercher les substances apparentées.</p>
+        <div class="explication">
+            <h4>Explication : Types d'Impuretés</h4>
+            <p>Les impuretés sont tout ce qui n'est pas le PA. On les traque activement :</p>
+            <ul>
+                <li><strong>Réactifs :</strong> Produits de départ qui n'ont pas totalement réagi.</li>
+                <li><strong>Sous-produits :</strong> Molécules non désirées créées pendant la réaction.</li>
+                <li><strong>Produits de dégradation :</strong> Le PA lui-même qui s'est "cassé" à cause de la lumière, de la chaleur ou du temps ("stabilité").</li>
+            </ul>
+            <p>Le contrôle qualité doit prouver que ces impuretés sont en dessous d'un seuil de toxicité défini.</p>
+        </div>
+
+        <p>Tout le long de la fabrication d’un médicament il faut s’assurer de la qualité de cette production et réalisé le contrôle du médicament (= son dosage etc).</p>
+        <p> Ce ne sont pas les mêmes personnes qui sont responsables du contrôle et de la qualité.</p>
+        <div class="explication">
+            <h4>Explication : La Séparation des Fonctions</h4>
+            <p>C'est un principe fondamental de l'industrie. Le service "Production" (qui fabrique) et le service "Contrôle Qualité" (qui vérifie) doivent être totalement indépendants. Le producteur ne peut pas être juge et partie. Cela garantit l'objectivité et la fiabilité des contrôles.</p>
+        </div>
+
+        <h2>5. Solubilité et miscibilité</h2>
+        <p>Avant de commencer à faire un dosage il faut s’assurer que le PA est soluble dans un solvant Il faut le peser, le mettre dans un récipient avec une fiole jaugée et on ajoute le solvant.</p>
+        <div class="explication">
+            <h4>Explication : L'Étape 0 du Dosage</h4>
+            <p>C'est une étape critique. La plupart des méthodes de dosage (Titrage, Spectroscopie UV...) se font en phase liquide. Si le PA n'est pas <strong>totalement dissous</strong>, une partie restera sous forme solide au fond de la fiole. On ne dosera alors qu'une fraction de la quantité réelle, et le résultat sera complètement faux (sous-estimé).</p>
+        </div>
+
+        <p>La solubilité est la capacité d'une substance, appelée <strong>soluté</strong>, à se <strong>dissoudre</strong> dans une autre substance, appelée <strong>solvant</strong>, pour former un mélange homogène appelé solution.</p>
+        <p>La solubilité c’est une grandeur correspondante à la quantité maximale en mole ou en gramme de soluté pouvant être dissoute dans un litre de solution. La solubilité est tabulée.</p>
+        <p>S dans Log S est en mol/L, il s’agit de l’unité internationale, c’est une concentration. Dans la pharmacopée européenne :</p>
+        <ul>
+            <li>Une substance est <strong>très soluble</strong> dans l’eau quand <strong>S > 0,1 g/L</strong></li>
+        </ul>
+        <p>Il faut convertir mol/ L par g/L</p>
+        <ul>
+            <li>Une substance est <strong>peu soluble</strong> dans l’eau quand <strong>S < 0,1 g/L</strong></li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Solubilité (S) vs. Log S</h4>
+            <p><strong>S (Solubilité) :</strong> C'est la concentration maximale que l'on peut atteindre avant que le produit ne commence à précipiter. (Ex: 350 g/L pour le sel).</p>
+            <p><strong>Log S :</strong> C'est juste une transformation mathématique (logarithme) de S. Elle est utilisée par les chimistes pour transformer une large gamme de valeurs (de 0,00001 à 1000) en une échelle plus simple à manipuler (ex: de -5 à 3).</p>
+        </div>
+
+        <p>La solution doit être LIMPIDE (on voit au travers), il ne doit pas y avoir de suspension. Elle peut être colorée mais limpide. Si pas limpide, impossible de doser le PA en suspension.</p>
+        <p>Alors on réalise une centrifugation, et on récupère le surnageant qui doit être limpide.</p>
+        <p>Solution  S’oppose au précipité</p>
+        <div class="explication">
+            <h4>Explication : Limpide vs. Incolore</h4>
+            <p>Il ne faut pas confondre ces deux termes :</p>
+            <ul>
+                <li><strong>Limpide (ou Transparent) :</strong> On voit à travers. Ex: Sirop de menthe (vert mais limpide), Coca-Cola (noir mais limpide).</li>
+                <li><strong>Opaque (ou Trouble) :</strong> On ne voit pas à travers. Ex: Lait (blanc mais opaque), jus d'orange (orange mais opaque).</li>
+            </ul>
+            <p>Une <strong>suspension</strong> (comme la farine dans l'eau) est opaque. Pour un dosage, la solution doit être limpide.</p>
+        </div>
+        
+        <p>Sel de mer : solubilité extrêmement élevée (jusqu’à 350g /L) extrait de la mer par évaporation de l’eau.</p>
+        <p>Sucre très soluble, farine peu soluble</p>
+        <p>Beaucoup de <strong>médicaments</strong> ne sont pas solubles</p>
+
+        <div class="image-placeholder">
+            [Image : Série de visuels. 
+            À gauche, un verre de liquide laiteux (suspension) et un verre de liquide jaune transparent (solution).
+            Au centre, un schéma montre l'ajout d'un solide (1) ou d'une solution (2) dans une fiole jaugée pour préparer une solution.
+            À droite, des tubes à essai montrent une "Solution" (limpide), une "Suspension" (particules troubles), un "Précipité" (solide au fond), et un "Surnageant" (liquide limpide au-dessus d'un précipité après centrifugation).]
+        </div>
+
+        <p><strong>Log de P</strong> : on considère le partage d’un soluté entre l’eau et un solvant non miscible (octanol par exemple)</p>
+        <div class="explication">
+            <h4>Explication : Pourquoi l'Octanol ?</h4>
+            <p>L'octanol (un type d'alcool gras) est le solvant choisi universellement pour mimer les graisses du corps. Il a une partie "grasse" (lipophile) et une petite partie "aqueuse" (hydrophile), ce qui en fait un excellent modèle pour simuler comment un médicament interagirait avec une membrane cellulaire.</p>
+        </div>
+
+        <p><strong>Coefficient de partage P</strong> = une constante d’équilibre d’un soluté qui est dissout dans l’eau et dans l’octanol qui sont non miscible et le soluté va se partager. A l’équilibre on peut définir P.</p>
+        <p>P reflète l’hydrophobicité du soluté dans les différents solvants. À l’équilibre :</p>
+
+        <div class="image-placeholder">
+            [Image : Diagramme d'équilibre chimique simple. "Soluté (eau) ⇌ Soluté (octanol)", avec "C" sous le soluté (eau) et "C'" sous le soluté (octanol).]
+        </div>
+
+        <p>P = C’(octanol)/C (eau)</p>
+        <p>Si C’< C : log P < 1 = soluté <strong>hydrophile</strong></p>
+        <p>Si C’> C : log P > 1 = soluté lipophile donc <strong>hydrophobe</strong></p>
+
+        <div class="explication">
+            <h4>Explication : Importance du Log P (Coefficient de Partage)</h4>
+            <p>Le <code>Log P</code> est un concept <strong>fondamental</strong> en pharmacologie. Il mesure la "préférence" d'un principe actif pour un environnement huileux (l'octanol, qui mime les graisses du corps) par rapport à un environnement aqueux (l'eau, qui mime le sang).</p>
+            <ul>
+                <li>Un <strong>Log P élevé (lipophile)</strong> signifie que le médicament peut facilement traverser les barrières grasses du corps, comme les membranes cellulaires ou la barrière hémato-encéphalique (pour atteindre le cerveau).</li>
+                <li>Un <strong>Log P bas (hydrophile)</strong> signifie que le médicament se dissout bien dans le sang et peut être facilement transporté dans le corps.</li>
+            </ul>
+            <p>Les pharmacologues cherchent souvent un équilibre : un médicament doit être assez hydrophile pour se dissoudre dans le sang, mais assez lipophile pour entrer dans les cellules où il doit agir.</p>
+        </div>
+
+        <div class="image-placeholder">
+            [Image : Série de tubes à essai et un tableau.
+            Les tubes montrent : un mélange homogène, un mélange octanol/eau (non miscible), de l'eau avec du sable (précipité), de l'eau avec de la farine (suspension), et de l'eau avec du sucre (dissous).
+            Le tableau résume la classification de la Pharmacopée Européenne :
+            - s < 0,1 g/L : Solubilité faible
+            - 0,1 ≤ s ≤ 1 g/L : Solubilité moyenne
+            - s > 1 g/L : Solubilité élevée]
+        </div>
+
+        <h3>Dosage d’un principe actif (pour le contrôle de la qualité du PA)</h3>
+        <p>Il existe deux méthodes :</p>
+        <ol>
+            <li><strong>1ère méthode : méthode directe</strong>, donc dosage volumétrique ou dosage par repérage d’une équivalence avec burette.</li>
+            <li><strong>2ème méthode : méthode indirecte, par étalonnage</strong> : on va préparer une gamme étalon d’une concentration connue du principe actif et grâce à la droite d’étalonnage déterminée on va pouvoir déterminer la concentration de notre inconnue. On finira par la validation des mesures et de la méthode de dosage.</li>
+        </ol>
+        <div class="explication">
+            <h4>Explication : Direct vs. Indirect</h4>
+            <p><strong>Direct (Titrage) :</strong> On fait réagir chimiquement 100% du produit. On compte les molécules une à une (via la réaction). C'est souvent considéré comme une méthode "primaire" ou de référence.</p>
+            <p><strong>Indirect (Étalonnage) :</strong> On mesure une propriété physique (ex: l'absorption de la lumière à une certaine longueur d'onde, ou un signal en spectrométrie de masse). On ne touche pas au produit. On compare ensuite cette mesure à une "gamme d'étalonnage" (une série de solutions de concentration connue : 1mg/L, 2mg/L, 5mg/L...). C'est la méthode la plus utilisée aujourd'hui (ex: HPLC-UV).</p>
+        </div>
+        <p>Il faut s’assurer que seul le composé d’intérêt (PA) est dosé !</p>
+
+        <h3>Les méthodes directes : dosage volumétrique</h3>
+        <p>L’équivalence c’est lorsque la quantité de réactif qui sert à titrer le principe actif est égal à la quantité initiale du composé à doser.</p>
+        <div class="explication">
+            <h4>Explication : L'Équivalence</h4>
+            <p>C'est le moment "mol pour mol" du titrage. Si vous avez 100 molécules d'acide (PA) dans votre bécher, l'équivalence est le moment <strong>précis</strong> où vous avez ajouté la 100ème molécule de base (réactif titrant) depuis la burette. La réaction est stœchiométriquement complète.</p>
+        </div>
+        
+        <p>On repère l’équivalence :</p>
+        <ul>
+            <li>Soit par <strong>potentiométrie</strong> avec des électrodes qui vont donner une courbe avec un changement de pente au niveau de cette équivalence.</li>
+            <li>Soit par <strong>colorimétrie</strong> donc c’est un indicateur coloré qu’on ajoute et qui change de couleur à l’équivalence</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Potentiométrie vs. Colorimétrie</h4>
+            <p><strong>Potentiométrie :</strong> Une machine (pH-mètre, voltmètre) mesure une propriété électrique de la solution. Elle dessine une courbe et le "saut" brutal sur cette courbe indique l'équivalence. C'est objectif, précis et permet de voir plusieurs sauts.</p>
+            <p><strong>Colorimétrie :</strong> Un indicateur (une molécule qui change de couleur avec le pH) est ajouté. Le technicien arrête la burette quand il voit la couleur changer. C'est rapide, peu coûteux, mais plus subjectif et moins précis.</p>
+        </div>
+
+        <div class="image-placeholder">
+            [Image : Diapositive récapitulant le dosage volumétrique.
+            Titre : "Méthodes directes : Dosage volumétrique (repérage d'une équivalence)".
+            Texte expliquant la méthode (consomme le réactif, réaction quantitative, sélective, etc.).
+            Liste les propriétés chimiques utilisées : acido-basique (protons), redox (électrons), formation d'un complexe (ligands/cation).
+            Liste les repérages d'équivalence : Potentiométrique (courbe) et Colorimétrique (indicateur).
+            Mentionne : "En milieu aqueux ou non aqueux : Dépend de la Solubilité du composé à doser".
+            Un schéma d'une burette au-dessus d'un bécher est visible.]
+        </div>
+
+        <p>Présence systématique d’une burette et d’un bêcher ou erlenmeyer en dessous.</p>
+        <p>Rappel : L’échelle d’acidité de l’eau (pH) varie de 0 à 14 donc 10^0 en proton à 10^(-14).</p>
+        <p>L’eau distillée a un pH proche de 7.</p>
+        
+        <p><code>pH = - log [H<sub>3</sub>O<sup>+</sup>] = - log C°</code></p>
+        <p><code>Produit ionique de l'eau: Ke = 10<sup>-14</sup> = [H<sub>3</sub>O<sup>+</sup>].[HO<sup>-</sup>]</code></p>
+        <div class="explication">
+            <h4>Explication : Échelle Logarithmique</h4>
+            <p>Le "p" de "pH" signifie "potentiel" et représente la fonction mathématique <code>-log10()</code>. C'est une échelle logarithmique :</p>
+            <ul>
+                <li>pH 7 = Neutre</li>
+                <li>pH 6 = 10 fois plus acide que pH 7</li>
+                <li>pH 5 = 100 fois plus acide que pH 7</li>
+            </ul>
+            <p>Le <strong>Produit ionique de l'eau (Ke)</strong> est une constante fondamentale : à 25°C, le produit des ions H+ et HO- vaut toujours 10⁻¹⁴. C'est ce qui fixe l'échelle de 0 à 14.</p>
+        </div>
+
+        <div class="image-placeholder">
+            [Image : Échelle de pH allant de 0 à 14.
+            - 0 : Acides forts (pKa < 0)
+            - 7 : Milieu neutre
+            - 14 : Bases fortes (pKa > 14)
+            - Entre 0 et 14 : Acides et bases moyens ou faibles.]
+        </div>
+
+        <h4>Tableau des acides</h4>
+        <div class="image-placeholder">
+            [Image : Tableau listant des couples Acide / Base conjuguée avec leur pKa.
+            Exemples notables :
+            - HClO4 / ClO4- (pKa -10)
+            - HCl / Cl- (pKa -3)
+            - H3O+ / H2O (pKa 0)
+            - RCO2H / RCO2- (pKa 3-5)
+            - H2CO3 / HCO3- (pKa 6,3)
+            - Phénol (C6H5OH) / C6H5O- (pKa 9,9)
+            - H2O / HO- (pKa 14)]
+        </div>
+        <p>(Commentaires profs)</p>
+        <ul>
+            <li>-acide perchlorique l’un des acides les plus forts</li>
+            <li>4 acides vont se comporter comme des acides forts dans l’eau parce que leurs pKa est inférieur à 0 : HClO4, H2SO4, HCl et HNO3</li>
+            <li>-Connaitre NO3- = nitrate</li>
+            <li>-Acide carbonique : équilibre entre eau et CO2  Acidité faible</li>
+            <li>-Phénol OH accroché par un noyau aromatique (se déprotone au-delà de pka 10)</li>
+            <li>-Carbonate à connaitre</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Acide Fort (pKa < 0)</h4>
+            <p>Un <strong>acide fort</strong> (comme HCl) a un pKa négatif. Cela signifie qu'il se dissocie <strong>totalement</strong> dans l'eau. Si vous mettez 100 molécules de HCl dans l'eau, vous obtiendrez instantanément 100 ions H+ et 100 ions Cl-. Il ne reste plus de HCl.</p>
+            <p>Un <strong>acide faible</strong> (comme le Phénol, pKa 9,9) reste majoritairement sous sa forme acide (C6H5OH) dans l'eau. Il ne libère que très peu de H+.</p>
+        </div>
+
+        <h4>Tableau des bases</h4>
+        <div class="image-placeholder">[Image : Un écran noir, probablement une diapositive manquante ou en transition.]</div>
+        
+        <div class="image-placeholder">
+            [Image : Tableau listant des couples Base / Acide conjugué avec leur pKa.
+            Exemples notables :
+            - H2O / H3O+ (pKa 0)
+            - Aniline (C6H5NH2) / C6H5NH3+ (pKa 4,6)
+            - Pyridine (C5H5N) / C5H5NH+ (pKa 5,2)
+            - NH3 / NH4+ (pKa 9,2)
+            - CO3^2- / HCO3- (pKa 10,3)
+            - HO- / H2O (pKa 14)]
+        </div>
+
+        <ul>
+            <li>H2PO- et SO2- = bases très faibles</li>
+            <li>Aniline = base faible à cause de son doublet qui va entrer en mésomérie. Doublet de l’aniline est délocalisable sur le noyau aromatique</li>
+            <li>Tout ce qui est aromatique = pKa faible donc base faible à cause du doublet non liant qui va entrer en mésomérie avec les électrons pi donc moins disponible à la formation de NH+ donc ce sont bases qui sont faibles</li>
+            <li>Mésomérie favorise déprotonation</li>
+            <li>NH3 = ammoniac qui va donner ammonium, base faible moyenne</li>
+            <li>Les hydroxyles = bases les plus fortes</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Mésomérie et Basicité (Ex: Aniline)</h4>
+            <p>Le cours mentionne que l'Aniline est une base faible à cause de la "mésomérie" (ou résonance).</p>
+            <p><strong>Qu'est-ce que ça veut dire ?</strong></p>
+            <ol>
+                <li>Une base (selon Brønsted) est une substance qui <strong>capte un proton (H+)</strong>.</li>
+                <li>Pour capter un H+, l'aniline utilise le <strong>doublet d'électrons non liant</strong> sur son atome d'azote (N).</li>
+                <li>Cependant, dans l'aniline, cet atome d'azote est lié à un noyau aromatique (un cycle de benzène). Ce noyau est riche en électrons (les électrons "pi").</li>
+                <li>Le doublet de l'azote n'est pas "statique" sur l'atome ; il est "aspiré" et participe à la résonance du cycle aromatique (il se "délocalise").</li>
+            </ol>
+            <p><strong>Conséquence :</strong> Puisque le doublet d'électrons de l'azote est occupé à se "promener" dans le cycle, il est <strong>moins disponible</strong> pour aller capter un proton H+. L'aniline est donc une base beaucoup plus faible que d'autres amines (comme NH3) où le doublet est 100% disponible.</p>
+        </div>
+        
+        <ul>
+            <li>Azote a doublet qui peut capter un proton pour donner une charge NH+</li>
+            <li>-Bases moléculaires vont être avides de protons</li>
+            <li>-Pas parce que pka est faible qu’on a affaire à des acides !!!!</li>
+            <li>-Aniline noyau aromatique avec NH2 (Azote mésomère donneur)</li>
+            <li>-Pyridine noyau aromatique avec azote</li>
+            <li>-AMINE NE SE DÉPROTONE JAMAIS DANS L’EAU (Se charge en + jamais en -)</li>
+            <li>-Alcool stable dans l’eau !!</li>
+            <li>-Hydroxyles = bases les plus fortes</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : "Amine ne se déprotone jamais"</h4>
+            <p>C'est un point clé. Une amine (R-NH2) est une <strong>base</strong>. Son travail est de <strong>capter</strong> un H+ pour devenir R-NH3+. Elle ne <strong>donne</strong> jamais un H+ pour devenir R-NH- (sauf dans des conditions extrêmement basiques qui n'existent pas dans l'eau). De même, un alcool (R-OH) est neutre dans l'eau, il ne se déprotone pas (contrairement au Phénol).</p>
+        </div>
+
+        <h4>Établir le domaine de prédominance dans l’eau d’une espèce ayant des propriétés acido-basiques</h4>
+        <div class="image-placeholder">
+            [Image : Diagrammes de prédominance.
+            - Cas d'un diacide AH2 : L'axe de pH montre AH2 < (pKa2) < AH- < (pKa1) < A2-
+            - Cas d'une dibase B : L'axe de pH montre BH2^2+ < (pKa2) < BH+ < (pKa1) < B
+            - Exemple (Phénylalanine) : pKa2=1,8 ; pKa1=9,1.
+            L'axe montre AH2+ (forme protonée) < (1,8) < AH+/- (Zwitterion) < (9,1) < A- (forme déprotonée).]
+        </div>
+
+        <p><strong>Domaine de prédominance : A SAVOIR FAIRE</strong></p>
+        <p>Poly acide = plusieurs pka ici sur le diapo  Diacide</p>
+        <p>Explication de la diapo ci- dessus</p>
+        <p>Il faut tracer l’échelle de pH, placer les pKa et à gauche, placer la forme la plus protonée = la plus acide. Au-delà du pKa 2, il faut déprotoner une 1er fois et au-delà du Pka1, protoner une 2e fois.</p>
+        <p>AH- ampholyte = peut être à la fois acide et base. RESPECTER L’ÉCHELLE !!!!</p>
+        <p>Phénylalanine (noyau aromatique)</p>
+        <p>La forme la plus protonée est en dessous du pKa 1,8 entre les 2 pKa on déprotone l’acide carboxylique La forme la plus déprotonée est en dessous du pKa 9,1.</p>
+        <p>Attention : phénylalanine n’est jamais complètement neutre, elle a des charges !! IL FAUT DÉPROTONER DANS LE BON ORDRE</p>
+        <p>Le groupe carboxylique COOH est la forme protonée du groupe acide (neutre), et NH3+ est la forme protonée de l’amine.</p>
+        <p>Entre les deux pKa, on déprotone d’abord le groupement fonctionnel le plus acide (COOH). On obtient l’ampholyte/ Zwitterion (globalement électriquement neutre).</p>
+
+        <div class="explication">
+            <h4>Explication : Zwitterion et Ordre de Déprotonation (Ex: Phénylalanine)</h4>
+            <p>La phénylalanine est un acide aminé. Elle possède deux groupes : un acide (COOH) et une base (NH2).</p>
+            <ul>
+                <li><strong>À pH très acide (ex: pH 0) :</strong> Tout est protoné. L'acide est <code>COOH</code> et la base est <code>NH3+</code>. La molécule est chargée <strong>positivement</strong> (AH2+).</li>
+                <li><strong>On augmente le pH :</strong> Le premier proton à partir est celui du groupe <strong>le plus acide</strong>, c'est-à-dire celui avec le pKa le plus bas. Ici, c'est le <code>COOH</code> (pKa = 1,8).</li>
+                <li><strong>Entre les deux pKa (ex: pH 7) :</strong> Le <code>COOH</code> est devenu <code>COO-</code>, mais le <code>NH3+</code> (pKa = 9,1) n'a pas encore perdu son proton. La molécule est donc <code>COO-</code> et <code>NH3+</code>. Elle a une charge + et une charge -, la charge globale est neutre. C'est cette forme qu'on appelle <strong>Zwitterion</strong> ou <strong>Ampholyte</strong>.</li>
+                <li><strong>À pH très basique (ex: pH 14) :</strong> On a passé le pKa de 9,1. Le <code>NH3+</code> perd son proton et devient <code>NH2</code>. La molécule est chargée <strong>négativement</strong> (A-).</li>
+            </ul>
+            <p><strong>L'ordre est crucial :</strong> on déprotone toujours le groupe le plus acide (pKa le plus bas) en premier.</p>
+        </div>
+
+        <p>Il existe 2 façons de suivre un dosage volumétrique, c’est-à-dire de repérer une équivalence :</p>
+        <div class="image-placeholder">
+            [Image : Deux méthodes de repérage de l'équivalence.
+            En haut : Un graphique de titrage (courbe sigmoïde) montrant un "saut de pH" (ou ΔE) au niveau du "Volume équivalent".
+            En bas : Trois fioles Erlenmeyer montrant un indicateur coloré qui change de couleur (rose -> violet -> bleu), illustrant le virage colorimétrique.]
+        </div>
+
+        <p><strong>Potentiométrique</strong> = à l’aide d’une électrode de verre pour les mesures de pH,
+            et en redox avec des électrodes de platine pour les mesures de potentiel.
+            On a ce genre de courbe : Courbe de titrage avec changement de pente à l’équivalence
+            Point d’équivalence au milieu</p>
+        <p><strong>Colorimétrique</strong> = à l’aide d’un indicateur coloré approprié : changement de couleur de la solution à l’équivalence.</p>
+        <div class="explication">
+            <h4>Explication : Avantages de la Potentiométrie</h4>
+            <p>La méthode potentiométrique (la courbe) est bien plus riche en informations. Non seulement elle donne le <strong>Volume équivalent</strong> (grâce au saut), mais elle permet aussi de trouver le <strong>pKa</strong> de l'acide. À la <strong>demi-équivalence</strong> (c'est-à-dire à <code>Veq / 2</code>), le pH de la solution est exactement égal au pKa de l'acide.</p>
+        </div>
+        
+        <h4>Dosage direct d’un acide par une base : échange de protons</h4>
+        <div class="image-placeholder">
+            [Image : Schéma d'un dosage acido-basique.
+            Réaction : <code>HA + B → A- + BH+</code>.
+            Schéma : Une burette (contenant B de concentration Cb) verse un volume V_ajouté dans un bécher contenant HA (volume V_pe, concentration C°A) et un pH-mètre.
+            Formules : n°A = Vpe x C°A ; nB = Vajouté x CB.
+            À l'équivalence : <code>n°HA = nB</code>, donc <code>Vpe x C°A = Vajouté x CB</code>.]
+        </div>
+
+        <p>On veut doser un acide HA qui a une concentration <strong>inconnue</strong></p>
+        <p>Cet acide est dosé par une base B dont la concentration est <strong>connue</strong>. Déprotonation de l’acide qui va devenir la base conjuguée et former BH+ Dans l’eau la base la plus forte est la soude.</p>
+        <p>Équivalence = on dit qu’on est à la stœchiométrie.</p>
+        <p>La réaction se fait dans l’eau, on va ajouter une base forte dans un acide, on va déterminer une quantité de HA qui est inconnue avec une prise d’essai Vpe. Les réactions doivent être <strong>quantitatives</strong>.</p>
+        <div class="explication">
+            <h4>Explication : "Quantitative"</h4>
+            <p>"Quantitative" est la condition la plus importante. Cela signifie que la réaction doit être <strong>totale</strong> (flèche simple →) et non un équilibre (⇌). Si la réaction n'est pas totale, au moment de l'équivalence, il restera de l'acide HA dans le bécher et le calcul <code>n(A) = n(B)</code> sera faux.</p>
+        </div>
+        
+        <p> Moins de 1% de réactifs et + de 99% de produits</p>
+        <p>Pour être quantitative/ totale : le pKa de l’acide a dosé doit être < à 9</p>
+        <p>Si > 9 on ne peut pas doser dans l’eau par la soude (elle n’est pas assez forte)</p>
+        <p><strong>LIMITE DU 9 POUR DOSER AVEC DE LA SOUDE EST À RETENIR</strong></p>
+        <p>(Pour avoir saut de pH net) Pka de l’acide à doser doit être > 5</p>
+        
+        <div class="image-placeholder">
+            [Image : Diagrammes de "Quantitativité".
+            - Pour un acide HA + HO- : La limite est pKa_limite = 9. Le dosage est quantitatif si pKa ≤ 9.
+            - Pour une base B + H3O+ : La limite est pKa_limite = 5. Le dosage est quantitatif si pKa ≥ 5.]
+        </div>
+
+        <div class="explication">
+            <h4>Explication : Les Limites pKa < 9 et pKa > 5</h4>
+            <p>Ces règles fixent le "champ d'action" des titrages dans l'eau :</p>
+            <ul>
+                <li><strong>pKa < 9 (pour un acide) :</strong> Si un acide est trop faible (ex: pKa = 11), il "résiste" à la soude. Le saut de pH à l'équivalence est "noyé" près de pH 14 et devient indétectable. La réaction n'est pas quantitative.</li>
+                <li><strong>pKa > 5 (pour une base) :</strong> De même, si une base est trop faible (ex: pKa = 3), elle "résiste" à l'acide fort (H3O+). Le saut de pH est "noyé" près de pH 0 et devient indétectable.</li>
+            </ul>
+            <p>Donc, dans l'eau, on ne peut doser que les acides et bases "moyens" (pKa entre 5 et 9).</p>
+        </div>
+
+        <h4>Notion de sélectivité de la Réaction acide base dans l’eau : cas de diacide H2A Dosage potentiométrique</h4>
+        <p>Un dosage sélectif d’un diacide H2A est un dosage où il est possible de déprotoner la première acidité de H2A quantitativement à 1% près, sans que 1% de la seconde acidité HA- ne commence à être déprotonée.</p>
+
+        <div class="image-placeholder">
+            [Image : Diapositive sur la sélectivité.
+            Elle montre une démonstration mathématique basée sur les pH à l'équivalence.
+            La conclusion est dans un encadré jaune : "Dosage potentiométrique : Saut de pH visible si ΔpKa > 4".]
+        </div>
+
+        <p>Pour savoir si on va obtenir un saut de pH et doser toutes les acidités ou distinguer les acidités par un saut de pH, il va falloir voir la sélectivité du dosage. <strong>Le delta pka doit être supérieur ou égal à 4</strong> pour avoir un saut de pH entre les différentes acidités, pour que le dosage soit sélectif.</p>
+        <p>La sélectivité c’est l’idée par ex quand on a un acide H2A qu’on va doser dans un premier temps en HA- sans toucher à la deuxième déprotonation, on s’arrête et ensuite on continue la déprotonation avec HA- qui donnera A2-.</p>
+        <p>Cela se fait en 2 temps et c’est SÉLECTIF. Dans le cas où c’est sélectif, présence d’un saut de pH et volume équivalent.</p>
+        <p><strong>Récapitulatif</strong> : dès qu’on a un dosage avec plusieurs pKa on vérifie la quantitativité de ces pKa et on vérifie la sélectivité pour voir s’il y a un écart ou pas, si tout est dosé ensemble ou si c’est dosé de manière successive.</p>
+        
+        <div class="explication">
+            <h4>Explication : Pourquoi ΔpKa > 4 pour la sélectivité ?</h4>
+            <p>Cette règle est la seconde clé des titrages.</p>
+            <ul>
+                <li>Un titrage crée une "zone tampon" autour de chaque pKa (la zone où le pH change lentement).</li>
+                <li>Le "saut de pH" se produit *entre* ces zones tampon.</li>
+                <li>Si les deux pKa d'un diacide sont trop proches (ex: pKa1=4 et pKa2=5, ΔpKa=1), leurs zones tampon se chevauchent.</li>
+                <li>La courbe de titrage n'a pas le "temps" de faire un premier saut avant de commencer la deuxième zone tampon. On obtient alors <strong>un seul grand saut</strong> qui dose les deux acidités en même temps.</li>
+            </ul>
+            <p>Il faut un écart d'au moins <strong>4 unités de pKa</strong> pour que le premier saut de pH soit complètement terminé et distinct avant que la deuxième zone tampon ne commence. Cela permet de voir <strong>deux sauts de pH séparés</strong> sur la courbe.</p>
+        </div>
+
+        <h4>Dosage potentiométrique à l’aide d’une électrode de verre : repérage d’un saut de pH courbe de titrage d’un acide HA par une base HO-</h4>
+        <div class="image-placeholder">
+            [Image : Courbe de titrage d'un acide HA par HO-.
+            L'axe Y est le pH, l'axe X est le V_base forte (burette).
+            La courbe part d'un pH acide (AH), monte doucement (zone tampon HA/A-), puis a un saut vertical brutal au niveau de Veq (L'équivalence).
+            À l'équivalence, il y a 100% de A-. Après, le pH monte rapidement (excès de HO-).]
+        </div>
+
+        <p>Grande variation du pH au moment de l’équivalence d’où le repérage de cette équivalence. Au point d’équivalence, on a transformé 100% de AH en A-.</p>
+        <p>Volume équivalence = volume ajouté dans bêcher provenant de la burette (solution titrante)</p>
+        <div class="explication">
+            <h4>Explication de la Courbe</h4>
+            <p>La courbe de titrage a 3 parties distinctes :</p>
+            <ol>
+                <li><strong>Avant Veq (Zone Tampon) :</strong> Le pH monte lentement car on est dans un mélange (HA/A-) qui résiste au changement de pH. À Veq/2, on a 50% HA et 50% A-, et pH = pKa.</li>
+                <li><strong>À Veq (Saut de pH) :</strong> On a 100% de A- (la base conjuguée). L'ajout d'une seule goutte de HO- en excès fait basculer le pH de façon très brutale. C'est ce saut qu'on mesure.</li>
+                <li><strong>Après Veq (Excès de base) :</strong> Le pH est maintenant dicté par l'excès de soude (HO-) qu'on ajoute dans la solution.</li>
+            </ol>
+        </div>
+
+        <h4>Repérage de l’équivalence par un indicateur coloré : Choix de l’indicateur coloré HI Dosage d’un acide faible HA par une base forte HO-</h4>
+        <div class="image-placeholder">
+            [Image : Choix de l'indicateur coloré.
+            En haut, la théorie : un indicateur HI/I- a une zone de virage autour de son pKa (pKa_HI ± 1).
+            Un tableau liste des indicateurs :
+            - Hélianthine : zone 3,0-4,4 (Rouge/Jaune)
+            - Rouge de Méthyle : zone 4,4-6,2 (Rouge/Jaune)
+            - Bleu de Bromothymol : zone 6,0-7,6 (Jaune/Bleu)
+            - Phénolphtaléine : zone 8,2-9,8 (Incolore/Rose)
+            En bas, trois graphiques de titrage montrent que l'Hélianthine et le BBT virent *avant* le saut de pH (incorrect), tandis que la Phénolphtaléine vire *pendant* le saut de pH (correct).]
+        </div>
+
+        <p>Hélianthine et Bleu de bromothymol : virage de couleur ne correspond pas parfaitement au moment de l’équivalence  PAS PRÉCIS</p>
+        <p>Un indicateur coloré peut permettre de repérer l’équivalence.</p>
+        <p>Indicateurs colorés = acides et bases conjuguées mais ont des formes de couleurs différentes. Produit change de couleur selon s’il est sous forme acide ou basique.</p>
+        <p>L’acide HI et la base I- présentent des couleurs différentes. Des acides et des bases avec des couleurs différentes, on passe d’une couleur à une autre lorsqu’on est à l’équivalence de notre dosage. Si on prend le dosage que l’on voit dans l’exemple, on voit une zone de virage donc passage de l’orange au jaune qui arrive vers pH = 4, donc l’Hélianthine a viré avant d’arriver au volume d’équivalence -> pas bon.</p>
+        <p>Il faut faire coïncider zone de virage avec l’équivalence du dosage et pas le pka de l’acide à doser.</p>
+        <p>Changement de couleur avec la phénolphtaléine, on s’arrête et on lit le volume équivalent qui correspond au volume de soude à ajouter jusqu’à l’équivalence.</p>
+        <div class="explication">
+            <h4>Explication : L'Erreur à Éviter</h4>
+            <p>L'erreur classique est de se dire : "Je dose un acide avec un pKa de 4, donc je prends un indicateur qui vire à pH 4 (Hélianthine)". C'est <strong>faux</strong>.</p>
+            <p>Le changement de couleur doit avoir lieu là où se produit le <strong>saut de pH</strong>. Or, le saut de pH ne se produit <strong>pas</strong> au pKa de l'acide. Pour un acide faible dosé par une base forte, le pH à l'équivalence est toujours basique (pH > 7). Dans l'exemple, le saut se produit entre pH 7 et 10. La Phénolphtaléine, qui vire entre 8,2 et 9,8, est donc parfaite.</p>
+        </div>
+
+        <h4>Exemple : Dosage de l’acide phosphorique H3PO4 par NaOH dans H2O (Quantitativité et sélectivité)</h4>
+        <div class="image-placeholder">
+            [Image : Diagramme de prédominance de l'acide phosphorique.
+            pKa1=2,1 ; pKa2=7,2 ; pKa3=12,4.
+            H3PO4 < (2,1) < H2PO4- < (7,2) < HPO4^2- < (12,4) < PO4^3-.
+            Analyse de Sélectivité : ΔpKa > 4 (entre 2,1 et 7,2) et ΔpKa > 4 (entre 7,2 et 12,4).
+            Analyse de Quantitativité : pKa1=2,1 et pKa2=7,2 sont < 9. (Le pKa3=12,4 est > 9, donc non dosable).
+            Équations : Les deux premières réactions de déprotonation par HO-.]
+        </div>
+
+        <p>Passage où il n’y a que H2PO4- en solution !!!</p>
+        <p>Acide phosphorique / acide dihydrogénophosphate / acide hydrogénophosphate / phosphate</p>
+        <p>Si on veut doser l’acide phosphorique par la soude, on va aller vers les milieux alcalins.</p>
+        <p><strong>Quantitativité</strong> : 2,1 et 7,2 < 9 pas de problèmes → quantitatif</p>
+        <p>Acide phosphorique dans l’eau est un diacide par rapport à la soude, elle va se déprotoner 2 fois pas 3.</p>
+        <p><strong>Sélectivité</strong> : c’est la différence entre les pKa. 7,2 – 2,1 et 12,4 - 7,2, écart supérieur à 4 on va pouvoir distinguer les deux acidités par un saut de pH.</p>
+        <p>Dosage en premier de H3PO4, le transformer en 100% de H2PO4- puis dans second temps on le transforme en HPO42-</p>
+        <p>= passage ou il n’y a que H2PO4- en solution.</p>
+        <div class="explication">
+            <h4>Explication de l'Analyse (H3PO4)</h4>
+            <p>C'est l'exemple parfait qui combine les deux règles :</p>
+            <ol>
+                <li><strong>Quantitativité (pKa < 9) :</strong>
+                    <ul>
+                        <li>pKa1 = 2,1 (OK)</li>
+                        <li>pKa2 = 7,2 (OK)</li>
+                        <li>pKa3 = 12,4 (<strong>NON</strong>, > 9). La 3ème acidité n'est pas dosable dans l'eau.</li>
+                    </ul>
+                </li>
+                <li><strong>Sélectivité (ΔpKa > 4) :</strong>
+                    <ul>
+                        <li>Écart 1-2 : 7,2 - 2,1 = 5,1 (<strong>OK</strong>, > 4). On verra un 1er saut de pH.</li>
+                        <li>Écart 2-3 : 12,4 - 7,2 = 5,2 (<strong>OK</strong>, > 4). On verra un 2ème saut de pH.</li>
+                    </ul>
+                </li>
+            </ol>
+            <p><strong>Conclusion :</strong> On s'attend à voir <strong>deux sauts de pH</strong>, mais pas trois.</p>
+        </div>
+
+        <h4>Dosage acide phosphorique H3PO4 par NaOH dans H2O</h4>
+        <p>Certaines espèces ont plusieurs pKa, certains vont être dosable et certains non dosable donc il faut être capable de savoir.</p>
+        <div class="image-placeholder">
+            [Image : Courbe de titrage de H3PO4 par NaOH.
+            La courbe montre deux sauts de pH clairs et distincts.
+            - Départ : H3PO4
+            - 1ère zone tampon
+            - Veq1 (ex: 10 mL) : 100% H2PO4- (ampholyte)
+            - 2ème zone tampon
+            - Veq2 (ex: 20 mL) : 100% HPO4^2- (ampholyte)
+            - La courbe continue de monter mais *sans* troisième saut, car le pKa3 (12,4) est > 9.]
+        </div>
+
+        <p>2 sauts, 2 grandes variations de pH pour les deux équivalences, parce que c’est sélectif.</p>
+        <p>Veq2 est le double de Veq1</p>
+        <ul>
+            <li>-Entre 0 et Veq1, dosage uniquement de l’acide phosphorique</li>
+            <li>-À l’équivalence : 100% de dihydrogénophosphate</li>
+            <li>-On continue à ajouter de la soude, deuxième saut à Veq2 et donc 100 % d’hydrogénophosphate.</li>
+            <li>Au-delà, on aura un mélange de soude, hydrogénophosphate et phosphate mais pas 100% de phosphate</li>
+        </ul>
+        <p> on atteint pas un 3e saut = CA N’EXISTE PAS.</p>
+        
+        <div class="explication">
+            <h4>Explication : Veq2 = 2 x Veq1 (et pourquoi pas de Veq3)</h4>
+            <p><strong>Veq2 = 2 x Veq1 :</strong></p>
+            <ul>
+                <li>Pour atteindre <code>Veq1</code>, on a ajouté un volume (disons 10 mL) de soude pour neutraliser la <strong>première</strong> acidité (H3PO4 → H2PO4-).</li>
+                <li>Pour passer de <code>Veq1</code> à <code>Veq2</code>, on doit neutraliser la <strong>deuxième</strong> acidité (H2PO4- → HPO4^2-). Cette acidité est présente dans la *même quantité* que la première.</li>
+                <li>Il faut donc ajouter <strong>exactement le même volume</strong> de soude (10 mL de plus) pour la neutraliser.</li>
+                <li>Le volume total à <code>Veq2</code> est donc 10 mL (pour la 1ère) + 10 mL (pour la 2ème) = 20 mL. Donc <code>Veq2 = 2 * Veq1</code>.</li>
+            </ul>
+            <p><strong>Pas de Veq3 :</strong></p>
+            <p>Comme vu précédemment, la troisième acidité (HPO4^2-) a un pKa de 12,4. Ce pKa est <strong>supérieur à 9</strong>. La réaction n'est donc pas quantitative dans l'eau. On ne peut pas la doser avec de la soude car on ne verra jamais de saut de pH distinct.</p>
+        </div>
+
+        <div class="image-placeholder">
+            [Image : Diapositive montrant "3 façons de déterminer la concentration de H3PO4".
+            1.  À Veq1 : n(OH-) = n°(H3PO4) => C(HO-) x Veq1 = [H3PO4]° x Vpe
+            2.  Entre (Veq2 - Veq1) : n(OH-) = n°(H2PO4-) => C(HO-) x (Veq2 - Veq1) = [H3PO4]° x Vpe (car n°(H2PO4-) = n°(H3PO4))
+            3.  À Veq2 : H3PO4 + 2 HO- → ... => n(H3PO4) = n(OH-) / 2 => [H3PO4]° x Vpe = (C(HO-) x Veq2) / 2]
+        </div>
+        <div class="explication">
+            <h4>Explication des 3 calculs</h4>
+            <p>Les 3 méthodes sont mathématiquement identiques et doivent donner le même résultat :</p>
+            <ol>
+                <li><strong>Méthode 1 (Veq1) :</strong> La plus simple. On dose 1 H+ par 1 HO-.</li>
+                <li><strong>Méthode 2 (Veq2 - Veq1) :</strong> On utilise juste le volume du 2ème saut. Il doit être égal à Veq1.</li>
+                <li><strong>Méthode 3 (Veq2) :</strong> On considère la réaction globale : H3PO4 + <strong>2</strong> HO- → HPO4^2-. À Veq2, on a ajouté <strong>2 fois</strong> plus de soude que d'acide initial. C'est souvent la méthode la plus précise car le 2ème saut est plus facile à lire.</li>
+            </ol>
+        </div>
+
+        <p>Dans le cas d’un indicateur coloré  Cas</p>
+
+        <div class="qa-section">
+            <h2>PARTIE QCM/EXERCICES DU COURS</h2>
+
+            <div class="image-placeholder">
+                [Image : Exercice 1 - Dosage de l'acide citrique (AH3).
+                Données : pKa1=3,1 ; pKa2=4,7 ; pKa3=6,4.
+                Analyse : Les ΔpKa sont tous < 4 (4,7-3,1=1,6 ; 6,4-4,7=1,7).
+                Conclusion : "Pas de sélectivité du dosage".
+                Les 3 acidités sont dosées en même temps : <code>AH3 + 3 HO- → A3- + 3H2O</code>.
+                La courbe de titrage montre un *seul* saut de pH.
+                Calcul : C(AH3) x Vpe = (C(HO-) x Veq) / 3]
+            </div>
+
+            <div class="explication">
+                <h4>Explication : Exercice Acide Citrique</h4>
+                <p>Cet exercice est l'opposé de l'acide phosphorique. L'acide citrique a 3 pKa (3.1, 4.7, 6.4).</p>
+                <ol>
+                    <li><strong>Quantitativité ?</strong> Les 3 pKa sont < 9. Donc, les 3 acidités *peuvent* être dosées par la soude.</li>
+                    <li><strong>Sélectivité ?</strong> On regarde les écarts :
+                        <ul>
+                            <li>ΔpKa (2-1) = 4.7 - 3.1 = 1.6</li>
+                            <li>ΔpKa (3-2) = 6.4 - 4.7 = 1.7</li>
+                        </ul>
+                        Les deux écarts sont <strong>< 4</strong>.
+                    </li>
+                </ol>
+                <p><strong>Conclusion :</strong> Le dosage n'est <strong>PAS sélectif</strong>. On ne verra pas 3 sauts. Les 3 acidités, étant trop proches, sont dosées toutes en même temps. La courbe de titrage montrera <strong>un seul saut de pH</strong>, qui correspond à la neutralisation des 3 acidités simultanément. C'est pourquoi on utilise un facteur 3 dans le calcul final.</p>
+            </div>
+
+            <p>A faux B faux (on a des bases donc il faut doser par des acides) C faux D vrai E vrai</p>
+
+            <div class="image-placeholder">
+                [Image : Réponse QCM 1 - Dosage d'un mélange Pipérazine + Pyridine.
+                Diagramme de prédominance : pKa(Pyridine)=5, pKa1(Pipérazine)=5,7, pKa2(Pipérazine)=9,8.
+                Analyse :
+                - pKa > 5 : OK (toutes les basicités sont dosées).
+                - ΔpKa (Pipérazine) = 9,8 - 5,7 = 4,1. C'est > 4, donc les 2 basicités de la pipérazine sont dosées séparément (2 sauts).
+                - pKa1(Pipérazine) ≈ pKa(Pyridine) (5,7 vs 5,0, ΔpKa < 4). Ces deux basicités sont donc dosées ensemble, entre Veq1 et Veq2.
+                La courbe montre un 1er saut (Veq1) pour la 1ère basicité de la pipérazine, et un 2ème saut (Veq2) pour la 2ème basicité de la pipérazine ET la pyridine.]
+            </div>
+
+            <p>Veq 2 n’est pas le double de Veq1 car il y a deux basicités qui sont dosé entre ces bornes.</p>
+            <div class="explication">
+                <h4>Explication du QCM 1 (Pipérazine + Pyridine)</h4>
+                <p>C'est un cas complexe. On dose 3 basicités avec un acide fort (HCl).</p>
+                <ol>
+                    <li><strong>Quantitativité (pKa > 5) :</strong> pKa=9,8 (OK), pKa=5,7 (OK), pKa=5,0 (OK). Les 3 sont dosables.</li>
+                    <li><strong>Sélectivité (ΔpKa > 4) :</strong>
+                        <ul>
+                            <li>Écart 1-2 : 9,8 - 5,7 = 4,1 (<strong>OK</strong>, > 4). On verra un 1er saut de pH.</li>
+                            <li>Écart 2-3 : 5,7 - 5,0 = 0,7 (<strong>NON</strong>, < 4). Ces deux basicités ne sont pas sélectives.</li>
+                        </ul>
+                    </li>
+                </ol>
+                <p><strong>Conclusion :</strong> On verra <strong>deux sauts</strong>. Le 1er saut (à Veq1) correspond au dosage de la basicité la plus forte (pKa 9,8). Le 2ème saut (à Veq2) correspond au dosage des deux basicités faibles (pKa 5,7 et 5,0) <strong>en même temps</strong>. C'est pourquoi le volume du 2ème saut (Veq2 - Veq1) est le double du premier (Veq1).</p>
+            </div>
+        </div>
+
+        <h3>Propriétés redox dans l’eau : comportement des oxydants et des réducteurs</h3>
+        <div class="image-placeholder">
+            [Image : Rappels sur les couples redox.
+            - Réducteur (Red) = donneur d'électrons
+            - Oxydant (Ox) = accepteur d'électrons
+            - Demi-équation : a Ox + ne- + m H3O+ ⇌ b Red + p H2O
+            - Comment équilibrer : 1. C, N, métal ; 2. O (avec H2O) ; 3. H (avec H+) ; 4. charge (avec e-).
+            - Exemples : Fe3+/Fe2+ et MnO4-/Mn2+.]
+        </div>
+        
+        <p>IL FAUT SAVOIR RÉÉQUILIBRER LES DEMI ÉQUATIONS !!!</p>
+        <ul>
+            <li>- D’abord en équilibre en eau, puis en proton, et pour finir en électron.</li>
+        </ul>
+        <p>Il est possible de faire du dosage par oxydoréduction, il faut que les composés soient des oxydants ou des réducteurs.</p>
+        <div class="explication">
+            <h4>Explication : Oxydant vs. Réducteur</h4>
+            <p>Un moyen mnémotechnique courant est <strong>"OIL RIG"</strong> (en anglais) :</p>
+            <ul>
+                <li><strong>O</strong>xidation <strong>I</strong>s <strong>L</strong>oss (L'Oxydation est une Perte... d'électrons).</li>
+                <li><strong>R</strong>eduction <strong>I</strong>s <strong>G</strong>ain (La Réduction est un Gain... d'électrons).</li>
+            </ul>
+            <p>Le <strong>Réducteur</strong> est celui qui se fait oxyder (il perd des électrons). L'<strong>Oxydant</strong> est celui qui se fait réduire (il gagne ces électrons).</p>
+        </div>
+
+        <div class="image-placeholder">
+            [Image : Diapositive sur l'Expression du potentiel de Nernst.
+            Formule générale : E_ind = E° + RT/nF * Ln(...)
+            Formule simplifiée à 298K (25°C) :
+            E_ind = E° - (0,06/n)pH + (0,06/n) * log([Ox]^a / [Red]^b)
+            Mesure : ΔE = E_ind - E_référence (où E_référence = cst)]
+        </div>
+
+        <p>m : le nombre de proton. n: le nombre d’électrons</p>
+        <p>Soit on va nous demander le <strong>potentiel pris par une électrode de mesure</strong> soit la <strong>différence de potentiel entre deux électrodes</strong> (une de mesure/ indicatrice et de référence(constant)).</p>
+
+        <div class="explication">
+            <h4>Explication : L'Équation de Nernst (en simple)</h4>
+            <p>L'équation de Nernst peut sembler compliquée, mais son idée est simple :</p>
+            <ul>
+                <li><strong>E° (Potentiel Standard) :</strong> C'est la "force" de base d'un couple redox, mesurée dans des conditions standards (concentration 1M, pH=0). C'est une valeur fixe.</li>
+                <li><strong>E_ind (Potentiel Réel) :</strong> C'est la "force" réelle du couple dans les conditions *actuelles* de votre solution (votre bécher).</li>
+            </ul>
+            <p>L'équation de Nernst dit que le potentiel réel (E_ind) dépend de 3 choses :</p>
+            <ol>
+                <li><strong>Le potentiel standard (E°) :</strong> Le point de départ.</li>
+                <li><strong>Le pH :</strong> Si des protons (H+) sont dans l'équation (comme pour MnO4-), le pH change la force du couple.</li>
+                <li><strong>Les concentrations ([Ox]/[Red]) :</strong> C'est le cœur du dosage. Au début, vous n'avez que le Réducteur, le potentiel est bas. Pendant que vous ajoutez l'Oxydant, le rapport [Ox]/[Red] change, et le potentiel (E_ind) grimpe. C'est ce changement de potentiel que l'électrode mesure et qui crée la courbe de titrage redox.</p>
+            </ol>
+        </div>
+
+        <div class="image-placeholder">
+            [Image : Échelle des potentiels standard d'électrode (E°).
+            L'axe va de +1,51V (MnO4-, le plus oxydant) à -2,37V (Mg2+/Mg, le plus réducteur).
+            Le couple de l'hydrogène (2H+/H2) est à 0V par convention.
+            Les valeurs positives sont de plus en plus oxydantes.
+            Les valeurs négatives sont de plus en plus réductrices.]
+        </div>
+
+        <p>Les valeurs de E° vont de +2 à -2.</p>
+        <p>Les verts : <strong>oxydant</strong> qui va jouer le rôle important (valeur positive en général)</p>
+        <p>Les rouges : <strong>réducteur</strong> qui va nous intéresser (valeur négative en général)</p>
+        <p>E° sont à pH= 0</p>
+        <div class="explication">
+            <h4>Explication : Lire l'échelle E°</h4>
+            <p>Cette échelle est comme une "échelle de force" :</p>
+            <ul>
+                <li><strong>Plus E° est élevé (+) :</strong> Plus l'Oxydant est "avide" d'électrons (fort). MnO4+ est un oxydant très puissant.</li>
+                <li><strong>Plus E° est bas (-) :</strong> Plus le Réducteur est "généreux" en électrons (fort). Mg est un réducteur très puissant.</li>
+            </ul>
+            <p>Une réaction est "quantitative" (totale) si l'écart entre le E° de l'oxydant et le E° du réducteur est suffisamment grand.</p>
+        </div>
+        
+        <p>FINI ICI (DE LA PREMIÈRE HEURE)</p>
+        
+        <hr>
+        
+        <div class="qa-section">
+            <h2>Questions de fin de cours (du document)</h2>
+            
+            <p><strong>Q1 Pour que le dosage d’un acide HA dans l’eau avec de la soude soit quantitatif , il faut que :</strong></p>
+            <ul>
+                <li>pka> 10</li>
+                <li>pka < 9</li>
+                <li>pka > 9</li>
+                <li>pka > 5</li>
+                <li>la réaction soit totale à 50%</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Corrections Q1 :</strong> B, D</p>
+                <div class="correction-note">
+                    <strong>Note d'explication :</strong> La question est double. 
+                    <br><strong>B (pka < 9)</strong> est la condition pour que la réaction soit quantitative (le saut de pH est détectable avant d'être "noyé" à pH 14).
+                    <br><strong>D (pka > 5)</strong> est la condition pour un dosage de base par un acide (pKa > pKa_limite = 5). La question est sur le dosage d'un <em>acide</em>, donc cette réponse est techniquement pour l'autre type de dosage, mais elle définit la plage "dosable" dans l'eau (entre 5 et 9).
+                </div>
+            </div>
+
+            <p><strong>Q2 Pour qu’un dosage d’un diacide soit sélectif et quantitatif il faut :</strong></p>
+            <ul>
+                <li>Que  Δ pKa ≥ 4</li>
+                <li>Que  Δ pKa ≤ 2</li>
+                <li>Que les deux pKa soient < 9</li>
+                <li>Qu’un indicateur coloré soit utilisé</li>
+                <li>Que la base soit plus forte que l’acide dosé</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Corrections Q2 :</strong> A, C</p>
+                <div class="correction-note">
+                    <strong>Note d'explication :</strong> 
+                    <br><strong>A (Δ pKa ≥ 4)</strong> est la règle de <strong>sélectivité</strong> (pour voir 2 sauts distincts).
+                    <br><strong>C (pKa < 9)</strong> est la règle de <strong>quantitativité</strong> (pour que les sauts soient visibles).
+                </div>
+            </div>
+
+            <p><strong>Q3 En potentiométrie :</strong></p>
+            <ul>
+                <li>On mesure une différence de potentiel électrique</li>
+                <li>L’électrode de verre est utilisée pour les dosages rédox</li>
+                <li>L’électrode de platine est utilisée pour les dosages rédox</li>
+                <li>L’équivalence se repère par changement de couleur</li>
+                <li>L’équivalence correspond à 100 % de conversion de l’acide en base conjuguée</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Corrections Q3 :</strong> A, C, E</p>
+                <div class="correction-note">
+                    <strong>Note d'explication :</strong>
+                    <br><strong>A :</strong> Vrai (ΔE ou pH, qui est un potentiel).
+                    <br><strong>B :</strong> Faux. L'électrode de verre mesure le pH (H+), elle est pour les dosages <strong>acido-basiques</strong>.
+                    <br><strong>C :</strong> Vrai. L'électrode de platine (Pt) est inerte et mesure le potentiel d'oxydoréduction (échange d'électrons).
+                    <br><strong>D :</strong> Faux. C'est la définition de la <strong>colorimétrie</strong>.
+                    <br><strong>E :</strong> Vrai. C'est la définition de l'équivalence.
+                </div>
+            </div>
+
+            <p><strong>Q4 Concernant les indicateurs colorés :</strong></p>
+            <ul>
+                <li>Ils changent de couleur à l’équivalence, peu importe leur zone de virage</li>
+                <li>Ils doivent avoir une zone de virage proche du pH d’équivalence</li>
+                <li>Ils sont inutiles en dosage potentiométrique</li>
+                <li>L’Hélianthine est adaptée à un dosage avec une équivalence à pH = 8</li>
+                <li>La phénolphtaléine est adaptée pour un dosage acide faible / base forte</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Corrections Q4 :</strong> B, C, E</p>
+                <div class="correction-note">
+                    <strong>Note d'explication :</strong>
+                    <br><strong>A :</strong> Faux. La zone de virage est cruciale.
+                    <br><strong>B :</strong> Vrai. La zone de virage doit *contenir* le pH à l'équivalence (le point milieu du saut de pH).
+                    <br><strong>C :</strong> Vrai. En potentiométrie, on suit la courbe, on n'a pas besoin de voir un changement de couleur.
+                    <br><strong>D :</strong> Faux. L'Hélianthine vire à pH 3-4. Elle n'est pas adaptée pour pH 8.
+                    <br><strong>E :</strong> Vrai. Un dosage acide faible / base forte a une équivalence à pH > 7 (basique). La phénolphtaléine, qui vire à 8,2-9,8, est parfaite pour cela.
+                </div>
+            </div>
+
+            <p><strong>Q5 Lors d’un dosage acide-base :</strong></p>
+            <ul>
+                <li>La solution titrante est celle dont on connaît la concentration</li>
+                <li>Le volume à l’équivalence est le volume ajouté depuis la burette</li>
+                <li>Au point d’équivalence, toute la base a été transformée en acide</li>
+                <li>On repère l’équivalence grâce à un saut de pH</li>
+                <li>Le pH reste constant pendant tout le titrage</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Corrections Q5 :</strong> A, B, D</p>
+                <div class="correction-note">
+                    <strong>Note d'explication :</strong>
+                    <br><strong>A :</strong> Vrai. La solution titrante (dans la burette) doit avoir une concentration parfaitement connue.
+                    <br><strong>B :</strong> Vrai. C'est la définition (Veq).
+                    <br><strong>C :</strong> Faux. Au contraire, tout l'acide est transformé en sa base conjuguée.
+                    <br><strong>D :</strong> Vrai. C'est le principe du repérage (potentiométrique ou colorimétrique).
+                    <br><strong>E :</strong> Faux. Le pH change tout le temps, et très brutalement à l'équivalence. Il ne reste "quasi-constant" que dans la zone tampon.
+                </div>
+            </div>
+
+            <h2>Questions et QCM en plus :</h2>
+            <p><strong>1/ Expliquer le principe d’identification d’un principe actif et comment ce dernier intervient dans le contrôle qualité.</strong></p>
+            <div class="correction">
+                <p><strong>Correction:</strong> 1/ L’identification d’un principe actif est une méthode qualitative qui consiste à identifier le principe actif selon plusieurs aspects. Sa formule brute est déterminée grâce à la spectrométrie de masse mais elle peut aussi être déterminé grâce à une analyse élémentaire (beaucoup moins utilisé aujourd’hui). Par ailleurs l’identification de la molécule/ du principe actif passe par l’identification de ses caractères physico- chimique tels que sa solubilité, son pouvoir rotatoire, etc….Mais aussi son identification spectral.</p>
+                <p>L’identification du principe actif s’applique dans le cadre du contrôle qualité pour s’assurer de l’ « identité » du PA ces étapes d’identification sont suivie par une étape de dose.</p>
+            </div>
+
+            <p><strong>2/ Donnez les 2 types de dosage de PA.</strong></p>
+            <div class="correction">
+                <p><strong>Correction:</strong> 2/ Le dosage du principe actif permet de déterminer la pureté d’un composé, que ce soit en terme de quantité ou de stabilité (permet de vérifier que le composé d’interêt n’est pas dégradé face à d’autre composé). Il existe deux méthodes, une méthode dite directe avec un dosage volumétrique ou un repérage d’équivalence. Et une méthode dite indirecte (dans le sens où on ne mesure pas directement de mesure sur le composé, mais une courbe d’étalonnage). Dans le dosage seul le composé d’intérêt est dosé.</p>
+            </div>
+            
+            <p><strong>QCM 1:  Parmi les items suivants choisissez la ou les bonnes réponse (s)</strong></p>
+            <ul>
+                <li>A-H2PO- et SO2- sont des acides faibles</li>
+                <li>B-La mésomérie favorise la déprotonation</li>
+                <li>C-Les hydroxyles sont les bases les plus fortes</li>
+                <li>D-La phénylalanine peut se déprotonner 2 fois</li>
+                <li>E-L’ordre de déprotonation de la phénylalanine n’est pas important</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Correction: QCM 1:</strong> B,C et D</p>
+                <div class="correction-note">
+                    <p>A- H2PO- et SO2 sont des bases très faibles</p>
+                    <p>E- L’odre de déprotonation doit être respecté (contrainte lié à la molécule) départ du H de COOH en 1er</p>
+                </div>
+            </div>
+
+            <p><strong>QCM 2:  Parmi les items suivants choisissez la ou les bonne (s) réponse (s)</strong></p>
+            <ul>
+                <li>A- Le chois de l’indicateur coloré n’est pas important</li>
+                <li>B- Dans l’eau la base la plus forte est la soude</li>
+                <li>C- Pour doser à la soude le pKA doit être supérieur à 9</li>
+                <li>D-Lors d’un titrage par équivalence la sélectivité n’est pas utile</li>
+                <li>E- Un indicateur coloré est un couple acide/base</li>
+            </ul>
+            <div class="correction">
+                <p><strong>Correction: QCM 2 :</strong> B et E</p>
+                <div class="correction-note">
+                    <p>A- Le choix de l’indicateur est important sinon on risque de ne pas voir l’équivalence. On le choisi de préférence afin que le changement de couleur se fasse dans la zone de virage.</p>
+                    <p>C-Pour doser à la soude la pKa doit être inférieur à 9</p>
+                    <p>D- La sélectivité est une des conditions pour un titrage sinon on ne sait pas ce que l’on mesure.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
+

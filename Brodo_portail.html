@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portail des Cours</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #005a9c; /* Bleu foncé */
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            font-weight: 700;
+        }
+        h2 {
+            color: #007bff; /* Bleu moyen */
+            margin-top: 2rem;
+            font-weight: 700;
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Une colonne par défaut */
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Sur les écrans plus larges, passer à 2 colonnes */
+        @media (min-width: 640px) {
+            .card-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .course-card {
+            display: block;
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: #212529;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+
+        .course-card h3 {
+            margin-top: 0;
+            color: #005a9c;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .course-card p {
+            font-size: 0.95em;
+            color: #495057;
+            margin-bottom: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Portail des Cours</h1>
+        <p>Bienvenue sur votre page d'accueil personnelle. Cliquez sur une carte pour accéder au cours correspondant.</p>
+
+        <h2>Mes Cours Disponibles</h2>
+        
+        <div class="card-grid">
+            
+            <!-- Carte pour CM14 -->
+            <a href="cours_brodo/CM14_Analytique_Explique.html" class="course-card">
+                <h3>CM 14 : Chimie analytique</h3>
+                <p>Contrôle de la qualité d'un principe actif, solubilité, et méthodes de dosage (titrages acido-basiques, redox).</p>
+            </a>
+
+            <!-- Carte pour CM3 -->
+            <a href="cours_brodo/CM3_Variations_Genomiques_Explique.html" class="course-card">
+                <h3>CM 3 : Variations Génomiques</h3>
+                <p>Introduction aux SNV, SV, éléments transposables, et leur impact sur les maladies et l'évolution.</p>
+            </a>
+
+            <!-- Modèle de carte pour un futur cours -->
+            <!-- 
+            <a href="cours_brodo/NOM_DU_FICHIER.html" class="course-card" style="background-color: #f8f9fa; border-style: dashed;">
+                <h3>Titre du Prochain Cours</h3>
+                <p>Une brève description de ce que ce cours couvrira.</p>
+            </a>
+            -->
+
+        </div>
+
+    </div>
+</body>
+</html>
+
