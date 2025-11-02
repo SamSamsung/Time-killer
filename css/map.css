@@ -12,20 +12,8 @@ html, body {
 }
 
 
-.leaflet-control { z-index: 0 !important}
-.leaflet-pane { z-index: 0 !important}
-.leaflet-top, .leaflet-bottom {z-index: 0 !important}
 
-/* Style pour le contenu du popup Leaflet */
-.leaflet-popup-content-wrapper {
-    padding: 1px; /* Réduire le padding pour maximiser l'espace */
-}
 
-.leaflet-popup-content {
-    width: 300px !important; /* Largeur fixe pour le contenu du popup */
-    margin: 0 !important;
-    padding: 5px !important;
-}
 
 /* Conteneur pour les images */
 .popup-images {
@@ -143,39 +131,92 @@ li {
     z-index: -1;
 }
 
+/* ================================================= */
+/* == STYLE UI (Votre idée: Parent flou + 3 boutons opaques) == */
+/* ================================================= */
 
-  #map-controls {
+/* Le conteneur UI (style de l'image) */
+#ui-container {
     position: absolute;
-    bottom: 10px;
-    left: 10px;
-    z-index: 1 !important;
-}
-
-#locate-button {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    z-index: 0 !important;
-    padding: 8px;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-    border: none;
+    bottom: 15px; 
+    left: 15px;
+    z-index: 1001; /* Reste au-dessus des contrôles Leaflet */
+    
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column; /* Pile verticale */
+    
+    /* --- C'EST LA PARTIE PARENT FLOU --- */
+    /* 1. Couleur de repli semi-transparente */
+    background-color: rgba(255, 255, 255, 0); 
+    
+    /* 2. Le flou (fonctionnera maintenant) */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Pour Safari */
+    
+    /* 3. L'ombre du parent */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    /* --- FIN DE L'EFFET --- */
+
+    /* L'espace entre les boutons */
+    gap: 15px; 
+    
+    /* LE PADDING QUE VOUS VOULEZ */
+    padding: 15px;
+    
+    /* Coins arrondis pour le parent */
+    border-radius: 16px; 
 }
 
-#locate-button:hover {
-    background-color: #f0f0f0;
+/* Style uniforme pour les boutons */
+/* CE SONT MAINTENANT LES 3 "SOUS-CONTENEURS" BLANCS */
+#ui-container button {
+    display: flex;
+    flex-direction: column;  /* Icon et texte sont empilés */
+    align-items: center;     
+    justify-content: center; 
+    
+    padding: 16px 20px; 
+    min-width: 110px;   
+    
+    /* C'est le bouton qui est BLANC et OPAQUE */
+    background-color: white; 
+    border: none;
+    cursor: pointer;
+    
+    /* Coins très arrondis pour les boutons */
+    border-radius: 10px; /* Un peu moins que le parent */
+    
+    /* Une ombre plus subtile, car ils sont déjà dans un conteneur */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    
+    transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
+#ui-container button:hover {
+    background-color: #f9f9f9; /* Léger gris au survol */
+    transform: translateY(-2px); /* Léger "lift" au survol */
+}
 
-#locate-button img {
-    width: 20px;
-    height: 20px;
+/* Style des icônes dans les boutons */
+#ui-container button img {
+    width: 24px;  
+    height: 24px;
+    margin-right: 0;   
+    margin-bottom: 8px; /* Espace ENTRE l'icône et le texte */
+    opacity: 0.7;
+}
+
+/* Style du texte dans les boutons */
+#ui-container button span {
+    font-size: 13px; 
+    font-weight: 500;
+    color: #333;
+}
+
+/* Force les boutons cachés à être VRAIMENT cachés */
+#friends-button[style*="display: none"],
+#logout-button[style*="display: none"] {
+    display: none !important;
 }
 
 .header_popup {
@@ -249,25 +290,6 @@ li {
     pointer-events: none;
     opacity: 0.3;
     filter: grayscale(100%);
-}
-
-#logout-button{
-    position: absolute;
-    bottom: 7px;
-    left: 50px;
-    padding: 8px;
-   
-    display: flex;
-}
-
-#friends-button{
-    position: absolute;
-    bottom: 7px;
-    left: 140px;
-    padding: 8px;
-
-    display: flex;
-    white-space: nowrap;
 }
 
 
@@ -366,7 +388,7 @@ li {
     position: absolute;
     top: 50%;
     left: 50%;
-    z-index: 12; /* (plus haut que l'overlay) */
+    z-index: 1003; /* (plus haut que l'overlay) */
     background: white;
     border: 1px solid black;
     border-radius: 10px;
@@ -589,4 +611,205 @@ li {
     border: 1px solid #eee;
     /* Pour que l'image ne soit pas "écrasée" */
     flex-shrink: 0; 
+}
+
+
+/* ================================================= */
+/* == CORRECTION FINALE Z-INDEX == */
+/* ================================================= */
+
+/* On force l'overlay à être au-dessus de la barre UI */
+#overlay {
+    z-index: 1002 !important;
+}
+
+/* On force TOUS les popups à être au-dessus de l'overlay */
+/* (Cible #informations, #comments, #login-popup) */
+.pop_up {
+    z-index: 1003 !important; 
+}
+
+
+/* ================================================= */
+/* == STYLE DES BOUTONS D'ACTION DU POPUP (Icônes) == */
+/* ================================================= */
+
+.popup-actions-container {
+    display: flex;
+    justify-content: flex-start; /* Aligner à droite */
+    gap: 8px; /* Espace entre les boutons */
+    margin-top: 10px; /* Espace au-dessus des boutons */
+}
+
+.popup-action-button {
+    width: 38px; /* Taille du bouton */
+    height: 38px;
+    border-radius: 50%; /* Boutons ronds */
+    background-color: #f0f0f0; /* Fond léger */
+    border: none;
+    cursor: pointer;
+    display: flex; /* Pour centrer l'icône */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombre subtile */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.popup-action-button:hover {
+    background-color: #e0e0e0; /* Assombrir au survol */
+    transform: translateY(-1px); /* Léger soulèvement */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.popup-action-button img {
+    width: 20px; /* Taille de l'icône */
+    height: 20px;
+    opacity: 0.7; /* Légèrement moins opaque */
+    filter: invert(0.2); /* Rendre les icônes sombres si elles sont blanches */
+}
+
+/* Vous pouvez ajouter des couleurs de survol spécifiques si vous voulez un effet visuel */
+.popup-action-button[title="Modifier"]:hover {
+    background-color: #cceeff; /* Bleu clair pour Modifier */
+}
+.popup-action-button[title="Supprimer"]:hover {
+    background-color: #ffcccc; /* Rouge clair pour Supprimer */
+}
+.popup-action-button[title="Ajouter un commentaire"]:hover {
+    background-color: #ccffcc; /* Vert clair pour Commentaire */
+}
+
+
+/* ================================================= */
+/* == STYLE MODERNE POUR POPUP DE MARQUEUR == */
+/* ================================================= */
+
+/* --- 1. On redessine le conteneur du popup --- */
+
+/* On cible la "bulle" principale */
+.leaflet-popup-content-wrapper {
+    /* L'effet "verre dépoli" (flou + transparence) */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Pour Safari */
+    background-color: rgba(255, 255, 255, 0.85); /* Fond de repli */
+    
+    border-radius: 12px; /* Coins arrondis modernes */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Bordure subtile */
+    padding: 0; /* On gère le padding à l'intérieur */
+}
+
+/* On cible le conteneur intérieur */
+.leaflet-popup-content {
+    /* On force une police moderne */
+    width: 300px !important; /* Gardons votre largeur fixe */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 14px 18px; /* Notre propre espacement */
+    margin: 0 !important; /* Annule le style par défaut de Leaflet */
+}
+
+/* On supprime la petite flèche moche en bas */
+.leaflet-popup-tip-container {
+    display: none;
+}
+
+/* --- 2. On met en forme votre contenu (le HTML) --- */
+
+/* On annule la marge par défaut des <p> pour tout contrôler */
+.leaflet-popup-content p {
+    margin: 0;
+}
+
+/* On style vos titres de section */
+.leaflet-popup-content .header_popup {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666; /* Un gris moyen, pas noir */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    /* C'est ce qui crée la séparation ! */
+    margin-top: 16px; 
+    margin-bottom: 4px; /* Espace avant le contenu */
+}
+
+/* Le tout premier titre n'a pas besoin de marge en haut */
+.leaflet-popup-content .header_popup:first-child {
+    margin-top: 0;
+}
+
+/* On style le texte de contenu (la balise <p> QUI SUIT un .header_popup) */
+.leaflet-popup-content .header_popup + p {
+    font-size: 15px;
+    color: #111; /* Presque noir, pour la lisibilité */
+    font-weight: 500;
+}
+
+/* On s'assure que le conteneur des images est bien calé */
+.leaflet-popup-content .popup-images {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* On sépare la section commentaire de la fin */
+.leaflet-popup-content .header_popup:last-child {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+
+/* ================================================= */
+/* == STYLE POUR LES "BOÎTES" DE DONNÉES (MODERNE) == */
+/* ================================================= */
+
+/* Cible la nouvelle classe .popup-data-box */
+.leaflet-popup-content p.popup-data-box {
+    /* Fond "verre sur verre" - légèrement plus sombre/opaque */
+    background-color: rgba(245, 245, 247, 0.7); 
+    
+    padding: 10px 14px;
+    margin-top: 5px; /* Espace par rapport au titre de section */
+    margin-bottom: 0; 
+    border-radius: 8px; /* Coins arrondis */
+    
+    /* Style de texte "normal" (pas d'italique) */
+    font-size: 15px; 
+    font-style: normal;
+    font-weight: 500;   
+    color: #111; /* Texte foncé pour la lisibilité */
+    line-height: 1.4;
+    
+    /* Bordure très subtile pour délimiter */
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    
+    /* Pour que le texte ne déborde pas de la boîte */
+    word-break: break-word; 
+}
+
+/* Gérer les boîtes vides */
+.leaflet-popup-content p.popup-data-box:empty {
+    /* On n'affiche pas les boîtes vides (ex: si 'lieu' est vide) */
+    display: none; 
+}
+
+/* (Rappel) Assure que les titres de section sont bien espacés */
+.leaflet-popup-content p.header_popup {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 16px; 
+    margin-bottom: 4px;
+}
+.leaflet-popup-content p.header_popup:first-child {
+    margin-top: 0;
+}
+
+/* (Rappel) Assure que le dernier header ("Section commentaire") est bien placé */
+.leaflet-popup-content p.header_popup:last-child {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
 }

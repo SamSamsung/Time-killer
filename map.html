@@ -18,22 +18,7 @@
         <div id="overlay"></div>
         <div class="pop_up" id="informations">
             <p>Qui est l'heureux·se élu·e ?</p>
-            <select id="dropdown_name">
-                <option>Samuel</option>
-                <option>Benjamin</option>
-                <option>Gabrielle</option>
-                <option>Louis</option>
-                <option>Nolwenn</option>
-                <option>Maurange</option>
-                <option>Alex</option>
-                <option>Tim</option>
-                <option>Noah</option>
-                <option>Tristan</option>
-                <option>Driptor</option>
-                <option>Victor</option>
-                <option>Ben7</option>
-                <option>Iloë</option>
-            </select>
+            <p id="creator-name-display" class="popup-data-box" style="margin-top: 5px; text-align: center;"></p>
             <p>Partenaire·s</p>
             <textarea id="partenaire" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
             <p>Date</p>
@@ -139,11 +124,23 @@
         </div>
 
         
-        <div id="map-controls">
-            <button id="locate-button"><img src="./icons_map/target.png" alt="Localiser"></button>
-            <button id="logout-button" class="verif_button" style="background-color: red; display: none;">Déconnexion</button>
-
-            <button id="friends-button" class="verif_button" style="background-color: #4285F4; display: none;">Gérer les amis</button>
+        <div id="ui-container">
+    
+            <button id="locate-button" title="Me localiser">
+                <img src="./icons_map/target.png" alt="Localiser">
+                <span>Me localiser</span>
+            </button>
+            
+            <button id="friends-button" title="Gérer les amis">
+                <img src="./icons_map/friends.png" alt="Amis"> 
+                <span>Gérer les amis</span>
+            </button>
+            
+            <button id="logout-button" title="Déconnexion">
+                <img src="./icons_map/logout.png" alt="Déconnexion">
+                <span>Déconnexion</span>
+            </button>
+        
         </div>
         
         <div id="map">
@@ -191,7 +188,7 @@
             import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
             import { getDatabase, ref, push, set, get, onValue, remove, update, query, orderByChild, startAt, endAt } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-            import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+            import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, getAdditionalUserInfo, updateProfile } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
             
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
@@ -227,6 +224,8 @@
             window.orderByChild = orderByChild;
             window.startAt = startAt;
             window.endAt = endAt;
+            window.getAdditionalUserInfo = getAdditionalUserInfo;
+            window.updateProfile = updateProfile;
 
 
             const auth = getAuth(app);

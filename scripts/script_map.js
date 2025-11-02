@@ -95,46 +95,119 @@ if (navigator.geolocation) {
 }
 // Charger les marqueurs depuis Realtime Database une seule fois
 function loadMarkers() {
-    const markersRef = ref(db, 'markers');
-    get(markersRef).then((snapshot) => {
-        const markers = snapshot.val();
-        for (const key in markers) {
-            if (markers.hasOwnProperty(key)) {
-                const markerData = markers[key];
-                const position = markerData.position;
-                const popupContent = markerData.popupContent;
+    const currentUserId = window.auth.currentUser.uid;
+    
+    // 1. On commence par s'ajouter soi-même à la liste
+    let allowedIds = [currentUserId];
 
-                // Vérifier si le marqueur a une icône personnalisée
-                if (markerData.icon) {
-                    const customIcon = L.icon({
-                        iconUrl: markerData.icon.iconUrl,
-                        iconSize: markerData.icon.iconSize,
-                        iconAnchor: markerData.icon.iconAnchor,
-                        popupAnchor: markerData.icon.popupAnchor
-                    });
-                    const marker = L.marker(position, { icon: customIcon }).addTo(map);
-                    marker.options.key = key; // Stocker la clé dans les options du marqueur
-                    marker.bindPopup(getPopupContent(popupContent, key))
-                } else {
-                    const marker = L.marker(position).addTo(map);
-                    marker.options.key = key; // Stocker la clé dans les options du marqueur
-                    marker.bindPopup(getPopupContent(popupContent, key))
+    // 2. On va chercher la liste d'amis
+    const friendsRef = ref(db, `friendships/${currentUserId}`);
+    
+    get(friendsRef).then((friendsSnapshot) => {
+        // 3. On construit la liste d'amis
+        if (friendsSnapshot.exists()) {
+            const relations = friendsSnapshot.val();
+            for (const friendId in relations) {
+                // On ajoute SEULEMENT ceux dont le statut est "friends"
+                if (relations[friendId] === "friends") {
+                    allowedIds.push(friendId);
                 }
             }
         }
+        
+        console.log("Affichage des marqueurs pour les UID:", allowedIds);
+
+        // 4. Une fois qu'on a la liste, on va chercher les marqueurs
+        const markersRef = ref(db, 'markers');
+        return get(markersRef); // On passe cette promesse au .then() suivant
+
+    }).then((markersSnapshot) => {
+        // 5. On a reçu les marqueurs
+        
+        // On nettoie la carte
+        map.eachLayer(function(layer) {
+            if (layer instanceof L.Marker) {
+                map.removeLayer(layer);
+            }
+        });
+
+        if (!markersSnapshot.exists()) {
+            console.log("Aucun marqueur trouvé dans la base de données.");
+            return; // On s'arrête
+        }
+
+        const markers = markersSnapshot.val();
+        
+        // 6. On filtre et on affiche les marqueurs
+        for (const key in markers) {
+            if (markers.hasOwnProperty(key)) {
+                const markerData = markers[key];
+                
+                // *** LE FILTRE PRINCIPAL EST ICI ***
+                if (allowedIds.includes(markerData.creator_id)) {
+                
+                    const position = markerData.position;
+                    const popupContent = markerData.popupContent;
+
+                    // On passe l'ID du créateur pour gérer les boutons
+                    const finalPopupContent = getPopupContent(popupContent, key, markerData.creator_id);
+
+                    // Vérifier si le marqueur a une icône personnalisée
+                    if (markerData.icon) {
+                        const customIcon = L.icon({
+                            iconUrl: markerData.icon.iconUrl,
+                            iconSize: markerData.icon.iconSize,
+                            iconAnchor: markerData.icon.iconAnchor,
+                            popupAnchor: markerData.icon.popupAnchor
+                        });
+                        const marker = L.marker(position, { icon: customIcon }).addTo(map);
+                        marker.options.key = key; 
+                        marker.bindPopup(finalPopupContent); // Pas de .openPopup()
+                    } else {
+                        const marker = L.marker(position).addTo(map);
+                        marker.options.key = key; 
+                        marker.bindPopup(finalPopupContent); // Pas de .openPopup()
+                    }
+                }
+            }
+        }
+
     }).catch((error) => {
-        console.error("Erreur lors du chargement des marqueurs :", error);
+        // Ce .catch() gérera les erreurs de get(friendsRef) ET de get(markersRef)
+        console.error("Erreur lors du chargement des marqueurs ou des amis :", error);
     });
 }
 
 // Fonction pour créer le contenu du popup avec la clé
-function getPopupContent(popupContent, key) {
+function getPopupContent(popupContent, key, creatorId) {
+    const currentUserId = window.auth.currentUser.uid;
+    const isCreator = (currentUserId === creatorId);
+
+    // Utilisez les chemins vers vos icônes
+    const iconEdit = './icons_map/edit.png'; // REMPLACEZ PAR VOTRE CHEMIN
+    const iconDelete = './icons_map/delete.png'; // REMPLACEZ PAR VOTRE CHEMIN
+    const iconComment = './icons_map/comment.png'; // REMPLACEZ PAR VOTRE CHEMIN
+
     return `
     <div>
         ${popupContent}
-        <button class="popup-button" style="background-color: lightblue" onclick="modifyMarker('${key}')">Modifier</button>
-        <button class="popup-button" style="background-color: red" onclick="removeMarker('${key}')">Supprimer</button>
-        <button class="popup-button" style="background-color: lightgreen" onclick="showCommentPopup('${key}')">Ajouter un commentaire</button>
+        
+        <div class="popup-actions-container">
+            ${/* Affichage conditionnel des boutons d'édition avec icônes */''}
+            ${isCreator ? `
+                <button class="popup-action-button" onclick="modifyMarker('${key}')" title="Modifier">
+                    <img src="${iconEdit}" alt="Modifier" />
+                </button>
+                <button class="popup-action-button" onclick="removeMarker('${key}')" title="Supprimer">
+                    <img src="${iconDelete}" alt="Supprimer" />
+                </button>
+            ` : ''}
+            
+            ${/* Le bouton de commentaire est toujours visible */''}
+            <button class="popup-action-button" onclick="showCommentPopup('${key}')" title="Ajouter un commentaire">
+                <img src="${iconComment}" alt="Commenter" />
+            </button>
+        </div>
     </div>
     `;
 }
@@ -163,7 +236,7 @@ function saveMarker(position, popupContent, icon=null, name, partenaires, date, 
         if (tempMarker) {
             tempMarker.options.key = newMarkerRef.key;
             // Mettre à jour le contenu du popup avec la clé
-            const popupContentWithKey = getPopupContent(popupContent, newMarkerRef.key);
+            const popupContentWithKey = getPopupContent(popupContent, newMarkerRef.key, creator);
             tempMarker.getPopup().setContent(popupContentWithKey);
         }
         return newMarkerRef.key; // Retourner la clé pour un usage ultérieur si nécessaire
@@ -228,7 +301,7 @@ function modifyMarker(key) {
         }
 
         // 2. Pré-remplir le formulaire avec les données existantes
-        document.getElementById("dropdown_name").value = markerData.name || "Samuel";
+        document.getElementById("creator-name-display").innerText = markerData.name || "";
         document.getElementById("partenaire").value = markerData.partenaires || "";
         document.getElementById("date").value = markerData.date || new Date().toISOString().slice(0, 10);
         document.getElementById("lieu").value = markerData.lieu || "";
@@ -319,6 +392,8 @@ function onMapClick(e) {
     const inputDate = document.getElementById('date');
     inputDate.value = new Date().toISOString().slice(0, 10);
 
+    document.getElementById("creator-name-display").innerText = window.auth.currentUser.displayName;
+
     var popupContent = `
     <div>
         <p>Voici un popup avec des boutons !</p>
@@ -369,7 +444,7 @@ function yes(){
     var position = tempMarker.getLatLng();
     var popupContent = tempMarker.getPopup().getContent();
     var icon = tempMarker.getIcon();
-    var name = document.getElementById("dropdown_name").value;
+    var name = window.auth.currentUser.displayName;
     var partenaires = document.getElementById("partenaire").value
     var lieu = document.getElementById("lieu").value
     var date = document.getElementById("date").value
@@ -386,21 +461,21 @@ function yes(){
 
     var popupContent = `
         <p class="header_popup">L'heureux·se élu·e</p>
-        <p>${name}</p>
+        <p class="popup-data-box">${name}</p>
         <p class="header_popup">Partenaire·s</p>
-        <p>${partenaires}</p>
+        <p class="popup-data-box">${partenaires}</p>
         <p class="header_popup">Date</p>
-        <p>${date}</p>
+        <p class="popup-data-box">${date}</p>
         <p class="header_popup">Lieu</p>
-        <p>${lieu}</p>
+        <p class="popup-data-box">${lieu}</p>
         <p class="header_popup">Les positions</p>
         <div class="popup-images">
             ${popuptexte}
         </div>
         <p class="header_popup">Note</p>
-        <p>${note_emoji} - ${note_num}/10</p>
+        <p class="popup-data-box">${note_emoji} - ${note_num}/10</p>
         <p class="header_popup">Les commentaires</p>
-        <p>${commentaires}</p>
+        <p class="popup-data-box">${commentaires}</p>
         <p class="header_popup">Section commentaire</p>
     `;
     
@@ -601,8 +676,35 @@ function yes_comments(){
 // Fonction de connexion avec Google
 function loginWithGoogle() {
     window.signInWithPopup(window.auth, window.provider)
-        .then((result) => {
+        .then( async (result) => {
             // Connexion réussie
+            const firebaseUser = result.user;
+            const additionalInfo = window.getAdditionalUserInfo(result);
+            const googleProfile = additionalInfo.profile;
+            const googleProfileName = googleProfile.given_name || googleProfile.name.split(' ')[0];
+
+            // On compare le nom en cache de Firebase avec le nom frais de Google
+            if (firebaseUser.displayName !== googleProfileName) {
+                
+                console.warn("Mise à jour du profil Firebase !");
+                console.log(`Ancien nom (cache) : ${firebaseUser.displayName}`);
+                console.log(`Nouveau nom (Google) : ${googleProfileName}`);
+
+                // On force la mise à jour du profil Firebase
+                // (On met aussi à jour la photo, au cas où)
+                await window.updateProfile(firebaseUser, {
+                    displayName: googleProfileName,
+                    photoURL: additionalInfo.profile.picture 
+                });
+                
+                console.log("Profil Firebase mis à jour avec succès.");
+                
+                // On recharge la page pour que "updateUI" s'exécute
+                // avec le bon nom partout.
+                window.location.reload();
+            }
+
+            // Si les noms sont déjà identiques, on ferme simplement le popup
             login_pop_up_close();
         })
         .catch((error) => {
@@ -660,8 +762,8 @@ function updateUI(user) {
 
         // Activer la carte
         document.getElementById('map').removeAttribute('disabled');
-        document.getElementById('logout-button').style.display = 'inline';
-        document.getElementById('friends-button').style.display = 'inline';
+        document.getElementById('logout-button').style.display = 'flex';
+        document.getElementById('friends-button').style.display = 'flex';
         loadMarkers(); // Charger les marqueurs de l'utilisateur
     } else {
         // Désactiver la carte et afficher le popup
