@@ -8,11 +8,73 @@ L.Control.geocoder().addTo(map);
 
 
 function initMap(lat, lon, zoom = 13) {
-  map.setView([lat, lon], zoom);
+    map.setView([lat, lon], zoom);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
+
+    // 1. Définir les deux thèmes
+    var cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+
+    var cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+    });
+
+    var esriSatellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
+    var openTopo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+        maxZoom: 17,
+        attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    });
+
+    var esriDarkGray = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+        maxZoom: 16
+    });
+
+    // L'ancien thème classique (pour comparer)
+    var osmClassic = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    });
+  
+    // 2. Créer l'objet pour le contrôle
+    var baseMaps = {
+        "Moderne (Clair)": cartoLight,
+        "Moderne (Sombre)": cartoDark,
+        "Gris (Sombre)": esriDarkGray,
+        "Satellite": esriSatellite,
+        "Terrain": openTopo,
+        "Classique (OSM)": osmClassic
+    };
+
+    // 3. Ajouter le contrôle à la carte
+    L.control.layers(baseMaps).addTo(map);
+
+
+    const savedThemeName = localStorage.getItem('userMapTheme'); // On récupère le nom sauvegardé
+    let defaultLayer;
+
+    // On vérifie si le nom sauvegardé existe dans notre objet baseMaps
+    if (savedThemeName && baseMaps[savedThemeName]) {
+        defaultLayer = baseMaps[savedThemeName]; // Si oui, on l'utilise
+    } else {
+        defaultLayer = cartoLight; // Sinon, on prend le thème par défaut
+    }
+
+    // 4. Ajouter le thème par défaut (important !)
+    defaultLayer.addTo(map);
+
+    // On écoute l'événement 'baselayerchange' (quand l'utilisateur change de thème)
+    map.on('baselayerchange', function(e) {
+        // e.name est le nom du thème (ex: "Satellite", "Moderne (Sombre)")
+        localStorage.setItem('userMapTheme', e.name);
+    });
 }
 
 if (navigator.geolocation) {
@@ -52,11 +114,11 @@ function loadMarkers() {
                     });
                     const marker = L.marker(position, { icon: customIcon }).addTo(map);
                     marker.options.key = key; // Stocker la clé dans les options du marqueur
-                    marker.bindPopup(getPopupContent(popupContent, key)).openPopup();
+                    marker.bindPopup(getPopupContent(popupContent, key))
                 } else {
                     const marker = L.marker(position).addTo(map);
                     marker.options.key = key; // Stocker la clé dans les options du marqueur
-                    marker.bindPopup(getPopupContent(popupContent, key)).openPopup();
+                    marker.bindPopup(getPopupContent(popupContent, key))
                 }
             }
         }
@@ -585,14 +647,27 @@ function updateUI(user) {
         console.log("Nom:", displayName);
         console.log("Email:", email);
         console.log("Photo:", photoURL);
+
+        const userRef = ref(db, `users/${user.uid}`);
+        const userData = {
+            displayName: displayName,
+            email: email,
+            photoURL: photoURL,
+            displayName_lowercase: displayName.toLowerCase()
+        };
+
+        set(userRef, userData);
+
         // Activer la carte
         document.getElementById('map').removeAttribute('disabled');
         document.getElementById('logout-button').style.display = 'inline';
+        document.getElementById('friends-button').style.display = 'inline';
         loadMarkers(); // Charger les marqueurs de l'utilisateur
     } else {
         // Désactiver la carte et afficher le popup
         document.getElementById('map').setAttribute('disabled', 'true');
         document.getElementById('logout-button').style.display = 'none';
+        document.getElementById('friends-button').style.display = 'none';
         show_login_popup(); // Afficher le popup de connexion
     }
 }
@@ -613,6 +688,11 @@ document.addEventListener('DOMContentLoaded', function() {
         updateUI(user);
     });
     
+    if (!window.friendsListenerAdded) {
+        document.getElementById('friends-button').addEventListener('click', show_friends_popup);
+        document.getElementById('user-search-button').addEventListener('click', searchUsers);
+        window.friendsListenerAdded = true; // Pour éviter les doublons
+    }
     
     //loadMarkers();
     // Ajouter le contrôle de géolocalisation
@@ -661,3 +741,310 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
 });
+
+
+
+// Gerer l'amitié :
+
+// --- Fonctions principales du Popup ---
+
+function show_friends_popup() {
+    document.getElementById("friends-popup").classList.add("active");
+    document.getElementById("overlay").classList.add("show");
+    document.querySelector('#map').style.pointerEvents = 'none';
+    
+    // Charger les deux listes à l'ouverture
+    loadCurrentFriends();
+    loadPendingRequests();
+    
+    // Vider la recherche
+    document.getElementById("user-search-results").innerHTML = "";
+    document.getElementById("user-search-input").value = "";
+}
+
+function friends_pop_up_close() {
+    document.getElementById("friends-popup").classList.remove("active");
+    document.getElementById("overlay").classList.remove("show");
+    document.querySelector('#map').style.pointerEvents = 'auto';
+    
+    // Recharger les marqueurs sur la carte
+    map.eachLayer(function(layer) {
+        if (layer instanceof L.Marker) {
+            map.removeLayer(layer);
+        }
+    });
+    loadMarkers(); // (Cette fonction sera mise à jour à l'Étape 4)
+}
+
+
+async function searchUsers() {
+    const searchInput = document.getElementById("user-search-input").value.toLowerCase();
+    const resultsContainer = document.getElementById("user-search-results");
+    resultsContainer.innerHTML = "<i>Recherche...</i>";
+
+    if (searchInput.length < 3) {
+        resultsContainer.innerHTML = "<i>Veuillez entrer au moins 3 caractères.</i>";
+        return;
+    }
+
+    const currentUserId = window.auth.currentUser.uid;
+    const usersRef = ref(db, 'users');
+    const userQuery = query(usersRef, 
+        orderByChild('displayName_lowercase'), 
+        startAt(searchInput), 
+        endAt(searchInput + '\uf8ff')
+    );
+
+    const snapshot = await get(userQuery);
+    if (!snapshot.exists()) {
+        resultsContainer.innerHTML = "<i>Aucun utilisateur trouvé.</i>";
+        return;
+    }
+
+    const usersData = snapshot.val();
+    const friendshipRef = ref(db, `friendships/${currentUserId}`);
+    const relationsSnapshot = await get(friendshipRef);
+    const relations = relationsSnapshot.exists() ? relationsSnapshot.val() : {};
+
+    let htmlToRender = []; 
+
+    for (const userId in usersData) {
+        if (userId === currentUserId) continue; 
+        
+        const userData = usersData[userId];
+        const relationStatus = relations[userId];
+
+        // --- AJOUT : On récupère la photo ---
+        const photoURL = userData.photoURL || './icons_map/default-avatar.png';
+        const imageHTML = `<img src="${photoURL}" class="result-avatar" onerror="this.src='./icons_map/default-avatar.png'">`;
+        // --- FIN AJOUT ---
+
+        let buttonHTML = "";
+        if (relationStatus === "friends") {
+            buttonHTML = `<button disabled>Amis</button>`;
+        } else if (relationStatus === "sent") {
+            buttonHTML = `<button disabled>Demande envoyée</button>`;
+        } else if (relationStatus === "pending") {
+            buttonHTML = `<button class="accept" onclick="acceptFriendRequest('${userId}', '${userData.displayName}')">Accepter</button>`;
+        } else {
+            buttonHTML = `<button onclick="sendFriendRequest('${userId}', '${userData.displayName}')">Ajouter</button>`;
+        }
+
+        // --- MODIFICATION : On ajoute l'image et une div ---
+        htmlToRender.push(`
+            <div class="user-result">
+                <div class="user-result-identity">
+                    ${imageHTML}
+                    <span>${userData.displayName}</span>
+                </div>
+                ${buttonHTML}
+            </div>
+        `);
+    }
+
+    if (htmlToRender.length > 0) {
+        resultsContainer.innerHTML = htmlToRender.join('');
+    } else {
+        resultsContainer.innerHTML = "<i>Aucun autre utilisateur trouvé.</i>";
+    }
+}
+
+async function sendFriendRequest(friendId, friendName) {
+    const currentUserId = window.auth.currentUser.uid;
+
+    // Statut "sent" (envoyé) pour l'expéditeur
+    const userRef = ref(db, `friendships/${currentUserId}/${friendId}`);
+    await set(userRef, "sent");
+
+    // Statut "pending" (en attente) pour le destinataire
+    const friendRef = ref(db, `friendships/${friendId}/${currentUserId}`);
+    await set(friendRef, "pending");
+
+    alert(`Demande d'ami envoyée à ${friendName} !`);
+    searchUsers(); // Rafraîchir les résultats de recherche
+}
+
+async function acceptFriendRequest(friendId, friendName) {
+    const currentUserId = window.auth.currentUser.uid;
+
+    // Les deux deviennent "friends"
+    const userRef = ref(db, `friendships/${currentUserId}/${friendId}`);
+    await set(userRef, "friends");
+
+    const friendRef = ref(db, `friendships/${friendId}/${currentUserId}`);
+    await set(friendRef, "friends");
+
+    alert(`Vous êtes maintenant ami avec ${friendName} !`);
+    
+    // Rafraîchir les deux listes dans le popup
+    loadCurrentFriends();
+    loadPendingRequests();
+    searchUsers(); // Rafraîchir aussi la recherche si elle est ouverte
+}
+
+async function declineFriendRequest(friendId, friendName) {
+    if (!confirm(`Voulez-vous vraiment refuser la demande de ${friendName} ?`)) return;
+
+    const currentUserId = window.auth.currentUser.uid;
+
+    // On supprime les entrées des deux côtés
+    const userRef = ref(db, `friendships/${currentUserId}/${friendId}`);
+    await remove(userRef);
+
+    const friendRef = ref(db, `friendships/${friendId}/${currentUserId}`);
+    await remove(friendRef);
+
+    alert(`Demande de ${friendName} refusée.`);
+    loadPendingRequests(); // Rafraîchir la liste des demandes
+}
+
+async function removeFriend(friendId, friendName) {
+    if (!confirm(`Voulez-vous vraiment retirer ${friendName} de vos amis ?`)) return;
+
+    const currentUserId = window.auth.currentUser.uid;
+
+    // On supprime les entrées des deux côtés
+    const userRef = ref(db, `friendships/${currentUserId}/${friendId}`);
+    await remove(userRef);
+
+    const friendRef = ref(db, `friendships/${friendId}/${currentUserId}`);
+    await remove(friendRef);
+
+    alert(`${friendName} a été retiré(e) de vos amis.`);
+    loadCurrentFriends(); // Rafraîchir la liste d'amis
+}
+
+
+
+// --- Fonctions d'affichage des listes ---
+
+async function loadCurrentFriends() {
+    const currentUserId = window.auth.currentUser.uid;
+    const listContainer = document.getElementById("current-friends-list");
+    listContainer.innerHTML = "<i>Chargement...</i>";
+
+    try {
+        const friendsRef = ref(db, `friendships/${currentUserId}`);
+        const snapshot = await get(friendsRef);
+
+        if (!snapshot.exists()) {
+            listContainer.innerHTML = "<i>Vous n'avez pas encore d'amis.</i>";
+            return;
+        }
+        
+        const relations = snapshot.val();
+        const promises = [];
+        let friendCount = 0;
+
+        for (const friendId in relations) {
+            if (relations[friendId] === "friends") {
+                friendCount++;
+                promises.push(
+                    get(ref(db, `users/${friendId}`)).then(userSnapshot => {
+                        let friendName = "Utilisateur inconnu";
+                        let photoURL = './icons_map/default-avatar.png'; // Défaut
+
+                        if (userSnapshot.exists()) {
+                            friendName = userSnapshot.val().displayName;
+                            photoURL = userSnapshot.val().photoURL || './icons_map/default-avatar.png';
+                        }
+                        
+                        // --- MODIFICATION : Template HTML mis à jour ---
+                        return `
+                            <div class="friend-item">
+                                <div class="user-result-identity">
+                                    <img src="${photoURL}" class="result-avatar" onerror="this.src='./icons_map/default-avatar.png'">
+                                    <span>${friendName}</span>
+                                </div>
+                                <button onclick="removeFriend('${friendId}', '${friendName}')">Retirer</button>
+                            </div>
+                        `;
+                    }).catch(err => {
+                        console.error(`Erreur au chargement de l'ami ${friendId}:`, err);
+                        return ''; 
+                    })
+                );
+            }
+        }
+
+        if (friendCount === 0) {
+            listContainer.innerHTML = "<i>Vous n'avez pas encore d'amis.</i>";
+            return;
+        }
+
+        const friendsHTMLArray = await Promise.all(promises);
+        listContainer.innerHTML = friendsHTMLArray.join('');
+
+    } catch (error) {
+        console.error("Erreur majeure dans loadCurrentFriends :", error);
+        listContainer.innerHTML = "<i style='color: red;'>Erreur de chargement. Vérifiez la console.</i>";
+    }
+}
+
+
+async function loadPendingRequests() {
+    const currentUserId = window.auth.currentUser.uid;
+    const listContainer = document.getElementById("pending-friends-list");
+    listContainer.innerHTML = "<i>Chargement...</i>";
+
+    try {
+        const friendsRef = ref(db, `friendships/${currentUserId}`);
+        const snapshot = await get(friendsRef);
+
+        if (!snapshot.exists()) {
+            listContainer.innerHTML = "<i>Aucune demande en attente.</i>";
+            return;
+        }
+        
+        listContainer.innerHTML = ""; 
+        const relations = snapshot.val();
+        let pendingCount = 0;
+        const promises = [];
+
+        for (const friendId in relations) {
+            if (relations[friendId] === "pending") {
+                pendingCount++;
+                promises.push(
+                    get(ref(db, `users/${friendId}`)).then(userSnapshot => {
+                        let friendName = "Utilisateur inconnu";
+                        let photoURL = './icons_map/default-avatar.png'; // Défaut
+
+                        if (userSnapshot.exists()) {
+                            friendName = userSnapshot.val().displayName;
+                            photoURL = userSnapshot.val().photoURL || './icons_map/default-avatar.png';
+                        }
+
+                        // --- MODIFICATION : Template HTML mis à jour ---
+                        return `
+                            <div class="pending-item">
+                                <div class="user-result-identity">
+                                    <img src="${photoURL}" class="result-avatar" onerror="this.src='./icons_map/default-avatar.png'">
+                                    <span>${friendName}</span>
+                                </div>
+                                <div>
+                                    <button class="accept" onclick="acceptFriendRequest('${friendId}', '${friendName}')">Accepter</button>
+                                    <button class="decline" onclick="declineFriendRequest('${friendId}', '${friendName}')">Refuser</button>
+                                </div>
+                            </div>
+                        `;
+                    }).catch(err => {
+                        console.error(`Erreur au chargement du demandeur ${friendId}:`, err);
+                        return ''; 
+                    })
+                );
+            }
+        }
+
+        if (pendingCount === 0) {
+            listContainer.innerHTML = "<i>Aucune demande en attente.</i>";
+            return;
+        }
+
+        const pendingHTMLArray = await Promise.all(promises);
+        listContainer.innerHTML = pendingHTMLArray.join('');
+
+    } catch (error) {
+        console.error("Erreur majeure dans loadPendingRequests :", error);
+        listContainer.innerHTML = "<i style='color: red;'>Erreur de chargement. Vérifiez la console.</i>";
+    }
+}

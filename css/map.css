@@ -1,5 +1,13 @@
+html, body {
+    margin: 0;  /* Annule la marge par défaut */
+    padding: 0; /* Annule l'espacement intérieur par défaut */
+    background-color: #f0f2f5; /* Un gris très clair et neutre */
+}
+
+
 #map { 
-    height: 760px;
+    height: 100vh;
+    width: 100%;
     position: relative;
 }
 
@@ -252,6 +260,16 @@ li {
     display: flex;
 }
 
+#friends-button{
+    position: absolute;
+    bottom: 7px;
+    left: 140px;
+    padding: 8px;
+
+    display: flex;
+    white-space: nowrap;
+}
+
 
 #comment_box{
     width: 90%; /* Largeur maximale = 100% du conteneur */
@@ -335,4 +353,240 @@ li {
         top: -3px;
         left: -3px;
     }
+}
+
+/* ================================================= */
+/* == CSS DE SECOURS POUR #friends-popup == */
+/* Annule et remplace les styles du Pendu (.pop_up) */
+/* ================================================= */
+
+/* --- 1. On ANNULE les styles de .pop_up --- */
+#friends-popup {
+    /* On garde la base pour être un popup */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 12; /* (plus haut que l'overlay) */
+    background: white;
+    border: 1px solid black;
+    border-radius: 10px;
+
+    /* ON ÉCRASE LES MAUVAIS STYLES */
+    width: 90%; /* Pas 50% */
+    max-width: 500px; /* Une largeur max */
+    height: auto; /* PAS 20% ! Hauteur auto */
+    max-height: 80vh; /* Hauteur max avec scroll */
+    padding: 20px; /* De l'espace à l'intérieur */
+    text-align: left; /* FORCE l'alignement à gauche */
+    overflow-y: auto; /* Ajoute un scroll si besoin */
+
+    /* ON CHANGE L'ANIMATION */
+    /* On le cache par défaut (sans scale) */
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(1.0); /* PAS de scale(0) */
+    transition: opacity 200ms ease-in-out;
+}
+
+/* --- 2. On change l'état .active --- */
+#friends-popup.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1.0); /* PAS de scale(1.5) */
+}
+
+/* --- 3. On FORCE les styles de texte à l'intérieur --- */
+#friends-popup h2,
+#friends-popup h3,
+#friends-popup p {
+    text-align: left; /* FORCE l'alignement gauche */
+    position: static; /* Annule les 'position: absolute' */
+    font-size: 1.25rem; /* Taille de police normale */
+    margin: 0 0 15px 0; /* Marges normales */
+}
+#friends-popup h2 {
+    text-align: center; /* OK, le titre principal peut être centré */
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+#friends-popup h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* --- 4. Le CSS fonctionnel (de ma réponse précédente) --- */
+
+.friend-section {
+    margin-top: 20px;
+}
+.friend-section:first-of-type {
+    margin-top: 0;
+}
+
+.search-bar {
+    display: flex;
+    margin-bottom: 10px;
+}
+#user-search-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    font-size: 1rem; /* Taille de police normale */
+}
+#user-search-button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #4285F4;
+    color: white;
+    cursor: pointer;
+    border-radius: 0 4px 4px 0;
+}
+
+#pending-friends-list,
+#user-search-results,
+#current-friends-list {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    background: #f9f9f9;
+}
+
+/* Les lignes de résultat */
+.friend-item,
+.pending-item,
+.user-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 8px;
+    margin-bottom: 5px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+.friend-item:last-child,
+.pending-item:last-child,
+.user-result:last-child {
+    margin-bottom: 0;
+}
+
+/* Le nom */
+.friend-item span,
+.pending-item span,
+.user-result span {
+    margin-right: 0; /* L'avatar gère la marge maintenant */
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    /* S'assure que le nom est coupé s'il est trop long */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Conteneur pour Accepter/Refuser */
+.pending-item div {
+    display: flex;
+    flex-shrink: 0;
+}
+
+/* Boutons dans les listes */
+.friend-item button,
+.pending-item button,
+.user-result button {
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    margin-left: 5px;
+}
+
+.pending-item button.accept,
+.user-result button {
+    background-color: #34A853; /* Vert */
+}
+.pending-item button.decline,
+.friend-item button {
+    background-color: #EA4335; /* Rouge */
+}
+.user-result button[disabled] {
+    background-color: #aaa; /* Gris */
+    cursor: not-allowed;
+}
+
+/* Bouton "Fermer" (on force son style) */
+#friends-popup > .verif_button {
+    display: block !important; /* important pour écraser */
+    position: static !important; /* important pour écraser */
+    float: none !important; /* important pour écraser */
+    margin: 25px auto 0 auto !important; /* centré */
+    width: 120px !important;
+    height: auto !important;
+}
+
+
+
+/* Styles pour la liste des demandes en attente */
+.pending-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.pending-item:last-child {
+    border-bottom: none;
+}
+
+.pending-item span {
+    font-weight: bold;
+}
+
+.pending-item button {
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    margin-left: 5px;
+}
+
+.pending-item button.accept {
+    background-color: #34A853; /* Vert */
+}
+
+.pending-item button.decline {
+    background-color: #EA4335; /* Rouge */
+}
+
+
+.user-result-identity {
+    display: flex;
+    align-items: center;
+    /* Pour que le nom ne sorte pas du conteneur */
+    overflow: hidden;
+    /* Prend l'espace dispo mais laisse la place à l'action */
+    flex: 1; 
+    min-width: 0; /* Important pour flex + overflow */
+}
+
+
+.result-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Image ronde */
+    object-fit: cover; /* Remplit le cercle sans déformer */
+    margin-right: 10px; /* Espace entre l'avatar et le nom */
+    border: 1px solid #eee;
+    /* Pour que l'image ne soit pas "écrasée" */
+    flex-shrink: 0; 
 }

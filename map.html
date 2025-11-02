@@ -7,10 +7,8 @@
     <link rel="icon" type="image/x-icon" href="/icons_map/sex_map.jpg">
     <link rel="stylesheet" href="./css/style.css"> <!-- On importe le document style.css pour  utiliser le css-->
     <link rel="stylesheet" href="./css/map.css"> <!-- On importe le document style.css pour  utiliser le css-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.control.locate/dist/L.Control.Locate.min.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet.control.locate/dist/L.Control.Locate.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" /> <!-- Barre de recherche CSS-->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- Barre de recherche JS-->
     <script type="module" src="https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js"></script> <!-- Authentification JS-->
@@ -144,6 +142,8 @@
         <div id="map-controls">
             <button id="locate-button"><img src="./icons_map/target.png" alt="Localiser"></button>
             <button id="logout-button" class="verif_button" style="background-color: red; display: none;">Déconnexion</button>
+
+            <button id="friends-button" class="verif_button" style="background-color: #4285F4; display: none;">Gérer les amis</button>
         </div>
         
         <div id="map">
@@ -157,11 +157,40 @@
                 Se connecter avec Google
             </button>
         </div>
+
+        <div class="pop_up" id="friends-popup">
+            <h2>Gérer les amis</h2>
+            
+            <div class="friend-section">
+                <h3>Demandes en attente</h3>
+                <div id="pending-friends-list">
+                    </div>
+            </div>
+        
+            <div class="friend-section">
+                <h3>Chercher un utilisateur</h3>
+                <div class="search-bar">
+                    <input type="text" id="user-search-input" placeholder="Nom d'utilisateur...">
+                    <button id="user-search-button">Rechercher</button>
+                </div>
+                <div id="user-search-results">
+                    </div>
+            </div>
+            
+            <div class="friend-section">
+                <h3>Mes amis</h3>
+                <div id="current-friends-list">
+                    </div>
+            </div>
+            
+            <button class="verif_button" style="background-color: red;" onclick="friends_pop_up_close()">Fermer</button>
+        </div>
+
         <script type="module">
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-analytics.js";
-            import { getDatabase, ref, push, set, get, onValue, remove, update } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
+            import { getDatabase, ref, push, set, get, onValue, remove, update, query, orderByChild, startAt, endAt } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
             import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
             
             // TODO: Add SDKs for Firebase products that you want to use
@@ -193,7 +222,11 @@
             window.get = get;
             window.onValue = onValue;
             window.remove = remove;
-            window.update = update
+            window.update = update;
+            window.query = query;
+            window.orderByChild = orderByChild;
+            window.startAt = startAt;
+            window.endAt = endAt;
 
 
             const auth = getAuth(app);
