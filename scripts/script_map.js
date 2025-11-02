@@ -96,104 +96,233 @@ if (navigator.geolocation) {
 // Charger les marqueurs depuis Realtime Database une seule fois
 function loadMarkers() {
     const currentUserId = window.auth.currentUser.uid;
-    
-    // 1. On commence par s'ajouter soi-même à la liste
     let allowedIds = [currentUserId];
-
-    // 2. On va chercher la liste d'amis
     const friendsRef = ref(db, `friendships/${currentUserId}`);
     
+    // On va stocker les données des marqueurs filtrés
+    let markerDataMap = {};
+
     get(friendsRef).then((friendsSnapshot) => {
-        // 3. On construit la liste d'amis
+        // --- 1. Construire la liste d'amis ---
         if (friendsSnapshot.exists()) {
             const relations = friendsSnapshot.val();
             for (const friendId in relations) {
-                // On ajoute SEULEMENT ceux dont le statut est "friends"
                 if (relations[friendId] === "friends") {
                     allowedIds.push(friendId);
                 }
             }
         }
-        
         console.log("Affichage des marqueurs pour les UID:", allowedIds);
-
-        // 4. Une fois qu'on a la liste, on va chercher les marqueurs
+        
+        // --- 2. Récupérer TOUS les marqueurs ---
         const markersRef = ref(db, 'markers');
-        return get(markersRef); // On passe cette promesse au .then() suivant
+        return get(markersRef); 
 
     }).then((markersSnapshot) => {
-        // 5. On a reçu les marqueurs
-        
-        // On nettoie la carte
-        map.eachLayer(function(layer) {
-            if (layer instanceof L.Marker) {
-                map.removeLayer(layer);
-            }
+        // --- 3. Nettoyer la carte ---
+        map.eachLayer(layer => {
+            if (layer instanceof L.Marker) map.removeLayer(layer);
         });
 
-        if (!markersSnapshot.exists()) {
-            console.log("Aucun marqueur trouvé dans la base de données.");
-            return; // On s'arrête
-        }
-
-        const markers = markersSnapshot.val();
+        if (!markersSnapshot.exists()) return;
         
-        // 6. On filtre et on affiche les marqueurs
+        // --- 4. Filtrer les marqueurs et préparer le chargement des commentaires ---
+        const markers = markersSnapshot.val();
+        let commentPromises = []; // On va stocker les promesses de chargement
+
         for (const key in markers) {
             if (markers.hasOwnProperty(key)) {
                 const markerData = markers[key];
                 
-                // *** LE FILTRE PRINCIPAL EST ICI ***
+                // On applique le filtre d'amis
                 if (allowedIds.includes(markerData.creator_id)) {
-                
-                    const position = markerData.position;
-                    const popupContent = markerData.popupContent;
-
-                    // On passe l'ID du créateur pour gérer les boutons
-                    const finalPopupContent = getPopupContent(popupContent, key, markerData.creator_id);
-
-                    // Vérifier si le marqueur a une icône personnalisée
-                    if (markerData.icon) {
-                        const customIcon = L.icon({
-                            iconUrl: markerData.icon.iconUrl,
-                            iconSize: markerData.icon.iconSize,
-                            iconAnchor: markerData.icon.iconAnchor,
-                            popupAnchor: markerData.icon.popupAnchor
-                        });
-                        const marker = L.marker(position, { icon: customIcon }).addTo(map);
-                        marker.options.key = key; 
-                        marker.bindPopup(finalPopupContent); // Pas de .openPopup()
-                    } else {
-                        const marker = L.marker(position).addTo(map);
-                        marker.options.key = key; 
-                        marker.bindPopup(finalPopupContent); // Pas de .openPopup()
-                    }
+                    // On stocke les données du marqueur
+                    markerDataMap[key] = markerData;
+                    
+                    // On prépare la promesse de charger les commentaires pour CE marqueur
+                    const commentsRef = ref(db, `comments/${key}`);
+                    commentPromises.push(
+                        get(commentsRef).then(commentSnapshot => {
+                            // On renvoie un objet avec la clé ET les commentaires
+                            return { markerKey: key, comments: commentSnapshot.val() || {} };
+                        })
+                    );
                 }
+            }
+        }
+        
+        // --- 5. Lancer toutes les promesses de commentaires en même temps ---
+        return Promise.all(commentPromises);
+
+    }).then((commentResults) => {
+        // --- 6. On a reçu TOUS les commentaires ---
+        // (commentResults est un array: [{ markerKey: "k1", comments: {...} }, ...])
+        
+        // On attache les commentaires aux données de leur marqueur
+        commentResults.forEach(result => {
+            if (markerDataMap[result.markerKey]) {
+                markerDataMap[result.markerKey].allComments = result.comments;
+            }
+        });
+
+        // --- 7. MAINTENANT on peut enfin afficher les marqueurs ---
+        for (const key in markerDataMap) {
+            const markerData = markerDataMap[key];
+            const allComments = markerData.allComments || {}; // Les commentaires de la BDD
+            
+            // On appelle la NOUVELLE fonction getPopupContent
+            const finalPopupContent = getPopupContent(markerData, key, allComments);
+            
+            const position = markerData.position;
+
+            if (markerData.icon) {
+                const customIcon = L.icon({
+                    iconUrl: markerData.icon.iconUrl,
+                    iconSize: markerData.icon.iconSize,
+                    iconAnchor: markerData.icon.iconAnchor,
+                    popupAnchor: markerData.icon.popupAnchor
+                });
+                const marker = L.marker(position, { icon: customIcon }).addTo(map);
+                marker.options.key = key;
+                marker.bindPopup(finalPopupContent);
+
+            } else {
+                const marker = L.marker(position).addTo(map);
+                marker.options.key = key;
+                marker.bindPopup(finalPopupContent);
             }
         }
 
     }).catch((error) => {
-        // Ce .catch() gérera les erreurs de get(friendsRef) ET de get(markersRef)
-        console.error("Erreur lors du chargement des marqueurs ou des amis :", error);
+        // Ce .catch() gérera TOUTES les erreurs de la chaîne
+        console.error("Erreur lors du chargement des marqueurs/commentaires :", error);
     });
 }
 
-// Fonction pour créer le contenu du popup avec la clé
-function getPopupContent(popupContent, key, creatorId) {
-    const currentUserId = window.auth.currentUser.uid;
-    const isCreator = (currentUserId === creatorId);
 
-    // Utilisez les chemins vers vos icônes
-    const iconEdit = './icons_map/edit.png'; // REMPLACEZ PAR VOTRE CHEMIN
-    const iconDelete = './icons_map/delete.png'; // REMPLACEZ PAR VOTRE CHEMIN
-    const iconComment = './icons_map/comment.png'; // REMPLACEZ PAR VOTRE CHEMIN
+// REMPLACEZ getPopupContent PAR CELLE-CI
+
+function getPopupContent(markerData, key, allComments) {
+    const currentUserId = window.auth.currentUser.uid;
+    const isCreator = (currentUserId === markerData.creator_id);
+
+    // --- 1. On définit nos "cartes" de conversion (pas de changement) ---
+    const listpopup_map = {
+        "doggy-style": '<img src="icons_map/dog.png" alt="Doggy style" />',
+        "lazy-doggy-style": '<img src="icons_map/anal.png" alt="Lazy doggy" />',
+        "standing-doggy-style": '<img src="icons_map/doggy.png" alt="Standing doggy" />',
+        "missionary": '<img src="icons_map/sex-2.png" alt="Missionary" />',
+        "cowgirl": '<img src="icons_map/cowgirl.png" alt="Cowgirl" />',
+        "cunnilingus": '<img src="icons_map/licking.png" alt="Cunnilingus" />',
+        "blowjob": '<img src="icons_map/oral-sex-2.png" alt="Blowjob" />',
+        "lazy-blowjob": '<img src="icons_map/oral-sex.png" alt="Lazy blowjob" />',
+        "upstanding-citizen": '<img src="icons_map/front.png" alt="Upstanding" />',
+        "reversed-cowgirl": '<img src="icons_map/back.png" alt="Reversed cowgirl" />',
+        "leapfrog": '<img src="icons_map/back (1).png" alt="Leapfrog" />',
+        "69": '<img src="icons_map/man.png" alt="69" />',
+        "lotus": '<img src="icons_map/sex.png" alt="Lotus" />',
+        "others": '<img src="icons_map/autre.png" alt="Others" />'
+    };
+    const note_map = {
+        "1": "🤮", "2": "🫥", "3": "🥱", "4": "🙃", "5": "😏",
+        "6": "😋", "7": "🥴", "8": "😍", "9": "😈", "10": "🥵", "none": "❌"
+    };
+
+    // --- 2. On recrée le HTML des positions (pas de changement) ---
+    let popuptexte = '';
+    if (markerData.positions && Array.isArray(markerData.positions)) {
+        markerData.positions.forEach(pos_id => {
+            if (listpopup_map[pos_id]) {
+                popuptexte += listpopup_map[pos_id];
+            }
+        });
+    }
+    
+    // --- 3. On recrée la note (pas de changement) ---
+    const note_num = markerData.note || "none";
+    const note_emoji = note_map[note_num.toString()] || "❌";
+
+    // --- 4. On construit le HTML des NOUVEAUX commentaires (du noeud 'comments') ---
+    let commentsHTML_new = '';
+    for (const commentKey in allComments) {
+        const comment = allComments[commentKey];
+        const proxyImageURL = comment.authorPhoto ?
+            `https://images.weserv.nl/?url=${encodeURIComponent(comment.authorPhoto)}&w=100&h=100&t=circle` :
+            'icons_map/default-avatar.png';
+        
+        commentsHTML_new += `
+        <div class="custom-comment-container" style="
+            margin-top: 15px; padding: 10px; border: 1px solid #ddd;
+            border-radius: 5px; background-color: #f9f9f9; display: flex;
+            width: calc(100% - 20px);
+        ">
+            <div style="flex: 0 0 60px; margin-right: 10px; display: flex; flex-direction: column; align-items: center;">
+                <img src="${proxyImageURL}"
+                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #4285F4; margin-bottom: 5px;"
+                     onerror="this.src='icons_map/default-avatar.png'">
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: bold; color: #4285F4; margin-bottom: 5px; border-bottom: 1px solid #eee; padding-bottom: 5px; font-size: 14px;">
+                    ${comment.authorName}
+                </div>
+                <div style="font-size: 13px; color: #333; word-break: break-word;">
+                    ${comment.text}
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    // --- NOUVEAU : 5. On extrait les ANCIENS commentaires de popupContent ---
+    let commentsHTML_old = '';
+    const oldPopupContent = markerData.popupContent || "";
+    const oldCommentsStartTag = '<div class="custom-comment-container"'; // Le marqueur de vos anciens commentaires
+    
+    const startIndex = oldPopupContent.indexOf(oldCommentsStartTag);
+    
+    if (startIndex !== -1) {
+        // On a trouvé d'anciens commentaires !
+        // On extrait tout, de ce point jusqu'à la fin de la chaîne.
+        commentsHTML_old = oldPopupContent.substring(startIndex);
+        console.log(`Anciens commentaires trouvés pour le marqueur ${key}`);
+    }
+    
+    // --- 6. On assemble le contenu principal ---
+    const mainPopupContent = `
+        <p class="header_popup">L'heureux·se élu·e</p>
+        <p class="popup-data-box">${markerData.name || ''}</p>
+        
+        <p class="header_popup">Partenaire·s</p>
+        <p class="popup-data-box">${markerData.partenaires || ''}</p>
+        
+        <p class="header_popup">Date</p>
+        <p class="popup-data-box">${markerData.date || ''}</p>
+        
+        <p class="header_popup">Lieu</p>
+        <p class="popup-data-box">${markerData.lieu || ''}</p>
+        
+        <p class="header_popup">Les positions</p>
+        <div class="popup-images">${popuptexte}</div>
+        
+        <p class="header_popup">Note</p>
+        <p class="popup-data-box">${note_emoji} - ${note_num}/10</p>
+        
+        <p class="header_popup">Les commentaires (du créateur)</p>
+        <p class="popup-data-box">${markerData.commentaires || ''}</p>
+        
+        <p class="header_popup">Section commentaire</p>
+        ${commentsHTML_new}  ${commentsHTML_old}  `;
+    
+    // --- 7. On ajoute les boutons d'action (pas de changement) ---
+    const iconEdit = './icons_map/edit.png';
+    const iconDelete = './icons_map/delete.png';
+    const iconComment = './icons_map/comment.png';
 
     return `
     <div>
-        ${popupContent}
+        ${mainPopupContent}
         
         <div class="popup-actions-container">
-            ${/* Affichage conditionnel des boutons d'édition avec icônes */''}
             ${isCreator ? `
                 <button class="popup-action-button" onclick="modifyMarker('${key}')" title="Modifier">
                     <img src="${iconEdit}" alt="Modifier" />
@@ -203,7 +332,6 @@ function getPopupContent(popupContent, key, creatorId) {
                 </button>
             ` : ''}
             
-            ${/* Le bouton de commentaire est toujours visible */''}
             <button class="popup-action-button" onclick="showCommentPopup('${key}')" title="Ajouter un commentaire">
                 <img src="${iconComment}" alt="Commenter" />
             </button>
@@ -213,12 +341,11 @@ function getPopupContent(popupContent, key, creatorId) {
 }
 
 // Sauvegarder un marqueur dans Realtime Database
-function saveMarker(position, popupContent, icon=null, name, partenaires, date, lieu, positions, note_num, commentaires, creator) {
+function saveMarker(position, icon=null, name, partenaires, date, lieu, positions, note_num, commentaires, creator) {
     const markersRef = ref(db, 'markers');
     const newMarkerRef = push(markersRef);
     const markerData = {
         position: [position.lat, position.lng],
-        popupContent: popupContent,
         name: name,
         partenaires: partenaires,
         date: date,
@@ -236,8 +363,8 @@ function saveMarker(position, popupContent, icon=null, name, partenaires, date, 
         if (tempMarker) {
             tempMarker.options.key = newMarkerRef.key;
             // Mettre à jour le contenu du popup avec la clé
-            const popupContentWithKey = getPopupContent(popupContent, newMarkerRef.key, creator);
-            tempMarker.getPopup().setContent(popupContentWithKey);
+            const newPopupHTML = getPopupContent(markerData, newMarkerRef.key, {});
+            tempMarker.getPopup().setContent(newPopupHTML);
         }
         return newMarkerRef.key; // Retourner la clé pour un usage ultérieur si nécessaire
     });
@@ -349,17 +476,15 @@ function showCommentPopup(key){
 
 
 function getPositions(){
-    var listpopup = ['<img src="icons_map/dog.png" id="doggy-style-popup" alt="Image 1" />', '<img src="icons_map/anal.png" id="lazy-doggy-style-popup" alt="Image 2" />', '<img src="icons_map/doggy.png" id="standing-doggy-style-popup" alt="Image 3" />', '<img src="icons_map/sex-2.png" id="missionary-popup" alt="Image 4" />', '<img src="icons_map/cowgirl.png" id="cowgirl-popup" alt="Image 5" />', '<img src="icons_map/licking.png" id="cunnilingus-popup" alt="Image 6" />', '<img src="icons_map/oral-sex-2.png" id="blowjob-popup" alt="Image 7" />', '<img src="icons_map/oral-sex.png" id="lazy-blowjob-popup" alt="Image 8" />', '<img src="icons_map/front.png" id="upstanding-citizen-popup" alt="Image 9" />', '<img src="icons_map/back.png" id="reversed-cowgirl-popup" alt="Image 10" />', '<img src="icons_map/back (1).png" id="leapfrog-popup" alt="Image 11" />', '<img src="icons_map/man.png" id="69-popup" alt="Image 12" />', '<img src="icons_map/sex.png"  id="lotus-popup" alt="Image 13" />', '<img src="icons_map/autre.png"  id="others-popup" alt="Image 13" />']
-    var textepopup = ''
     var L = []
     var all = document.getElementById("positions").children
-    for(i = 0; i < all.length; i++){
+    // Assurez-vous de déclarer 'i'
+    for(var i = 0; i < all.length; i++){
         if(all[i].children[0].checked){
-            textepopup += listpopup[i]
             L.push(all[i].children[0].id)
         }
     }
-    return [L,textepopup]
+    return L; // Ne renvoie QUE l'array
 }
 
 
@@ -442,42 +567,17 @@ function yes(){
 
 
     var position = tempMarker.getLatLng();
-    var popupContent = tempMarker.getPopup().getContent();
     var icon = tempMarker.getIcon();
     var name = window.auth.currentUser.displayName;
     var partenaires = document.getElementById("partenaire").value
     var lieu = document.getElementById("lieu").value
     var date = document.getElementById("date").value
-    var variable = getPositions()
-    var positions = variable[0]
-    var popuptexte = variable[1]
     var notes = getSelectedRating()
     var note_emoji = notes[0]
     var note_num = notes[1];
     var commentaires = document.getElementById("commentaires").value
-
     var creator = window.auth.currentUser.uid; // Utiliser l'ID de l'utilisateur
-
-
-    var popupContent = `
-        <p class="header_popup">L'heureux·se élu·e</p>
-        <p class="popup-data-box">${name}</p>
-        <p class="header_popup">Partenaire·s</p>
-        <p class="popup-data-box">${partenaires}</p>
-        <p class="header_popup">Date</p>
-        <p class="popup-data-box">${date}</p>
-        <p class="header_popup">Lieu</p>
-        <p class="popup-data-box">${lieu}</p>
-        <p class="header_popup">Les positions</p>
-        <div class="popup-images">
-            ${popuptexte}
-        </div>
-        <p class="header_popup">Note</p>
-        <p class="popup-data-box">${note_emoji} - ${note_num}/10</p>
-        <p class="header_popup">Les commentaires</p>
-        <p class="popup-data-box">${commentaires}</p>
-        <p class="header_popup">Section commentaire</p>
-    `;
+    var positions = getPositions();
     
     
     if(name === "Benjamin"){
@@ -509,14 +609,12 @@ function yes(){
     });
 
     tempMarker.setIcon(customIcon);
-    tempMarker.getPopup().setContent(popupContent);
 
     if (window.currentEditingKey) {
         // Mode modification : mettre à jour le marqueur existant
         const markerRef = ref(db, `markers/${window.currentEditingKey}`);
         set(markerRef, {
             position: [position.lat, position.lng],
-            popupContent: popupContent,
             name: name,
             partenaires: partenaires,
             date: date,
@@ -546,7 +644,7 @@ function yes(){
         });
     } else {
         // Mode création : sauvegarder un nouveau marqueur
-        saveMarker(position, popupContent, {
+        saveMarker(position, {
             iconUrl: icon.options.iconUrl,
             iconSize: icon.options.iconSize,
             iconAnchor: icon.options.iconAnchor,
@@ -570,104 +668,29 @@ function yes_comments(){
     document.querySelector('#map').style.pointerEvents = 'auto';
 
     var key = document.getElementById("key").innerHTML;
-
     var pseudo = window.auth.currentUser.displayName;
     var photo = window.auth.currentUser.photoURL;
     var texte = document.getElementById("comment_box").value;
-
-    // 1. Utiliser un proxy CORS pour les images Google
-    const proxyImageURL = photo ?
-        `https://images.weserv.nl/?url=${encodeURIComponent(photo)}&w=100&h=100&t=circle` :
-        'icons_map/default-avatar.png';
-
-    const markerRef = ref(db, `markers/${key}`);
-    get(markerRef).then((snapshot) => {
-        const markerData = snapshot.val();
-        if (!markerData) {
-            console.error("Aucune donnée trouvée pour ce marqueur.");
-            return;
-        }
+    var creator_uid = window.auth.currentUser.uid;
 
 
-        const currentContent = markerData.popupContent;
-        const newContent = `
-        ${currentContent}
-        <div class="custom-comment-container" style="
-            margin-top: 15px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            display: flex;
-            width: calc(100% - 20px); /* Largeur = 100% du popup - marges */
-        ">
-            <!-- Partie gauche : Image de profil -->
-            <div style="
-                flex: 0 0 60px;
-                margin-right: 10px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            ">
-                <img src="${proxyImageURL}"
-                     style="
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                        border: 2px solid #4285F4;
-                        margin-bottom: 5px;
-                     "
-                     onerror="this.src='icons_map/default-avatar.png'">
-            </div>
-
-            <!-- Partie droite : Pseudo et texte -->
-            <div style="
-                flex: 1;
-                min-width: 0;
-            ">
-                <!-- Pseudo en haut -->
-                <div style="
-                    font-weight: bold;
-                    color: #4285F4;
-                    margin-bottom: 5px;
-                    border-bottom: 1px solid #eee;
-                    padding-bottom: 5px;
-                    font-size: 14px;
-                ">
-                    ${pseudo}
-                </div>
-
-                <!-- Texte du commentaire -->
-                <div style="
-                    font-size: 13px;
-                    color: #333;
-                    word-break: break-word;
-                ">
-                    ${texte}
-                </div>
-            </div>
-        </div>
-        `;
-
-
-        update(markerRef,{
-            popupContent: newContent,
-        }).then(() => {
-            console.log("Marqueur mis à jour avec succès !");
-            // Recharger les marqueurs pour mettre à jour la carte
-            map.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
-            loadMarkers();
-            // Réinitialiser
-            window.currentEditingKey = null;
-            window.tempMarker = null;
+    const commentsRef = ref(db, `comments/${key}`);
+    const newCommentRef = push(commentsRef); // Génère une clé unique pour le commentaire
+    set(newCommentRef, {
+        authorName: pseudo,
+        authorPhoto: photo,
+        text: texte,
+        authorUid: creator_uid,
+        timestamp: new Date().toISOString()
+    }).then(() => {
+        console.log("Commentaire ajouté !");
+        // On recharge les marqueurs pour que le nouveau commentaire s'affiche
+        map.eachLayer(layer => {
+            if (layer instanceof L.Marker) map.removeLayer(layer);
         });
+        loadMarkers();
     }).catch((error) => {
-        console.error("Erreur lors de la récupération des données du marqueur :", error);
+        console.error("Erreur lors de l'ajout du commentaire :", error);
     });
     
 }
