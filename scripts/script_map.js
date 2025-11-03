@@ -3,6 +3,28 @@ var userProfileMap = {};
 // Variable globale pour stocker les infos du créateur original
 window.currentEditingOriginalCreator = null;
 
+// =================================================
+// == CONFIGURATION DES ICÔNES DE PROFIL ==
+// =================================================
+// Dictionnaire qui lie un ID de couleur au fichier de l'icône
+const ICON_COLOR_MAP = {
+    "red": './icons_map/boutique-de-sexe-red.png',
+    "blue": './icons_map/boutique-de-sexe-blue.png',
+    "lightblue": './icons_map/boutique-de-sexe-lightblue.png',
+    "orange": './icons_map/boutique-de-sexe-orange.png',
+    "lightgreen": './icons_map/boutique-de-sexe-lightgreen.png',
+    "gray": './icons_map/boutique-de-sexe-gray.png',
+    "magenta": './icons_map/boutique-de-sexe-magenta.png',
+    "green": './icons_map/boutique-de-sexe-green.png',
+    "pink": './icons_map/boutique-de-sexe-pink.png',
+    "yellow": './icons_map/boutique-de-sexe-yellow.png',
+    "purple" : './icons_map/boutique-de-sexe-purple.png',
+    "darkgray" : './icons_map/boutique-de-sexe-darkgray.png',
+    "black": './icons_map/boutique-de-sexe-black.png',
+    "google": null // Cas spécial pour la photo de profil Google
+};
+// =================================================
+
 var map = L.map('map');
 
 // Ajouter le contrôle de géocodage à la carte
@@ -869,9 +891,10 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('user-search-button').addEventListener('click', searchUsers);
         window.friendsListenerAdded = true; // Pour éviter les doublons
     }
-    
-    //loadMarkers();
-    // Ajouter le contrôle de géolocalisation
+
+    if (document.getElementById('profile-button')) {
+        document.getElementById('profile-button').addEventListener('click', openProfilePopup);
+    }
     
     // Ajouter le gestionnaire d'événement pour le bouton de localisation
     document.getElementById('locate-button').addEventListener('click', function() {
@@ -1262,4 +1285,217 @@ function removeComment(markerKey, commentKey) {
             console.error("Erreur (Admin) lors de la suppression du commentaire :", error);
             alert("Erreur : Le commentaire n'a pas pu être supprimé. (Vos règles Firebase sont-elles à jour ?)");
         });
+}
+
+/**
+ * CRÉATION 1/5 : OUVRE LE POPUP DE PROFIL
+ * (Charge les couleurs et pré-remplit les champs)
+ */
+function openProfilePopup() {
+    const uid = window.auth.currentUser.uid;
+    const userRef = ref(db, `users/${uid}`);
+
+    get(userRef).then((snapshot) => {
+        if (!snapshot.exists()) {
+            alert("Erreur : profil utilisateur introuvable.");
+            return;
+        }
+        
+        const userData = snapshot.val();
+        
+        // --- 1. Pré-remplir le nom ---
+        document.getElementById('profile-name-input').value = userData.displayName || "";
+        
+        // --- 2. Définir l'icône actuelle ---
+        const currentColor = userData.chosen_color || "google"; // Par défaut, c'est la photo Google
+        let previewIconSrc;
+        let googlePhotoUrl = userData.photoURL; // Stocker la photo Google
+
+        if (currentColor === "google") {
+            const proxyImageURL = googlePhotoUrl ?
+                `https://images.weserv.nl/?url=${encodeURIComponent(googlePhotoUrl)}&w=80&h=80&t=circle` :
+                './icons_map/default-avatar.png';
+            previewIconSrc = proxyImageURL;
+        } else {
+            previewIconSrc = ICON_COLOR_MAP[currentColor] || ICON_COLOR_MAP["black"];
+        }
+
+        document.getElementById('profile-icon-preview').src = previewIconSrc;
+        
+        // --- 3. Construire la grille de couleurs ---
+        const grid = document.getElementById('icon-color-grid');
+        grid.innerHTML = ''; // Vider la grille
+        
+        // On ajoute la photo Google comme première option
+        const googlePhotoOption = document.createElement('div');
+        googlePhotoOption.className = 'color-choice';
+        googlePhotoOption.dataset.color = "google"; // L'ID "google"
+        googlePhotoOption.title = "Utiliser ma photo de profil Google";
+        // On utilise l'URL de prévisualisation qu'on a déjà
+        const googlePreviewSrc = (currentColor === "google") ? previewIconSrc : (googlePhotoUrl ? `https://images.weserv.nl/?url=${encodeURIComponent(googlePhotoUrl)}&w=80&h=80&t=circle` : './icons_map/default-avatar.png');
+        googlePhotoOption.innerHTML = `<img src="${googlePreviewSrc}" alt="Photo Google">`;
+        if (currentColor === "google") {
+            googlePhotoOption.classList.add('selected');
+        }
+        googlePhotoOption.onclick = () => selectColor(googlePhotoOption);
+        grid.appendChild(googlePhotoOption);
+
+        // On ajoute les autres couleurs (sauf "google")
+        for (const colorName in ICON_COLOR_MAP) {
+            if (colorName === "google") continue; // On l'a déjà mis
+            
+            const colorDiv = document.createElement('div');
+            colorDiv.className = 'color-choice';
+            colorDiv.dataset.color = colorName;
+            colorDiv.title = colorName;
+            // On ne met QUE l'image de fond. On ne touche plus à la couleur de fond.
+            colorDiv.style.backgroundImage = `url(${ICON_COLOR_MAP[colorName]})`;
+            
+            if (currentColor === colorName) {
+                colorDiv.classList.add('selected');
+            }
+            colorDiv.onclick = () => selectColor(colorDiv);
+            grid.appendChild(colorDiv);
+        }
+
+        // --- 4. Afficher le popup ---
+        document.getElementById("profile-popup").classList.add("active");
+        document.getElementById("overlay").classList.add("show");
+        document.querySelector('#map').style.pointerEvents = 'none';
+    
+    }).catch(err => {
+        console.error("Erreur de chargement du profil:", err);
+    });
+}
+
+/**
+ * CRÉATION 2/5 : Gère le clic sur une couleur dans la grille
+ */
+function selectColor(selectedColorElement) {
+    // On enlève "selected" de tous les autres
+    document.querySelectorAll('#icon-color-grid .color-choice').forEach(el => {
+        el.classList.remove('selected');
+    });
+    
+    // On ajoute "selected" à celui sur lequel on a cliqué
+    selectedColorElement.classList.add('selected');
+    
+    // On met à jour la grosse image de prévisualisation
+    const selectedColor = selectedColorElement.dataset.color;
+    let previewIconSrc;
+
+    if (selectedColor === "google") {
+        // On va chercher l'image de la photo google (qui est dans la grille)
+        previewIconSrc = selectedColorElement.querySelector('img').src;
+    } else {
+        previewIconSrc = ICON_COLOR_MAP[selectedColor];
+    }
+    
+    document.getElementById('profile-icon-preview').src = previewIconSrc;
+}
+
+/**
+ * CRÉATION 3/5 : FERME LE POPUP DE PROFIL
+ */
+function closeProfilePopup() {
+    document.getElementById("profile-popup").classList.remove("active");
+    document.getElementById("overlay").classList.remove("show");
+    document.querySelector('#map').style.pointerEvents = 'auto';
+}
+
+/**
+ * CRÉATION 4/5 : ENREGISTRE LES CHANGEMENTS DU PROFIL
+ */
+function saveProfile() {
+    const uid = window.auth.currentUser.uid;
+    const newName = document.getElementById('profile-name-input').value;
+    
+    if (!newName) {
+        alert("Le pseudo ne peut pas être vide.");
+        return;
+    }
+    
+    // On trouve quelle couleur est sélectionnée
+    const selectedColorEl = document.querySelector('.color-choice.selected');
+    if (!selectedColorEl) {
+        alert("Veuillez sélectionner une icône.");
+        return;
+    }
+    
+    const newColor = selectedColorEl.dataset.color; // ex: "red" ou "google"
+
+    // --- 1. On prépare les mises à jour pour la Realtime Database ---
+    const updates = {};
+    updates[`/users/${uid}/displayName`] = newName;
+    updates[`/users/${uid}/displayName_lowercase`] = newName.toLowerCase();
+    updates[`/users/${uid}/chosen_color`] = newColor; // On sauvegarde la couleur
+        
+    // --- 2. On met aussi à jour le profil Firebase Auth (juste le nom) ---
+    const authUpdatePromise = updateProfile(auth.currentUser, { 
+        displayName: newName 
+    });
+
+    // --- 3. On lance les deux mises à jour ---
+    Promise.all([
+        update(ref(db), updates), // Met à jour la Realtime Database
+        authUpdatePromise       // Met à jour Firebase Auth
+    ]).then(() => {
+        // --- 4. TOUT est fini et sauvegardé ---
+        console.log("Profil mis à jour avec succès !");
+        closeProfilePopup();
+        loadMarkers(); // Recharge la carte avec le nouveau nom/couleur
+        
+    }).catch(error => {
+        console.error("Erreur lors de la sauvegarde du profil :", error);
+        alert("Une erreur est survenue lors de la sauvegarde.");
+    });
+}
+
+/**
+ * CRÉATION 5/5 : CRÉE L'ICÔNE DE MARQUEUR (L.divIcon ou L.Icon)
+ * @param {object} userProfile - L'objet utilisateur (de /users/)
+ */
+function createProfileIcon(userProfile) {
+    if (!userProfile) userProfile = {}; 
+    
+    // On récupère la couleur choisie, sinon "google"
+    const color = userProfile.chosen_color || "google";
+
+    if (color === "google") {
+        // --- CAS 1 : L'utilisateur veut sa photo Google ---
+        // On utilise le code de l'icône ronde avec bordure
+        const photoToUse = userProfile.photoURL || null;
+        
+        const proxyImageURL = photoToUse ?
+            `https://images.weserv.nl/?url=${encodeURIComponent(photoToUse)}&w=40&h=40&t=circle` :
+            './icons_map/default-avatar.png';
+
+        const iconHTML = `
+            <div class="profile-marker-container">
+                <img src="${proxyImageURL}" class="profile-marker-image" onerror="this.src='./icons_map/default-avatar.png'">
+            </div>
+        `;
+
+        return L.divIcon({
+            className: 'profile-marker',
+            html: iconHTML,
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+            popupAnchor: [0, -20]
+        });
+        
+    } else {
+        // --- CAS 2 : L'utilisateur a choisi une couleur ---
+        // On utilise une icône Leaflet standard (L.Icon)
+        
+        // On va chercher le chemin de l'image (ex: './icons_map/boutique-de-sexe-red.png')
+        const iconPath = ICON_COLOR_MAP[color] || ICON_COLOR_MAP["black"]; // "black" par défaut
+        
+        return L.icon({
+            iconUrl: iconPath,
+            iconSize:     [32, 32], 
+            iconAnchor: [16, 16], 
+            popupAnchor: [0, -16] 
+        });
+    }
 }

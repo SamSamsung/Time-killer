@@ -884,3 +884,81 @@ li {
     border-color: #d00;
     transform: scale(1.1);
 }
+
+
+/* ================================================= */
+/* == STYLE POUR LA SÉLECTION DE COULEUR D'ICÔNE == */
+/* ================================================= */
+
+#icon-color-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f0f2f5;
+    border-radius: 8px;
+    max-height: 140px;
+    overflow-y: auto;
+}
+
+.color-choice {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid #ccc;
+    transition: all 0.2s ease;
+    
+    background-color: #ffffff; /* Un fond blanc propre */
+    background-size: contain;  /* Affiche l'icône en entier */
+    background-repeat: no-repeat; /* Ne pas répéter l'icône */
+    background-position: center;  /* Centrer l'icône */
+
+    /* Pour centrer l'icône de la photo Google */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.color-choice:hover {
+    transform: scale(1.1);
+}
+
+.color-choice.selected {
+    border-color: #4285F4; /* Bleu pour l'icône sélectionnée */
+    box-shadow: 0 0 10px rgba(66, 133, 244, 0.5);
+}
+
+/* Style pour le bouton "Google" */
+.color-choice[data-color="google"] img {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* ================================================= */
+/* == STYLE POUR L'ATTRIBUTION (LÉGAL) == */
+/* ================================================= */
+
+.profile-attribution {
+    /* Positionnement */
+    text-align: center; /* Centré */
+    margin-top: 20px; /* Espace au-dessus */
+    padding-top: 15px; /* Espace après la ligne */
+    border-top: 1px solid #eee; /* Ligne de séparation fine */
+    
+    /* Style "moderne et discret" */
+    font-size: 11px; /* Très petit */
+    color: #aaa; /* Gris très clair */
+}
+
+/* On style les liens pour qu'ils ne soient pas bleus */
+.profile-attribution a {
+    color: #888; /* Un peu plus foncé pour être lisible */
+    text-decoration: none; /* Pas de soulignement par défaut */
+}
+
+.profile-attribution a:hover {
+    text-decoration: underline; /* On souligne au survol */
+}

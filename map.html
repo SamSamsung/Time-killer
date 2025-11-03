@@ -135,6 +135,11 @@
                 <img src="./icons_map/friends.png" alt="Amis"> 
                 <span>Gérer les amis</span>
             </button>
+
+            <button id="profile-button" title="Mon Profil">
+                <img src="./icons_map/account.png" alt="Profil">
+                <span>Mon Profil</span>
+            </button>
             
             <button id="logout-button" title="Déconnexion">
                 <img src="./icons_map/logout.png" alt="Déconnexion">
@@ -183,6 +188,38 @@
             <button class="verif_button" style="background-color: red;" onclick="friends_pop_up_close()">Fermer</button>
         </div>
 
+        <div class="pop_up" id="profile-popup" style="text-align: left; padding: 20px;">
+            <h2>Mon Profil</h2>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img id="profile-icon-preview" src="./icons_map/boutique-de-sexe-black.png" 
+                     style="width: 80px; height: 80px; object-fit: contain;">
+            </div>
+            
+            <p class="header_popup" style="margin-top: 0;">Mon pseudo</p>
+            <input type="text" id="profile-name-input" class="popup-data-box" style="width: 95%; font-size: 16px;">
+            
+            <p class="header_popup">Choisir mon icône</p>
+            <div id="icon-color-grid">
+                </div>
+            
+            <br><br>
+            
+            <div style="text-align: right;">
+                <button class="verif_button" style="background-color: red;" onclick="closeProfilePopup()">Annuler</button>
+                <button class="verif_button" style="background-color: lightgreen;" onclick="saveProfile()">Enregistrer</button>
+            </div>
+
+            <div class="profile-attribution">
+                Icônes conçues par 
+                <a href="https://www.flaticon.com/fr/auteurs/freepik" title="Freepik">Freepik</a> 
+                from 
+                <a href="https://www.flaticon.com/fr/" title="Flaticon">www.flaticon.com</a>
+            </div>
+        </div>
+
+
+       
         <script type="module">
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
