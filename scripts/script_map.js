@@ -1,4 +1,7 @@
-//import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+const ADMIN_UID = "dtbRFLH60vVn7T7czh3dZTVguck2"
+var userProfileMap = {};
+// Variable globale pour stocker les infos du créateur original
+window.currentEditingOriginalCreator = null;
 
 var map = L.map('map');
 
@@ -93,17 +96,51 @@ if (navigator.geolocation) {
   // Si géoloc pas supportée, centrer sur Paris
   initMap(48.8566, 2.3522);
 }
-// Charger les marqueurs depuis Realtime Database une seule fois
+
+/**
+ * Crée une icône de profil ronde (L.divIcon)
+ * @param {object} userProfile - L'objet utilisateur (de /users/)
+ */
+function createProfileIcon(userProfile) {
+    if (!userProfile) { // Sécurité si le profil est manquant
+        userProfile = {}; 
+    }
+    
+    // VOTRE IDÉE : On utilise l'icône choisie, SINON la photo Google
+    const photoToUse = userProfile.chosen_icon || userProfile.photoURL || null;
+
+    const proxyImageURL = photoToUse ?
+        `https://images.weserv.nl/?url=${encodeURIComponent(photoToUse)}&w=40&h=40&t=circle` :
+        './icons_map/default-avatar.png'; // Un avatar par défaut
+
+    const iconHTML = `
+        <div class="profile-marker-container">
+            <img src="${proxyImageURL}" class="profile-marker-image" onerror="this.src='./icons_map/default-avatar.png'">
+        </div>
+    `;
+
+    return L.divIcon({
+        className: 'profile-marker', // Classe CSS pour le conteneur global
+        html: iconHTML,
+        iconSize: [36, 36], // Taille de l'icône
+        iconAnchor: [18, 18], // Point d'ancrage (centre)
+        popupAnchor: [0, -20] // Point d'où le popup sort
+    });
+}
+
+
 function loadMarkers() {
     const currentUserId = window.auth.currentUser.uid;
+    const isAdmin = (currentUserId === ADMIN_UID);
     let allowedIds = [currentUserId];
-    const friendsRef = ref(db, `friendships/${currentUserId}`);
     
-    // On va stocker les données des marqueurs filtrés
+    // On réinitialise les données
+    userProfileMap = {}; 
     let markerDataMap = {};
 
-    get(friendsRef).then((friendsSnapshot) => {
-        // --- 1. Construire la liste d'amis ---
+    // --- ÉTAPE 1: On lance DEUX requêtes en parallèle ---
+    // 1. Récupérer les amis
+    const friendsPromise = get(ref(db, `friendships/${currentUserId}`)).then((friendsSnapshot) => {
         if (friendsSnapshot.exists()) {
             const relations = friendsSnapshot.val();
             for (const friendId in relations) {
@@ -112,38 +149,50 @@ function loadMarkers() {
                 }
             }
         }
-        console.log("Affichage des marqueurs pour les UID:", allowedIds);
+        console.log("Amis autorisés:", allowedIds);
+        return true; // La promesse est résolue
+    });
+
+    // 2. Récupérer TOUS les utilisateurs (pour avoir noms, photos, et icônes choisies)
+    const usersPromise = get(ref(db, 'users')).then((usersSnapshot) => {
+        if (usersSnapshot.exists()) {
+            userProfileMap = usersSnapshot.val(); // On stocke TOUS les profils
+        }
+        console.log("Carte des profils utilisateur chargée.");
+        return true; // La promesse est résolue
+    });
+
+    // --- ÉTAPE 2: Quand on a les amis ET les profils, on charge les marqueurs ---
+    Promise.all([friendsPromise, usersPromise]).then(() => {
         
-        // --- 2. Récupérer TOUS les marqueurs ---
         const markersRef = ref(db, 'markers');
         return get(markersRef); 
 
     }).then((markersSnapshot) => {
-        // --- 3. Nettoyer la carte ---
+        // --- ÉTAPE 3: On a les marqueurs. On nettoie la carte ---
         map.eachLayer(layer => {
             if (layer instanceof L.Marker) map.removeLayer(layer);
         });
 
         if (!markersSnapshot.exists()) return;
         
-        // --- 4. Filtrer les marqueurs et préparer le chargement des commentaires ---
+        // --- ÉTAPE 4: On filtre les marqueurs et on prépare les commentaires ---
         const markers = markersSnapshot.val();
-        let commentPromises = []; // On va stocker les promesses de chargement
+        let commentPromises = []; 
 
         for (const key in markers) {
             if (markers.hasOwnProperty(key)) {
                 const markerData = markers[key];
                 
-                // On applique le filtre d'amis
-                if (allowedIds.includes(markerData.creator_id)) {
-                    // On stocke les données du marqueur
+                // Si vous êtes Admin OU si le créateur est dans vos amis
+                if (isAdmin || allowedIds.includes(markerData.creator_id)) {
+                    
                     markerDataMap[key] = markerData;
                     
-                    // On prépare la promesse de charger les commentaires pour CE marqueur
+                    // On prépare la promesse de charger les commentaires
                     const commentsRef = ref(db, `comments/${key}`);
                     commentPromises.push(
                         get(commentsRef).then(commentSnapshot => {
-                            // On renvoie un objet avec la clé ET les commentaires
                             return { markerKey: key, comments: commentSnapshot.val() || {} };
                         })
                     );
@@ -151,62 +200,62 @@ function loadMarkers() {
             }
         }
         
-        // --- 5. Lancer toutes les promesses de commentaires en même temps ---
+        // On lance toutes les promesses de commentaires
         return Promise.all(commentPromises);
 
     }).then((commentResults) => {
-        // --- 6. On a reçu TOUS les commentaires ---
-        // (commentResults est un array: [{ markerKey: "k1", comments: {...} }, ...])
-        
-        // On attache les commentaires aux données de leur marqueur
+        // --- ÉTAPE 5: On a les commentaires, on attache tout ---
         commentResults.forEach(result => {
             if (markerDataMap[result.markerKey]) {
                 markerDataMap[result.markerKey].allComments = result.comments;
             }
         });
 
-        // --- 7. MAINTENANT on peut enfin afficher les marqueurs ---
+        // --- ÉTAPE 6: On affiche les marqueurs ---
         for (const key in markerDataMap) {
             const markerData = markerDataMap[key];
-            const allComments = markerData.allComments || {}; // Les commentaires de la BDD
+            const allComments = markerData.allComments || {};
             
-            // On appelle la NOUVELLE fonction getPopupContent
-            const finalPopupContent = getPopupContent(markerData, key, allComments);
+            // On va chercher le profil "à jour" du créateur
+            const creatorProfile = userProfileMap[markerData.creator_id];
+            
+            // Sécurité : si le créateur d'un marqueur a été supprimé
+            if (!creatorProfile) {
+                console.warn(`Marqueur ${key} ignoré car le créateur ${markerData.creator_id} n'existe pas dans /users/`);
+                continue; 
+            }
+            
+            // On génère le contenu HTML avec les données À JOUR
+            const finalPopupContent = getPopupContent(markerData, creatorProfile, key, allComments);
+            
+            // On génère l'icône avec les données À JOUR
+            const markerIcon = createProfileIcon(creatorProfile);
             
             const position = markerData.position;
-
-            if (markerData.icon) {
-                const customIcon = L.icon({
-                    iconUrl: markerData.icon.iconUrl,
-                    iconSize: markerData.icon.iconSize,
-                    iconAnchor: markerData.icon.iconAnchor,
-                    popupAnchor: markerData.icon.popupAnchor
-                });
-                const marker = L.marker(position, { icon: customIcon }).addTo(map);
-                marker.options.key = key;
-                marker.bindPopup(finalPopupContent);
-
-            } else {
-                const marker = L.marker(position).addTo(map);
-                marker.options.key = key;
-                marker.bindPopup(finalPopupContent);
-            }
+            const marker = L.marker(position, { icon: markerIcon }).addTo(map);
+            marker.options.key = key;
+            marker.bindPopup(finalPopupContent);
         }
 
     }).catch((error) => {
-        // Ce .catch() gérera TOUTES les erreurs de la chaîne
-        console.error("Erreur lors du chargement des marqueurs/commentaires :", error);
+        console.error("Erreur majeure lors du chargement :", error);
     });
 }
 
-
-// REMPLACEZ getPopupContent PAR CELLE-CI
-
-function getPopupContent(markerData, key, allComments) {
+/**
+ * Construit le HTML du popup en utilisant les données brutes
+ * @param {object} markerData - Les données du marqueur (/markers/)
+ * @param {object} userData - Les données À JOUR du créateur (/users/)
+ * @param {string} key - L'ID du marqueur
+ * @param {object} allComments - Les commentaires (/comments/)
+ */
+// REMPLACEZ getPopupContent (Version finale et propre)
+function getPopupContent(markerData, userData, key, allComments) {
     const currentUserId = window.auth.currentUser.uid;
+    const isAdmin = (currentUserId === ADMIN_UID);
     const isCreator = (currentUserId === markerData.creator_id);
 
-    // --- 1. On définit nos "cartes" de conversion (pas de changement) ---
+    // --- 1. Cartes de conversion (identique) ---
     const listpopup_map = {
         "doggy-style": '<img src="icons_map/dog.png" alt="Doggy style" />',
         "lazy-doggy-style": '<img src="icons_map/anal.png" alt="Lazy doggy" />',
@@ -228,37 +277,42 @@ function getPopupContent(markerData, key, allComments) {
         "6": "😋", "7": "🥴", "8": "😍", "9": "😈", "10": "🥵", "none": "❌"
     };
 
-    // --- 2. On recrée le HTML des positions (pas de changement) ---
+    // --- 2. HTML des positions (identique) ---
     let popuptexte = '';
     if (markerData.positions && Array.isArray(markerData.positions)) {
         markerData.positions.forEach(pos_id => {
-            if (listpopup_map[pos_id]) {
-                popuptexte += listpopup_map[pos_id];
-            }
+            if (listpopup_map[pos_id]) popuptexte += listpopup_map[pos_id];
         });
     }
     
-    // --- 3. On recrée la note (pas de changement) ---
+    // --- 3. Note (identique) ---
     const note_num = markerData.note || "none";
     const note_emoji = note_map[note_num.toString()] || "❌";
 
-    // --- 4. On construit le HTML des NOUVEAUX commentaires (du noeud 'comments') ---
-    let commentsHTML_new = '';
+    // --- 4. HTML des commentaires (uniquement depuis /comments/) ---
+    let commentsHTML = ''; 
     for (const commentKey in allComments) {
         const comment = allComments[commentKey];
+        
         const proxyImageURL = comment.authorPhoto ?
             `https://images.weserv.nl/?url=${encodeURIComponent(comment.authorPhoto)}&w=100&h=100&t=circle` :
             'icons_map/default-avatar.png';
         
-        commentsHTML_new += `
+        const adminDeleteButton = isAdmin ? 
+            `<button class="comment-delete-button" title="Supprimer ce commentaire (Admin)" onclick="removeComment('${key}', '${commentKey}')">
+                <img src="./icons_map/delete.png" alt="Supprimer" style="width: 12px; height: 12px; vertical-align: middle;">
+            </button>` : '';
+
+        // Le HTML de votre style de commentaire (corrigé)
+        commentsHTML += `
         <div class="custom-comment-container" style="
             margin-top: 15px; padding: 10px; border: 1px solid #ddd;
             border-radius: 5px; background-color: #f9f9f9; display: flex;
-            width: calc(100% - 20px);
+            width: calc(100% - 20px); position: relative;
         ">
+            ${adminDeleteButton}
             <div style="flex: 0 0 60px; margin-right: 10px; display: flex; flex-direction: column; align-items: center;">
-                <img src="${proxyImageURL}"
-                     style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #4285F4; margin-bottom: 5px;"
+                <img src="${proxyImageURL}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #4285F4; margin-bottom: 5px;"
                      onerror="this.src='icons_map/default-avatar.png'">
             </div>
             <div style="flex: 1; min-width: 0;">
@@ -273,24 +327,12 @@ function getPopupContent(markerData, key, allComments) {
         `;
     }
 
-    // --- NOUVEAU : 5. On extrait les ANCIENS commentaires de popupContent ---
-    let commentsHTML_old = '';
-    const oldPopupContent = markerData.popupContent || "";
-    const oldCommentsStartTag = '<div class="custom-comment-container"'; // Le marqueur de vos anciens commentaires
-    
-    const startIndex = oldPopupContent.indexOf(oldCommentsStartTag);
-    
-    if (startIndex !== -1) {
-        // On a trouvé d'anciens commentaires !
-        // On extrait tout, de ce point jusqu'à la fin de la chaîne.
-        commentsHTML_old = oldPopupContent.substring(startIndex);
-        console.log(`Anciens commentaires trouvés pour le marqueur ${key}`);
-    }
+    // --- 5. LOGIQUE HYBRIDE (old_comments) SUPPRIMÉE ---
     
     // --- 6. On assemble le contenu principal ---
     const mainPopupContent = `
         <p class="header_popup">L'heureux·se élu·e</p>
-        <p class="popup-data-box">${markerData.name || ''}</p>
+        <p class="popup-data-box">${userData.displayName || '???'}</p>
         
         <p class="header_popup">Partenaire·s</p>
         <p class="popup-data-box">${markerData.partenaires || ''}</p>
@@ -311,9 +353,9 @@ function getPopupContent(markerData, key, allComments) {
         <p class="popup-data-box">${markerData.commentaires || ''}</p>
         
         <p class="header_popup">Section commentaire</p>
-        ${commentsHTML_new}  ${commentsHTML_old}  `;
+        ${commentsHTML} `;
     
-    // --- 7. On ajoute les boutons d'action (pas de changement) ---
+    // --- 7. On ajoute les boutons d'action (identique) ---
     const iconEdit = './icons_map/edit.png';
     const iconDelete = './icons_map/delete.png';
     const iconComment = './icons_map/comment.png';
@@ -321,9 +363,8 @@ function getPopupContent(markerData, key, allComments) {
     return `
     <div>
         ${mainPopupContent}
-        
         <div class="popup-actions-container">
-            ${isCreator ? `
+            ${(isCreator || isAdmin) ? `
                 <button class="popup-action-button" onclick="modifyMarker('${key}')" title="Modifier">
                     <img src="${iconEdit}" alt="Modifier" />
                 </button>
@@ -331,7 +372,6 @@ function getPopupContent(markerData, key, allComments) {
                     <img src="${iconDelete}" alt="Supprimer" />
                 </button>
             ` : ''}
-            
             <button class="popup-action-button" onclick="showCommentPopup('${key}')" title="Ajouter un commentaire">
                 <img src="${iconComment}" alt="Commenter" />
             </button>
@@ -340,36 +380,29 @@ function getPopupContent(markerData, key, allComments) {
     `;
 }
 
-// Sauvegarder un marqueur dans Realtime Database
-function saveMarker(position, icon=null, name, partenaires, date, lieu, positions, note_num, commentaires, creator) {
+function saveMarker(position, partenaires, date, lieu, positions, note_num, commentaires, creator) {
     const markersRef = ref(db, 'markers');
     const newMarkerRef = push(markersRef);
+    
+    // Le marqueur ne contient QUE les données de l'événement
     const markerData = {
         position: [position.lat, position.lng],
-        name: name,
         partenaires: partenaires,
         date: date,
         lieu: lieu,
         positions: positions,
         note: note_num,
-        commentaires: commentaires,
-        creator_id: creator
+        commentaires: commentaires, // Le commentaire principal
+        creator_id: creator // Le SEUL lien vers l'utilisateur
+        
+        // 'name', 'creator_photo', 'icon', 'popupContent' sont partis
     };
-    if (icon) {
-        markerData.icon = icon;
-    }
+
+    // On sauvegarde et on renvoie une promesse avec les données
     return set(newMarkerRef, markerData).then(() => {
-        // Stocker la clé dans le marqueur temporaire
-        if (tempMarker) {
-            tempMarker.options.key = newMarkerRef.key;
-            // Mettre à jour le contenu du popup avec la clé
-            const newPopupHTML = getPopupContent(markerData, newMarkerRef.key, {});
-            tempMarker.getPopup().setContent(newPopupHTML);
-        }
-        return newMarkerRef.key; // Retourner la clé pour un usage ultérieur si nécessaire
+        return { key: newMarkerRef.key, data: markerData };
     });
 }
-
 
 // Supprimer un marqueur de la base de données
 function removeMarker(key) {
@@ -382,8 +415,13 @@ function removeMarker(key) {
             console.error("Aucune donnée trouvée pour ce marqueur.");
             return;
         }
+
+        const currentUserId = window.auth.currentUser.uid;
+        const isAdmin = (currentUserId === ADMIN_UID);
+        const isCreator = (currentUserId === markerData.creator_id);
+
         // On empeche n'importe qui de modifier les markers des autres
-        if(window.auth.currentUser.uid != markerData.creator_id){
+        if(!isAdmin && !isCreator){
             alert("Vous essayez de supprimer un marker que vous n'avez pas créé et ce n'est pas autorisé")
             return;
         }
@@ -411,58 +449,87 @@ function removeMarker(key) {
 }
 
 
+
 function modifyMarker(key) {
-    // 1. Récupérer les données du marqueur depuis Firebase
     const markerRef = ref(db, `markers/${key}`);
-    get(markerRef).then((snapshot) => {
-        const markerData = snapshot.val();
-        if (!markerData) {
-            console.error("Aucune donnée trouvée pour ce marqueur.");
-            return;
-        }
+    const commentsRef = ref(db, `comments/${key}`);
 
-        // On empeche n'importe qui de modifier les markers des autres
-        if(window.auth.currentUser.uid != markerData.creator_id){
-            alert("Vous essayez de modifier un marker que vous n'avez pas créé et ce n'est pas autorisé")
-            return;
-        }
+    let markerData; 
 
-        // 2. Pré-remplir le formulaire avec les données existantes
-        document.getElementById("creator-name-display").innerText = markerData.name || "";
+    // 1. On charge les données du MARQUEUR
+    get(markerRef).then((markerSnapshot) => {
+        if (!markerSnapshot.exists()) throw new Error("Marqueur non trouvé");
+        markerData = markerSnapshot.val(); 
+
+        // 2. On vérifie les permissions
+        const currentUserId = window.auth.currentUser.uid;
+        const isAdmin = (currentUserId === ADMIN_UID);
+        const isCreator = (currentUserId === markerData.creator_id);
+        if (!isCreator && !isAdmin) throw new Error("Permission refusée");
+
+        // 3. ON VA CHERCHER LE PROFIL DU CRÉATEUR (depuis la map globale)
+        const creatorProfile = userProfileMap[markerData.creator_id];
+        if (!creatorProfile) throw new Error("Profil créateur non trouvé.");
+
+        // 4. Mémoriser le créateur (pour la "gaffe" admin)
+        window.currentEditingOriginalCreator = {
+            uid: markerData.creator_id,
+            name: creatorProfile.displayName, 
+            photo: creatorProfile.chosen_icon || creatorProfile.photoURL
+        };
+
+        // 5. On pré-remplit le formulaire
+        document.getElementById("creator-name-display").innerText = creatorProfile.displayName || ""; 
         document.getElementById("partenaire").value = markerData.partenaires || "";
         document.getElementById("date").value = markerData.date || new Date().toISOString().slice(0, 10);
         document.getElementById("lieu").value = markerData.lieu || "";
-        document.getElementById("commentaires").value = markerData.commentaires || "";
+        document.getElementById("commentaires").value = markerData.commentaires || ""; 
 
-        // 3. Gérer les positions (cocher les cases correspondantes)
         const positions = markerData.positions || [];
         document.querySelectorAll("#positions input[type=checkbox]").forEach(checkbox => {
             checkbox.checked = positions.includes(checkbox.id);
         });
-
-        // 4. Gérer la note (sélectionner le radio button correspondant)
         const note = markerData.note;
         if (note) {
             document.querySelector(`input[name="rating"][value="${note}"]`).checked = true;
         }
 
-        // 5. Afficher le popup de modification
+        // 6. On affiche le popup de modification
         document.getElementById("informations").classList.add("active");
         document.getElementById("overlay").classList.add("show");
         document.querySelector('#map').style.pointerEvents = 'none';
 
-        // 6. Stocker la clé du marqueur en cours de modification (pour la sauvegarde)
+        // 7. On stocke la clé
         window.currentEditingKey = key;
 
-        // 7. Stocker le marqueur temporaire (pour mise à jour visuelle)
+        // 8. On charge les COMMENTAIRES (pour l'affichage du tempMarker)
+        return get(commentsRef); 
+
+    }).then((commentsSnapshot) => {
+        // 9. On a tout : markerData, comments, et le profil
+        const allComments = commentsSnapshot.val() || {};
         const position = markerData.position;
-        const popupContent = markerData.popupContent;
-        const icon = markerData.icon || customIcon;
-        window.tempMarker = L.marker(position, { icon: L.icon(icon) }).addTo(map)
-            .bindPopup(popupContent)
+        const creatorProfile = userProfileMap[markerData.creator_id];
+
+        // 10. On génère le VRAI contenu HTML
+        const finalPopupContent = getPopupContent(markerData, creatorProfile, key, allComments);
+        
+        // 11. On génère la VRAIE icône
+        const finalIcon = createProfileIcon(creatorProfile);
+
+        // 12. On crée le tempMarker avec le VRAI contenu
+        window.tempMarker = L.marker(position, { icon: finalIcon }).addTo(map)
+            .bindPopup(finalPopupContent) 
             .openPopup();
+
     }).catch((error) => {
-        console.error("Erreur lors de la récupération des données du marqueur :", error);
+        console.error("Erreur lors de la préparation de la modification :", error.message);
+        if (error.message === "Permission refusée") {
+            alert("Vous essayez de modifier un marker que vous n'avez pas créé et ce n'est pas autorisé");
+        }
+        // On réinitialise au cas où
+        window.currentEditingOriginalCreator = null;
+        window.currentEditingKey = null;
     });
 }
 
@@ -521,7 +588,7 @@ function onMapClick(e) {
 
     var popupContent = `
     <div>
-        <p>Voici un popup avec des boutons !</p>
+        <p>Vous etes en train de creer un marker !</p>
         <div class="popup-images">
             
         </div>
@@ -548,7 +615,8 @@ function pop_up_close(){
         tempMarker = null;
     }
 
-    // Réinitialiser le mode modification
+    // Réinitialisation
+    window.currentEditingOriginalCreator = null; 
     window.currentEditingKey = null;
 }
 
@@ -560,105 +628,83 @@ function pop_up_close_comments(){
 }
 
 
+function reloadMapAndClosePopup() {
+    pop_up_close(); // S'assure que tout est réinitialisé
+
+    // Recharger la carte
+    map.eachLayer(layer => {
+        if (layer instanceof L.Marker) map.removeLayer(layer);
+    });
+    loadMarkers();
+}
+
+
 function yes(){
     document.getElementById("informations").classList.remove("active")
     document.getElementById("overlay").classList.remove("show")
     document.querySelector('#map').style.pointerEvents = 'auto';
 
+    // --- 1. Récupération des données ---
+    const currentUser = window.auth.currentUser;
+    const position = tempMarker.getLatLng();
+    const partenaires = document.getElementById("partenaire").value;
+    const lieu = document.getElementById("lieu").value;
+    const date = document.getElementById("date").value;
+    const notes = getSelectedRating();
+    const note_num = notes[1];
+    const commentaires = document.getElementById("commentaires").value;
+    const creator = currentUser.uid;
+    const positions = getPositions();
 
-    var position = tempMarker.getLatLng();
-    var icon = tempMarker.getIcon();
-    var name = window.auth.currentUser.displayName;
-    var partenaires = document.getElementById("partenaire").value
-    var lieu = document.getElementById("lieu").value
-    var date = document.getElementById("date").value
-    var notes = getSelectedRating()
-    var note_emoji = notes[0]
-    var note_num = notes[1];
-    var commentaires = document.getElementById("commentaires").value
-    var creator = window.auth.currentUser.uid; // Utiliser l'ID de l'utilisateur
-    var positions = getPositions();
-    
-    
-    if(name === "Benjamin"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-blue.png';
-    } else if(name === "Louis"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-orange.png';
-    } else if(name === "Nolwenn"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-lightgreen.png';
-    } else if(name === "Alex"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-gray.png';
-    } else if(name === "Samuel"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-red.png';
-    } else if(name === "Gabrielle"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-magenta.png';
-    } else if(name === "Tim"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-green.png';
-    } else if(name === "Iloë"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-pink.png';
-    } else if(name === "Maurange"){
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-yellow.png';
-    } else {
-        icon.options.iconUrl = '../icons_map/boutique-de-sexe-black.png';
-    }
-    var customIcon = L.icon({
-        iconUrl: icon.options.iconUrl,
-        iconSize:     [32, 32], // taille de l'icône
-        iconAnchor: [16, 16], // point de l'icône qui correspondra à la position du marqueur
-        popupAnchor: [0, -16] // point à partir duquel le popup devrait s'ouvrir relativement à l'iconAnchor
-    });
+    // --- 2. On prépare les données du marqueur (SANS nom, SANS photo) ---
+    const markerDataToSave = {
+        position: [position.lat, position.lng],
+        partenaires: partenaires,
+        date: date,
+        lieu: lieu,
+        positions: positions,
+        note: note_num,
+        commentaires: commentaires,
+        creator_id: creator
+    };
 
-    tempMarker.setIcon(customIcon);
-
+    // --- 3. Logique de sauvegarde ---
     if (window.currentEditingKey) {
-        // Mode modification : mettre à jour le marqueur existant
+        // Mode modification
         const markerRef = ref(db, `markers/${window.currentEditingKey}`);
-        set(markerRef, {
-            position: [position.lat, position.lng],
-            name: name,
-            partenaires: partenaires,
-            date: date,
-            lieu: lieu,
-            positions: positions,
-            note: note_num,
-            commentaires: commentaires,
-            creator_id: creator,
-            icon: {
-                iconUrl: icon.options.iconUrl,
-                iconSize: icon.options.iconSize,
-                iconAnchor: icon.options.iconAnchor,
-                popupAnchor: icon.options.popupAnchor
-            }
-        }).then(() => {
+        
+        let finalData = markerDataToSave;
+        const isAdmin = (currentUser.uid === ADMIN_UID);
+        
+        if (isAdmin && window.currentEditingOriginalCreator && window.currentEditingOriginalCreator.uid !== currentUser.uid) {
+            // "Gaffe" admin : on préserve le créateur original
+            finalData.creator_id = window.currentEditingOriginalCreator.uid;
+        }
+
+        set(markerRef, finalData).then(() => {
             console.log("Marqueur mis à jour avec succès !");
-            // Recharger les marqueurs pour mettre à jour la carte
-            map.eachLayer(layer => {
-                if (layer instanceof L.Marker) {
-                    map.removeLayer(layer);
-                }
-            });
-            loadMarkers();
-            // Réinitialiser
-            window.currentEditingKey = null;
-            window.tempMarker = null;
+            reloadMapAndClosePopup();
         });
+
     } else {
-        // Mode création : sauvegarder un nouveau marqueur
-        saveMarker(position, {
-            iconUrl: icon.options.iconUrl,
-            iconSize: icon.options.iconSize,
-            iconAnchor: icon.options.iconAnchor,
-            popupAnchor: icon.options.popupAnchor
-        }, name, partenaires, date, lieu, positions, note_num, commentaires, creator)
-        .then(() => {
-            window.tempMarker = null;
-        })
-        .catch((error) => {
-            console.error("Erreur lors de la création :", error);
-            alert("Erreur lors de la sauvegarde.");
+        // Mode création
+        saveMarker(position, partenaires, date, lieu, positions, note_num, commentaires, creator)
+        .then((result) => { // result contient { key, data }
+            // On met à jour le tempMarker AVANT de le fermer
+            const userProfile = userProfileMap[currentUser.uid]; // On le lit de la map globale
+            const popupHTML = getPopupContent(result.data, userProfile, result.key, {});
+            const markerIcon = createProfileIcon(userProfile); 
+            
+            tempMarker.setIcon(markerIcon);
+            tempMarker.getPopup().setContent(popupHTML);
+            
+            reloadMapAndClosePopup(); // Appelle la fonction helper
         });
     }
 
+    // On vide la mémoire d'édition (déplacé de pop_up_close)
+    window.currentEditingOriginalCreator = null;
+    window.currentEditingKey = null;
 }
 
 
@@ -667,15 +713,22 @@ function yes_comments(){
     document.getElementById("overlay").classList.remove("show")
     document.querySelector('#map').style.pointerEvents = 'auto';
 
-    var key = document.getElementById("key").innerHTML;
+    // 1. Récupérer les informations
+    var key = document.getElementById("key").innerHTML; // Clé du marqueur
     var pseudo = window.auth.currentUser.displayName;
     var photo = window.auth.currentUser.photoURL;
     var texte = document.getElementById("comment_box").value;
     var creator_uid = window.auth.currentUser.uid;
 
-
+    // 2. NOUVELLE LOGIQUE: On crée une référence vers le nouveau dossier 'comments'
+    // (ex: /comments/-Ma_Marker_Key/)
     const commentsRef = ref(db, `comments/${key}`);
-    const newCommentRef = push(commentsRef); // Génère une clé unique pour le commentaire
+    
+    // 3. On "push" pour générer une clé unique pour le nouveau commentaire
+    // (ex: /comments/-Ma_Marker_Key/-Ma_Comment_Key)
+    const newCommentRef = push(commentsRef); 
+
+    // 4. On sauvegarde les données du commentaire
     set(newCommentRef, {
         authorName: pseudo,
         authorPhoto: photo,
@@ -683,16 +736,14 @@ function yes_comments(){
         authorUid: creator_uid,
         timestamp: new Date().toISOString()
     }).then(() => {
-        console.log("Commentaire ajouté !");
-        // On recharge les marqueurs pour que le nouveau commentaire s'affiche
-        map.eachLayer(layer => {
-            if (layer instanceof L.Marker) map.removeLayer(layer);
-        });
+        console.log("Commentaire ajouté avec succès dans /comments/ !");
+        
+        // 5. On recharge la carte
+        // (on n'a pas besoin de vider la carte, loadMarkers() le fait déjà)
         loadMarkers();
     }).catch((error) => {
         console.error("Erreur lors de l'ajout du commentaire :", error);
     });
-    
 }
 
 
@@ -1172,4 +1223,43 @@ async function loadPendingRequests() {
         console.error("Erreur majeure dans loadPendingRequests :", error);
         listContainer.innerHTML = "<i style='color: red;'>Erreur de chargement. Vérifiez la console.</i>";
     }
+}
+
+
+/**
+ * NOUVELLE FONCTION ADMIN : Supprime un commentaire spécifique
+ * @param {string} markerKey - L'ID du marqueur parent
+ * @param {string} commentKey - L'ID du commentaire à supprimer
+ */
+function removeComment(markerKey, commentKey) {
+    // Vérification de sécurité (au cas où le bouton s'afficherait par erreur)
+    if (window.auth.currentUser.uid !== ADMIN_UID) {
+        alert("Action réservée à l'administrateur.");
+        return;
+    }
+
+    // Confirmation
+    if (!confirm("ADMIN : Voulez-vous vraiment supprimer ce commentaire ? Cette action est irréversible.")) {
+        return;
+    }
+
+    // On crée la référence vers le commentaire
+    const commentRef = ref(db, `comments/${markerKey}/${commentKey}`);
+
+    // On supprime
+    remove(commentRef)
+        .then(() => {
+            console.log("Commentaire supprimé avec succès par l'admin.");
+            // On recharge la carte pour que le popup se mette à jour
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            loadMarkers();
+        })
+        .catch((error) => {
+            console.error("Erreur (Admin) lors de la suppression du commentaire :", error);
+            alert("Erreur : Le commentaire n'a pas pu être supprimé. (Vos règles Firebase sont-elles à jour ?)");
+        });
 }

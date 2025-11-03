@@ -813,3 +813,74 @@ li {
     padding-top: 15px;
     margin-top: 15px;
 }
+
+/* ================================================= */
+/* == STYLE POUR LES ICÔNES DE PROFIL (Marqueurs) == */
+/* ================================================= */
+
+.profile-marker-container {
+    width: 36px;
+    height: 36px;
+    
+    /* --- VOTRE BORDURE MODERNE --- */
+    /* On remplace le fond blanc par un dégradé */
+    background: linear-gradient(45deg, #4285F4, #9b59b6); /* Bleu Google -> Violet */
+    
+    padding: 3px; /* C'est l'épaisseur de la bordure */
+    border-radius: 50%; /* Rend le conteneur rond */
+    
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* L'image de profil elle-même */
+.profile-marker-image {
+    width: 30px;  /* (Taille totale - 2 * padding) */
+    height: 30px; /* (36px - 2 * 3px) */
+    
+    border-radius: 50%; /* Rend l'image ronde */
+    object-fit: cover; /* S'assure que l'image remplit le cercle */
+}
+
+/* Leaflet ajoute une bordure moche, on la supprime */
+.profile-marker {
+    border: none !important;
+    background: transparent !important;
+}
+
+/* ================================================= */
+/* == STYLE POUR BOUTON "SUPPRIMER COMMENTAIRE" (Admin) == */
+/* ================================================= */
+
+.comment-delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%; /* Bouton rond */
+    
+    color: #888;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 18px; /* Centre le "×" */
+    text-align: center;
+    
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.comment-delete-button:hover {
+    background-color: #EA4335; /* Rouge */
+    color: white;
+    border-color: #d00;
+    transform: scale(1.1);
+}
