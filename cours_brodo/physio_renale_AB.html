@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Physiologie Rénale - Bilan Acides-Bases</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        h1 {
+            color: #005a9c; /* Bleu foncé */
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+            font-weight: 700;
+        }
+        h2 {
+            color: #007bff; /* Bleu moyen */
+            margin-top: 2rem;
+            font-weight: 700;
+        }
+        h3, h4 {
+            color: #343a40;
+            margin-top: 1.5rem;
+            font-weight: 700;
+        }
+        p, li {
+            margin-bottom: 0.75em;
+        }
+        ul, ol {
+            padding-left: 30px;
+        }
+        strong, b {
+            color: #d90429; /* Rouge pour l'accentuation */
+        }
+        .explication {
+            background-color: #e6f7ff; /* Bleu très clair */
+            border-left: 5px solid #007bff; /* Bordure bleue */
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        .explication h4 {
+            margin-top: 0;
+            color: #005a9c;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .image-placeholder {
+            font-style: italic;
+            color: #555;
+            border: 1px dashed #ccc;
+            padding: 15px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #fdfdfd;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f1f3f5;
+        }
+        code {
+            background-color: #e9ecef;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PHYSIOLOGIE RENALE COURS N°5</h1>
+        <h2>BILAN d’ACIDES ET DE BASES</h2>
+        <p>Marie Courbebaisse Université Paris Cité</p>
+        <p>Service de Physiologie-Explorations fonctionnelles, HEGP</p>
+
+        <h3>Objectifs pédagogiques</h3>
+        <ul>
+            <li>Connaître les déterminants du bilan d’acide et de base</li>
+            <li>Connaître les mécanismes de transport tubulaire rénal d’acide et de bicarbonate et leurs déterminants</li>
+            <li>Savoir analyser une situation affectant le bilan d’acide et de base</li>
+        </ul>
+
+        <h3>Plan</h3>
+        <ul>
+            <li>Introduction</li>
+            <li>Régulation rénale de l’état acido-basique du milieu intérieur</li>
+            <li>Réabsorption du bicarbonate filtré (Tubule proximal, Anse de Henle et tubule distal)</li>
+            <li>Sécrétion de protons et régénération des bicarbonates consommés (ou sécrétion de bicarbonates) dans le canal collecteur</li>
+            <li>Déterminants de l’excrétion urinaire nette d’acide</li>
+            <li>Réponse rénale à une charge acide ou alcaline</li>
+            <li>Physiopathologie des acidoses et des alcaloses</li>
+            <li>En pratique : distinguer acidose respiratoire et métabolique et savoir raisonner devant une acidose métabolique</li>
+        </ul>
+
+        <h2>INTRODUCTION</h2>
+        <p>Dans les conditions normales, les valeurs de pH des milieux extra- et intracellulaires sont maintenues dans d’étroites limites malgré une addition continuelle d’acide carbonique (ou acide volatile) et d’acides non carboniques (ou acides fixes) provenant du métabolisme cellulaire.</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>Notre corps produit constamment des acides (via la respiration et la digestion). Le but de ce cours est de comprendre comment notre organisme, et surtout nos reins, font pour que ces acides n'entraînent pas une chute mortelle de notre pH.</p>
+            <ul>
+                <li><strong>Acide volatile (H2CO3) :</strong> C'est le CO2 produit par la respiration. Il est dit "volatil" car il est éliminé en gaz par les poumons.</li>
+                <li><strong>Acides fixes :</strong> Ce sont les acides produits par le métabolisme (ex: digestion des protéines). Ils ne sont pas volatils et doivent être éliminés par les reins.</li>
+            </ul>
+        </div>
+
+        <p>Les valeurs du pH du milieu intérieur sont maintenues normalement dans d’étroites limites,</p>
+        <ul>
+            <li><strong>7,38 à 7,42</strong> pour le pH extracellulaire</li>
+            <li><strong>6,9 à 7,1</strong> pour le pH intracellulaire</li>
+        </ul>
+        <div class="image-placeholder">[Image : Une forme rose pâle décorative]</div>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>Le pH du sang (extracellulaire) est très stable, autour de 7,40. La vie n'est possible que dans cette fourchette très serrée. L'intérieur de nos cellules (intracellulaire) est légèrement plus acide.</p>
+        </div>
+        
+        <h3>Systèmes tampons extracellulaires, intracellulaires et osseux</h3>
+        <p>La présence de systèmes tampons dans les milieux extracellulaire, intracellulaire et dans le tissu osseux permet d’atténuer les variations du pH qui résultent de l’addition d’ions H+ ou OH−. Les systèmes tampons sont constitués d’un acide faible conjugué donneur d’ions H+ et d’une base conjuguée accepteur d’ions H+. Le rapport entre la concentration de la base conjuguée et celle de l’acide conjugué est déterminé en fonction de la constante de dissociation (exprimée en pK’) et de la concentration d’ions H+ (exprimée en pH), par l’équation d’Henderson-Hasselbalch :</p>
+        <p><strong>pH = pK′ + 𝑙𝑜𝑔 (base conjuguée/acide conjugué)</strong></p>
+        <div class="explication">
+            <h4>Explication : Système Tampon & Équation Clé</h4>
+            <p>Un <strong>système tampon</strong> est la première ligne de défense contre un changement de pH. C'est un couple chimique (un acide faible + sa base conjuguée) qui agit comme une "éponge" à H+ :</p>
+            <ul>
+                <li>Si un acide fort arrive (excès de H+), la <strong>base conjuguée</strong> du tampon le capte.</li>
+                <li>Si une base forte arrive (déficit de H+), l'<strong>acide faible</strong> du tampon libère un H+.</li>
+            </ul>
+            <p>L'<strong>équation d'Henderson-Hasselbalch</strong> est la formule mathématique qui régit cet équilibre. Elle montre que le pH ne dépend pas des quantités absolues, mais du <em>rapport</em> entre la base et l'acide du couple tampon.</p>
+        </div>
+
+        <p>-Dans le tissu osseux, il existe des systèmes tampons représentés essentiellement par le carbonate (CO32− )/bicarbonate (HCO3−).</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>C'est un point important pour les acidoses chroniques : si le sang est acide en permanence, le corps va "grignoter" l'os (le carbonate) pour libérer des bases et tamponner l'acidité. Cela conduit à l'ostéoporose.</p>
+        </div>
+
+        <p>Il faut distinguer les systèmes <strong>tampons fermés</strong> des systèmes <strong>tampons ouverts</strong>.</p>
+        
+        <h4>Tampons fermés</h4>
+        <p>Les systèmes tampons hémoglobine, protéines et phosphates sont des systèmes fermés dont la masse (base + acide conjugués) est fixe.</p>
+        <div class="image-placeholder">[Image : Une forme rose pâle décorative]</div>
+        <div class="explication">
+            <h4>Explication : Tampon Fermé</h4>
+            <p>Un système "fermé" signifie que la quantité totale de tampon (Acide + Base) est fixe. Par exemple, votre quantité d'hémoglobine est constante. Quand elle tamponne un H+, elle change de forme, mais la quantité totale d'hémoglobine ne change pas. Son efficacité est donc limitée.</p>
+        </div>
+
+        <p>Ces systèmes tampons fermés sont les seuls mis en jeu en cas de variations de production d’ions H+ liées à des modifications de la PCO2.</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>Lors d'un problème respiratoire (PCO2 qui monte ou descend), le CO2 rentre dans les globules rouges et est tamponné par l'hémoglobine. C'est le principal tampon fermé impliqué dans les troubles respiratoires.</p>
+        </div>
+        
+        <p>production d’acides fixes.</p>
+        <p>Dans ces systèmes fermés, le pouvoir tampon dépend de la concentration du tampon, et est maximum quand le pH est égal au pK’ du système.</p>
+        
+        <h4>Tampons ouverts</h4>
+        <p>pK inférieur au pH</p>
+        <p>ils se trouvent sont des donneurs de protons. Cependant, malgré son pK inférieur à 7,00- l’acide carbonique (H2CO3) accepte des protons dans le sang, parce qu’il se transforme en gaz carbonique (CO2) et eau (H2O) dont l’accumulation ne limite pas la réaction. Les ions H+ et HCO3- sont en effet en équilibre avec les produits de la réaction de déshydratation de l’acide carbonique de la manière suivante :</p>
+        
+        <div class="image-placeholder">[Image : Équation chimique : CO2 + H2O ⇌ H2CO3 ⇌ H+ + HCO3-]</div>
+        
+        <p>L’équation de Henderson-Hasselbach permet de calculer le pH sanguin à partir des concentrations en ion bicarbonate (HCO − ) et acide carbonique (H2CO3).</p>
+        
+        <div class="image-placeholder">[Image : Formule : pH_sang = 6,1 + log10 ([HCO3-]/[H2CO3]) = 6,1 + log10 ([HCO3-]/0,03 PCO2)]</div>
+
+        <div class="explication">
+            <h4>Explication : Le Tampon Ouvert (Le Plus Important)</h4>
+            <p>Le couple Bicarbonate (HCO3-) / Acide carbonique (H2CO3) est le système tampon le plus important du sang. Il est dit <strong>"ouvert"</strong> car ses deux composantes peuvent être régulées indépendamment :</p>
+            <ol>
+                <li>La composante "acide" (H2CO3), qui est en équilibre avec le CO2, est contrôlée par les <strong>poumons</strong> (en respirant plus ou moins vite).</li>
+                <li>La composante "base" (HCO3-), est contrôlée par les <strong>reins</strong> (en réabsorbant ou en excrétant plus ou moins de bicarbonate).</li>
+            </ol>
+            <p>Grâce à cette double régulation (poumons + reins), ce système est incroyablement efficace pour maintenir le pH stable.</p>
+            <p>La formule <code>pH = 6,1 + log ([HCO3-]/0,03 PCO2)</code> est la version "praticable" de l'équation d'Henderson-Hasselbalch, car on ne mesure pas l'acide H2CO3, mais directement la PCO2 (pression en CO2).</p>
+        </div>
+
+        <p>En présence d’un afflux de protons, l’association des protons avec les anions bicarbonates est favorisée selon la constante de dissociation ionique (H+ + HCO3- → H2CO3) parce que le CO2 produit disparaît au fur et à mesure grâce à la ventilation alvéolaire et que les millilitres d’eau de la réaction sont éliminés par la perspiration insensible (500 ml/jour).</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>Si vous avez une arrivée d'acide (H+), il est immédiatement capté par un bicarbonate (HCO3-). Cela forme du H2CO3, qui se transforme en CO2 + H2O. Le CO2 est ensuite instantanément expiré par les poumons. Le système ne sature pas car le CO2 est "évacué".</p>
+        </div>
+
+        <p>-Les concentrations de CO2 et H2CO3 sont contrôlées par la <strong>ventilation alvéolaire</strong>.</p>
+        <p>-La concentration de <strong>HCO3 −</strong> plasmatique est contrôlée par le <strong>rein</strong> qui peut générer ou excréter du bicarbonate.</p>
+        <div class="explication">
+            <h4>Explication : La Balance Poumons/Reins</h4>
+            <p>C'est le résumé de l'équilibre acido-basique :</p>
+            <ul>
+                <li><strong>Poumons (rapide) :</strong> Contrôlent le CO2 (le pôle "acide").</li>
+                <li><strong>Reins (lent) :</strong> Contrôlent le HCO3- (le pôle "base").</li>
+            </ul>
+        </div>
+
+        <h3>Sources physiologiques d’acides</h3>
+        <p>L’organisme est soumis physiologiquement à deux perturbations acides résultant du métabolisme cellulaire :</p>
+        
+        <p>- La production tissulaire d’acide carbonique (H2CO3).</p>
+        <p>Le métabolisme cellulaire oxydatif complet des glucides, lipides et de la majorité des protéines d’origine alimentaire est responsable d’une production quotidienne par les tissus mous d’environ <strong>14 000 mmoles de CO2</strong> (10 mmol/min) déversées dans les capillaires tissulaires puis dans le sang veineux. La quasi-totalité du CO2 est hydratée instantanément en H2CO3 dans les hématies grâce</p>
+        <div class="explication">
+            <h4>Explication : L'Acide Volatil (Respiration)</h4>
+            <p>Le simple fait de vivre et de "brûler" nos sucres et nos graisses produit une quantité *énorme* de CO2 (14 000 mmol/j). Ce CO2 est un acide potentiel. Heureusement, il est 100% pris en charge par les poumons et expiré. Il ne pose pas de problème au rein en temps normal.</p>
+        </div>
+        
+        <p>- La production d’acides fixes</p>
+        <p>Le métabolisme cellulaire hépatique de certains acides aminés provenant de <strong>protéines animales</strong> contenues dans l’alimentation « habituelle » occidentale est responsable d’une <strong>production nette d’acides fixes</strong> correspondant à environ <strong>60 mmol d’ions H+/24 h</strong> soit environ 1 mmol/kg de poids corporel/j chez le sujet adulte normal . Il s’agit principalement (pour 80 %) des acides aminés neutres sulfurés (méthionine et cystéine), mais aussi des acides aminés cationiques (arginine et lysine), des phosphoprotéines et phosphoaminolipides.</p>
+        <div class="explication">
+            <h4>Explication : Les Acides Fixes (Alimentation)</h4>
+            <p>Voici le vrai travail du rein. Manger des protéines (surtout animales) produit des acides "fixes" (comme l'acide sulfurique H2SO4) qui ne peuvent pas être expirés. Le corps en produit environ 60 mmol/jour. Ces 60 mmol de H+ *doivent* être éliminés par le rein, sinon ils s'accumulent et provoquent une acidose.</p>
+        </div>
+        
+        <p>Il faut noter que, si le métabolisme normalement complet des sucres et des lipides ne libère pas d’acides fixes, leur métabolisme incomplet dans certaines circonstances pathologiques peut libérer des acides fixes en quantité importante (acide lactique ou acidocétose diabétique par exemple).</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>En temps normal, sucre et graisse ne produisent que du CO2 (volatil). Mais dans certaines maladies (diabète, manque d'oxygène), leur métabolisme est "incomplet" et produit des acides fixes (acide lactique, corps cétoniques) qui s'accumulent et débordent les capacités du rein.</p>
+        </div>
+
+        <h2>REGULATION RENALE DE L’ETAT ACIDO-BASIQUE DU MILIEU INTERIEUR</h2>
+        <p>Dans la situation habituelle d’une alimentation protéique, le rein maintient la concentration plasmatique de bicarbonate dans d’étroites limites (24 à 26 mmol/L) malgré la charge physiologique quotidienne d’acides fixes. Son rôle s’étale sur 24 heures.</p>
+        <div class="explication">
+            <h4>Explication : Le Double Rôle du Rein</h4>
+            <p>Le rein a deux missions vitales pour maintenir le pH à 7,40 face aux 60 mmol/j d'acides fixes :</p>
+            <ol>
+                <li>Réabsorber 100% des bicarbonates filtrés.</li>
+                <li>Régénérer les 60 mmol de bicarbonates consommés pour tamponner les acides.</li>
+            </ol>
+        </div>
+
+        <p>D’une part, <strong>la charge filtrée de bicarbonate (concentration plasmatique de bicarbonate x DFG soit environ 4 500 mmol/24 h) doit être réabsorbée complètement par le tubule rénal</strong> pour empêcher une perte de bicarbonate dans l’urine qui serait responsable d’une acidose métabolique (acidose tubulaire proximale). Cette étape est réalisée par la sécrétion d’une quantité équivalente d’ions H+ qui permet la réabsorption indirecte du bicarbonate dans le tubule proximal, l’anse de Henle, et le tubule contourné distal.</p>
+        <div class="explication">
+            <h4>Explication : Mission 1 - Ne Rien Perdre (Réabsorption)</h4>
+            <p>Le rein filtre d'énormes quantités de sang, et donc de bicarbonates (4500 mmol/j). S'il laissait "fuir" ces bicarbonates dans l'urine, ce serait une perte massive de base, provoquant une acidose grave. La priorité absolue du rein est donc de réabsorber 100% de ces bicarbonates "utiles" pour les remettre dans le sang. Cela se passe surtout dans le tubule proximal.</p>
+        </div>
+        
+        <p>D’une part, <strong>la quantité de bicarbonate consommé par la production physiologique nette d’acides fixes doit être remplacée par du bicarbonate généré par le rein</strong>. Cette étape nécessite deux conditions:</p>
+        <ul>
+            <li>une sécrétion d’ions H+ par le canal collecteur cortical et médullaire égale à la production d’acides fixes par l’organisme.</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Mission 2 - Régénérer ce qui a été perdu</h4>
+            <p>Les 60 mmol d'acides fixes produits par l'alimentation ont été tamponnés dans le sang par 60 mmol de bicarbonates (selon l'équation H+ + HCO3- → H2CO3). Ces 60 mmol de bicarbonates ont donc été "consommés" et ont disparu. Le rein doit les re-fabriquer.</p>
+            <p>Pour fabriquer 1 nouveau bicarbonate, le rein doit sécréter et éliminer 1 H+ dans l'urine. La mission est donc de <strong>sécréter 60 mmol de H+</strong> dans le canal collecteur (la fin du néphron) pour <strong>régénérer 60 mmol de HCO3-</strong> qui retournent au sang.</p>
+        </div>
+
+        <ul>
+            <li>principalement NH3) dans le canal collecteur pour permettre l’excrétion des ions H+ sécrétés sous forme de H 2 PO − et 𝐍𝐇+ et donc la régénération du bicarbonate consommé par la charge acide fixe quotidienne. Le donc fait référence à une quantité suffisante de tampon pour permettre l’excrétion des ions hydrogène.</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Comment Éliminer les H+ ? (Les "Poubelles")</h4>
+            <p>Le rein ne peut pas uriner de l'acide pur (le pH de l'urine ne peut pas descendre sous 4,5). Pour éliminer les 60 mmol de H+ sécrétés, il doit les "emballer" en les collant à des tampons urinaires (des "poubelles") :</p>
+            <ol>
+                <li><strong>L'acidité titrable (H2PO4-) :</strong> Le H+ se colle sur un phosphate (HPO4^2-) pour former du H2PO4-.</li>
+                <li><strong>L'ammonium (NH4+) :</strong> Le rein fabrique de l'ammoniac (NH3), une base, qui diffuse dans l'urine, capte un H+ et devient de l'ammonium (NH4+). C'est la principale "poubelle" et la plus adaptable.</li>
+            </ol>
+            <p>L'excrétion nette d'acide = (NH4+ urinaire) + (Acidité titrable urinaire).</p>
+        </div>
+        
+        <div class="image-placeholder">[Image : Schéma du bilan acido-basique de l'organisme. Montre les entrées (Régime, Métabolisme) et les sorties (Poumons, Reins, Fèces) d'acides et de bases, avec le rein réabsorbant 4320 HCO3- et générant 70 "Nouveaux" HCO3- pour équilibrer la charge acide.]</div>
+
+        <h3>Réabsorption du bicarbonate filtré</h3>
+        <h4>Tubule proximal</h4>
+        <p>Le bicarbonate est librement filtré au travers de la paroi capillaro-glomérulaire : sa concentration dans le filtrat glomérulaire est la même que dans le plasma. <strong>La majeure partie (80 % de la charge filtrée) est absorbée dans le tubule proximal.</strong> Les 2/3 de cette réabsorption sont assurés par un échangeur <strong>Na+ / H+</strong> (isoforme NHE3) présent au pôle apical de la cellule proximale. Il existe également à la membrane apicale une <strong>H+ -ATPase</strong> de type vacuolaire, présente également dans des vésicules intracellulaires et transloquée à la membrane apicale en cas de diminution du pH de la cellule proximale.</p>
+        <div class="explication">
+            <h4>Explication : Mécanisme de Réabsorption Proximale</h4>
+            <p>La réabsorption de 80% des bicarbonates se fait ici. C'est un mécanisme <strong>indirect</strong> :</p>
+            <ol>
+                <li>La cellule proximale <strong>sécrète un H+</strong> dans l'urine (via l'échangeur NHE3 qui fait sortir 1 H+ pour faire rentrer 1 Na+).</li>
+                <li>Dans l'urine, ce H+ se combine au HCO3- filtré pour former H2CO3.</li>
+                <li>Une enzyme (Anhydrase Carbonique IV) transforme H2CO3 en CO2 + H2O.</li>
+                <li>Le CO2 (gaz) diffuse librement dans la cellule.</li>
+                <li>À l'intérieur de la cellule, une autre enzyme (Anhydrase Carbonique II) refait la réaction inverse : CO2 + H2O → H+ + HCO3-.</li>
+                <li>Le H+ est recyclé et re-sécrété. Le HCO3- est "neuf" et transporté dans le sang.</li>
+            </ol>
+            <p><strong>Bilan :</strong> 1 HCO3- a disparu de l'urine et 1 HCO3- est apparu dans le sang. C'est la réabsorption.</p>
+        </div>
+        
+        <p>(NBCe1).</p>
+        <p>La concentration de bicarbonate dans la lumière tubulaire, initialement identique à celle du plasma au début du tube proximal, diminue jusqu'à 8 mmol/l à la fin de la partie contournée de ce tube.</p>
+        <p>L'absorption nette d'eau sans électrolytes dans la branche fine descendante de l'anse de Henle est responsable d'une élévation de la concentration de bicarbonate mesurée de nouveau à la pointe de l'anse à 25 mmol/l.</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>Le tubule proximal réabsorbe tellement de HCO3- que sa concentration chute à 8. Puis, dans l'anse de Henle, le rein réabsorbe massivement de l'eau. Le HCO3- restant se retrouve donc "concentré" mécaniquement, et sa concentration remonte à 25.</p>
+        </div>
+
+        <div class="image-placeholder">[Image : Schéma de la cellule du tubule proximal. Montre le HCO3- dans la lumière, l'échangeur Na+/H+ (NHE3), les anhydrases carboniques (A.C. IV et II) et le transporteur de HCO3- (NBCe1) vers le sang.]</div>
+        
+        <p>La réabsorption du bicarbonate se poursuit au niveau de la branche large ascendante de Henle et dans le tube contourné distal. Les mécanismes de cette réabsorption sont proches de ceux rencontrés dans le tubule proximal.</p>
+
+        <h2>SECRETION DE PROTONS ET RÉGENERATION DES BICARBONATES CONSOMMÉS DANS LE CANAL COLLECTEUR (ou sécrétion de bicarbonates)</h2>
+        <p>Le canal collecteur est capable de régénérer ou d'excréter le bicarbonate en fonction des besoins. Dans le canal collecteur cortical, il existe trois types de cellules: les cellules intercalaires de type A qui sécrètent des ions H+, les cellules intercalaires de type B qui sécrètent du bicarbonate et les cellules principales, responsables de la réabsorption de sodium et de la sécrétion de potassium.</p>
+        <div class="explication">
+            <h4>Explication : Le Réglage Fin (Canal Collecteur)</h4>
+            <p>C'est ici que le rein "décide" s'il doit corriger une acidose ou une alcalose. Il utilise pour cela deux cellules opposées :</p>
+            <ul>
+                <li><strong>Cellule Intercalaire A (Acidose) :</strong> S'il y a trop d'acide dans le sang (acidose), cette cellule s'active. Elle <strong>sécrète des H+</strong> dans l'urine (via une H+-ATPase) et <strong>régénère du HCO3-</strong> vers le sang. Elle corrige l'acidose.</li>
+                <li><strong>Cellule Intercalaire B (Alcalose) :</strong> S'il y a trop de base dans le sang (alcalose), cette cellule (qui est un miroir de la A) s'active. Elle <strong>sécrète du HCO3-</strong> dans l'urine (elle "jette" la base) et envoie des H+ dans le sang. Elle corrige l'alcalose.</li>
+            </ul>
+        </div>
+        
+        <p>membrane apicale, appelé également pendrine.</p>
+        
+        <div class="image-placeholder">[Image : Schéma des 3 types de cellules du canal collecteur.
+        (P) Cellule Principale : réabsorbe Na+ (via ENaC), sécrète K+ (via ROMK).
+        (A) Cellule Intercalaire A : Sécrète H+ (via H+-ATPase) dans l'urine, régénère HCO3- vers le sang (via AE1).
+        (B) Cellule Intercalaire B : Sécrète HCO3- (via Pendrine) dans l'urine, envoie H+ vers le sang.]</div>
+
+        <h2>ACCEPTEURS URINAIRES D’IONS H+</h2>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>On revient aux "poubelles" nécessaires pour éliminer les H+ sécrétés par la cellule A.</p>
+        </div>
+        <p>La base conjuguée HPO 2− titrée par les ions H+ sécrétés pour former H PO − est le constituant majoritaire de l’acidité titrable, qui représente normalement un tiers de l’excrétion nette d’acide.</p>
+        <div class="explication">
+            <h4>Explication : Acidité Titrable</h4>
+            <p>C'est la première poubelle : le phosphate (HPO4^2-) qui est filtré. Il capte un H+ et devient H2PO4-. C'est une poubelle "passive", sa quantité dépend juste de la filtration et n'est pas très adaptable.</p>
+        </div>
+        
+        <p>proton ATPase apicale</p>
+        
+        <p>puis sécrété sous forme de NH3 via un canal à NH3 par les cellules du canal collecteur. Le NH3 sécrété tamponne un H+ luminal et forme du NH4+ qui est excrété dans l’urine.</p>
+        <div class="explication">
+            <h4>Explication : Ammoniogenèse (NH3/NH4+)</h4>
+            <p>C'est la deuxième poubelle, la plus importante. Le rein (surtout le tubule proximal) fabrique activement de l'ammoniac (NH3) à partir de l'acide aminé glutamine. Le NH3 est ensuite sécrété dans l'urine, où il capte un H+ pour devenir de l'ammonium (NH4+). L'avantage est que ce mécanisme est très <strong>adaptable</strong> : en cas d'acidose, le rein peut multiplier par 10 sa production de NH3 pour éliminer massivement les H+.</p>
+        </div>
+        
+        <div class="image-placeholder">[Image : Schéma de l'ammoniogenèse. Montre la synthèse de NH4+ dans le tubule proximal, et la sécrétion de NH3 qui capte un H+ dans le canal collecteur pour devenir NH4+ urinaire.]</div>
+
+        <h2>DETERMINANTS DE L’EXCRETION URINAIRE NETTE D’ACIDE</h2>
+        <p>De nombreux facteurs (hormonaux ou non) modulent le comportement rénal des ions H+ dans les différents segments du néphron. Ces facteurs peuvent agir sur</p>
+        <ul>
+            <li>-La capacité de réabsorption du HCO3- filtré dans le tubule proximal, l’anse de Henle et le tube contourné distal, via les échangeurs Na/H</li>
+            <li>-La capacité de sécrétion d’H+ dans le canal collecteur, via la H+-ATPase</li>
+            <li>-La capacité de sécrétion de NH3 dans le canal collecteur</li>
+        </ul>
+        
+        <h3>Variations de l’état acide-base plasmatique</h3>
+        <p>Dans les différents segments du néphron, la variation du pH sanguin module la sécrétion d’ions H+. Par exemple, une diminution du pH des cellules tubulaires par diminution de la concentration plasmatique de bicarbonate ou par augmentation de la PCO2 stimule la sécrétion d’ions H+.</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>Le facteur de régulation le plus logique : si le sang est acide (pH bas), le rein est stimulé pour sécréter plus de H+ et réabsorber plus de HCO3-.</p>
+        </div>
+
+        <h3>Angiotensine II et Aldostérone</h3>
+        <p>La sécrétion d'angiotensine II stimule la sécrétion d’H+ dans le tubule proximal, et le tubule distal et le canal collecteur. Elle augmente également l’ammoniogénèse dans le tubule proximal. <strong>L’aldostérone</strong> joue un rôle important dans la régulation de l’acidification rénale.</p>
+        <p>L’aldostérone stimule la sécrétion d’ions H+ dans le canal collecteur par plusieurs mécanismes.</p>
+        <ul>
+            <li>-directement via la sécrétion d’ions H+ par la H+-ATPase.</li>
+            <li>-indirectement en augmentant la réabsorption de sodium par les cellules principales du canal collecteur : ce dernier effet entraîne une augmentation de la négativité de la lumière tubulaire, ce qui permet une stimulation indirecte de la sécrétion d’H+ par la H+-ATPase électrogénique et de la sécrétion de K+.</li>
+        </ul>
+        <p>Enfin, l’aldostérone augmente indirectement la disponibilité de NH3 dans l’urine en induisant une déplétion potassique par perte rénale de potassium, ce qui stimule l’ammoniogenèse rénale.</p>
+        <p>Au total, <strong>l’hyperaldostéronisme</strong> induit une augmentation de l’excrétion rénale nette d’acide avec création d’une <strong>alcalose métabolique</strong> et d’une <strong>hypokaliémie</strong>.</p>
+        <p><strong>L’hypoaldostéronisme</strong> a des effets opposés et est accompagné d’une <strong>acidose métabolique</strong> avec <strong>hyperkaliémie</strong>.</p>
+        <div class="explication">
+            <h4>Explication : Le Lien Aldostérone / pH / Potassium</h4>
+            <p>C'est une triade clinique majeure : <strong>Aldostérone, H+ et K+</strong>.</p>
+            <p>L'aldostérone (hormone qui fait retenir le sel) a deux effets principaux sur le canal collecteur : elle fait <strong>sécréter du K+</strong> (potassium) et <strong>sécréter du H+</strong> (acide).</p>
+            <ul>
+                <li><strong>Hyperaldostéronisme (excès d'Aldo) :</strong> L'hormone fonctionne trop. Le rein sécrète trop de K+ (→ <strong>Hypokaliémie</strong>, manque de K+ dans le sang) et sécrète trop de H+ (→ <strong>Alcalose métabolique</strong>, manque d'acide dans le sang).</li>
+                <li><strong>Hypoaldostéronisme (manque d'Aldo) :</strong> L'hormone ne fonctionne pas. Le rein ne sécrète plus assez de K+ (→ <strong>Hyperkaliémie</strong>, excès de K+ dans le sang) et ne sécrète plus assez de H+ (→ <strong>Acidose métabolique</strong>, excès d'acide dans le sang).</li>
+            </ul>
+        </div>
+
+        <h3>Apports de sodium et volume extracellulaire</h3>
+        <p>L’augmentation chronique des apports de sodium et donc du volume extracellulaire augmente la quantité de sodium délivrée au canal collecteur et par conséquent la sécrétion d’H+ mais elle diminue en parallèle la sécrétion d’aldostérone si bien que l’effet résultant est une absence de changement de l’excrétion nette d’acide.</p>
+        <p>Une diminution chronique du volume extracellulaire par régime pauvre en NaCl augmente la sécrétion d’aldostérone, mais diminue la quantité de sodium délivrée au canal collecteur cortical.</p>
+        <p>Aussi, un sujet normal recevant un régime pauvre en NaCl ou riche en NaCl n’a pas de modification de l’état acide-base sanguin.</p>
+        
+        <h3>Apports de potassium</h3>
+        <p>Une surcharge en potassium, d’une part stimule la sécrétion d’aldostérone et donc la capacité de sécrétion d’ions H+ dans le canal collecteur, mais d’autre part diminue simultanément l’accumulation de NH3 dans la médullaire rénale, et donc la sécrétion de NH3 dans le canal collecteur, ce qui limite a sécrétion des ions H+ (et inversement en cas de régime pauvre en potassium). L’excrétion urinaire nette d’H+ est donc inchangée.</p>
+        <p>-Ainsi, chez le sujet normal, une augmentation ou une diminution chronique (sans déplétion potassique) des apports alimentaires de potassium ne modifie pas l’état acide-base sanguin.</p>
+        <p>Cependant, si la sécrétion d’aldostérone est diminuée et non stimulable (cas de l’insuffisance surrénale), on voit apparaître une hyperkaliémie et une acidose métabolique.</p>
+        <p>En cas de déplétion potassique (diminution du contenu de l’organisme en potassium=bilan négatif de potassium) la stimulation de H/K-ATPase augmentant la sécrétion d’H+ dans canal collecteur induisant une alcalose métabolique.</p>
+        <div class="explication">
+            <h4>Explication : Bilan Na+ et K+</h4>
+            <p>Le message principal est que, chez un sujet sain, les apports en sel (Na+) ou en potassium (K+) ne modifient pas le pH. Le corps a des mécanismes de compensation (l'aldostérone qui baisse quand on mange salé, par exemple) qui maintiennent l'équilibre.</p>
+            <p>Cependant, ces équilibres sont rompus en cas de maladie (insuffisance surrénale) ou de déplétion (vomissements, diarrhées), où l'on observe alors une <strong>alcalose métabolique hypokaliémique</strong> (manque d'acide et manque de potassium).</p>
+        </div>
+
+        <h3>Diurétiques</h3>
+        <p>L’administration d’<strong>acétazolamide</strong>, qui inhibe les anhydrases carboniques apicale et cellulaire du tubule proximal et de l’anse de Henle, diminue la réabsorption nette de bicarbonate et donc l’excrétion nette d’acide, ce qui favorise l’apparition d’une <strong>acidose métabolique</strong>.</p>
+        <div class="explication">
+            <h4>Explication : Acétazolamide (Diamox)</h4>
+            <p>Ce diurétique bloque l'enzyme (Anhydrase Carbonique) qui permet la réabsorption de HCO3- dans le tubule proximal. En bloquant la Mission 1 du rein, il provoque une fuite massive de bicarbonate dans l'urine. Perdre du bicarbonate (une base), c'est comme gagner un acide : le patient développe une acidose métabolique.</p>
+        </div>
+        
+        <p>Les <strong>diurétiques épargneurs de potassium, comme l’amiloride</strong>, inhibent la réabsorption de sodium par les cellules principales du canal collecteur cortical, diminuant ainsi indirectement la sécrétion d’ions H+, et donc l’excrétion nette d’acide avec apparition d’une <strong>acidose métabolique</strong> lorsqu’ils sont utilisés à dose excessive.</p>
+        <div class="explication">
+            <h4>Explication : Amiloride</h4>
+            <p>L'Amiloride bloque le canal ENaC (Cellule P). En bloquant la réabsorption de Na+, il annule la "négativité" de la lumière qui aide à "tirer" le H+ dehors. Moins de H+ sécrété = acidose métabolique. (C'est l'effet inverse de l'aldostérone).</p>
+        </div>
+
+        <h2>REPONSES A UNE CHARGE ACIDE OU ALCALINE</h2>
+        <h3>Réponse à une charge acide fixe</h3>
+        <p>La réponse à une charge acide fixe extrarénale implique plusieurs étapes :</p>
+        <ul>
+            <li>tamponnement de la charge acide dans le liquide extracellulaire ;</li>
+            <li>tamponnement dans le liquide intracellulaire et l’os ;</li>
+            <li>compensation respiratoire ;</li>
+            <li>augmentation de l’excrétion rénale d’acide.</li>
+        </ul>
+        <p>Tous ces mécanismes concourent à limiter l’augmentation de la concentration d’ions H+ plasmatique et donc l’abaissement du pH plasmatique.</p>
+        
+        <p>tampons intracellulaires et osseux.</p>
+        <p>La réponse ventilatoire minimise également la variation de pH plasmatique. Le poumon, en excrétant par les voies respiratoires le gaz carbonique, modifie la pCO2 du sang artériel. La régulation de la ventilation pulmonaire dépend de la PaO2, de la pCO2 et du pH artériel. Par mécanisme réflexe, <strong>par l’intermédiaire de chémorécepteurs aortiques, carotidiens et centraux, la baisse du pH sanguin entraine de façon instantanée une augmentation de la ventilation</strong> (et vice-versa) et donc une baisse de la pCO2. En moyenne, la pression partielle de CO2 chute de 1,2 mmHg pour une diminution d’une mmole de la concentration de bicarbonate plasmatique jusqu’à une valeur minimum de PCO2 de 10 à 15 mmHg.</p>
+        <div class="explication">
+            <h4>Explication : La Compensation Respiratoire</h4>
+            <p>Si vous avez une <strong>acidose métabolique</strong> (ex: acide lactique), votre pH sanguin baisse. Votre cerveau le détecte (via les chémorécepteurs) et vous ordonne de <strong>respirer plus vite</strong> (hyperventilation). Le but est d'expirer un maximum de CO2. En diminuant le CO2 (le pôle acide), vous compensez l'acidose métabolique et limitez la chute du pH. C'est la "compensation respiratoire".</p>
+        </div>
+        
+        <p>La réponse rénale à la charge acide fixe, en augmentant l’excrétion nette d’acide, minimise également la variation du pH plasmatique.</p>
+        <div class="image-placeholder">[Image : Graphique de la temporalité des réponses à une charge acide.
+        - Rouge (0-1h) : Tamponnement extracellulaire (immédiat).
+        - Bleu (0-8h) : Tamponnement cellulaire (rapide).
+        - Vert (0-24h) : Compensation respiratoire (rapide à mettre en place).
+        - Bleu clair (0-72h) : Excrétion rénale d'acide (très lente, prend 3 jours pour être maximale).]</div>
+        <div class="explication">
+            <h4>Explication du Graphique</h4>
+            <p>Ce graphique est essentiel. Il montre qui fait quoi et quand :</p>
+            <ul>
+                <li><strong>Secondes :</strong> Les tampons du sang (HCO3-) agissent immédiatement.</li>
+                <li><strong>Minutes/Heures :</strong> Les tampons cellulaires et la respiration prennent le relais.</li>
+                <li><strong>Jours (24-72h) :</strong> Le rein commence *enfin* son travail de correction.</li>
+            </ul>
+            <p>Le rein est le seul à *corriger* le problème (en éliminant l'acide), mais il est très lent. Les autres systèmes ne font que *tamponner* ou *compenser* en attendant.</p>
+        </div>
+
+        <p><strong>NB</strong> : lors d’une charge acide chronique, les systèmes tampons osseux sont mis à contribution de façon chronique et cela a pour conséquence une déminéralisation osseuse qu’il faut penser à rechercher en réalisant une ostéodensitométrie.</p>
+        
+        <div class="image-placeholder">[Image : Graphique de la réponse à une charge acide chronique (NH4Cl).
+        - Le HCO3- (Bicarbonate) plasmatique chute (de 25 à 18).
+        - Le pH urinaire chute (de 6.0 à 4.8).
+        - L'excrétion de NH4+ (UNH4+V) augmente massivement sur 6 jours.
+        - L'acidité titrable (UTA V) n'augmente presque pas.]</div>
+        <div class="explication">
+            <h4>Explication du Graphique</h4>
+            <p>Ce graphique montre ce qui se passe quand on donne un acide à une personne pendant plusieurs jours :</p>
+            <ul>
+                <li>Son bicarbonate sanguin (HCO3-) chute (elle est en acidose).</li>
+                <li>Son pH urinaire chute (le rein essaie d'acidifier l'urine).</li>
+                <li>Son "acidité titrable" (poubelle phosphate) n'augmente pas.</li>
+                <li>Son excrétion d'<strong>ammonium (NH4+)</strong> augmente de jour en jour.</li>
+            </ul>
+            <p><strong>Conclusion :</strong> Cela prouve que le mécanisme d'adaptation principal du rein à une acidose chronique est l'<strong>augmentation de l'ammoniogenèse</strong> (production de NH3/NH4+).</p>
+        </div>
+
+        <h3>Réponse à une charge alcaline fixe</h3>
+        <p>L’administration aiguë de NaHCO3 est responsable d’une excrétion urinaire nette de bicarbonate importante et immédiate avec un pH urinaire alcalin, ce qui indique une très grande capacité du rein à excréter une charge alcaline. Le seuil rénal d’excrétion de bicarbonate est atteint pour une concentration plasmatique de 26-28 mmol/L, valeur à peine supérieure à la normale. Au-dessus de cette valeur, la pente de la relation entre le bicarbonate excrété et le bicarbonate plasmatique devient rapidement linéaire et de pente 1, ce qui signifie que toute augmentation de bicarbonate filtré est excrétée dans l’urine. Ainsi, <strong>le comportement rénal du bicarbonate est caractérisé par l’existence d’une capacité limitée de réabsorption tubulaire d’environ 26 à 28 mmol/L de filtrat glomérulaire (TmHCO3/FG). Cette capacité limitée explique que le sujet normal est bien protégé contre le risque d’alcalose métabolique</strong>.</p>
+        <div class="explication">
+            <h4>Explication : Le Seuil Rénal du Bicarbonate</h4>
+            <p>Le rein est très fort pour gérer un excès de base (alcalose).</p>
+            <p>Le tubule proximal a une capacité *maximale* de réabsorption du bicarbonate (appelée le "Tm"). Cette capacité est réglée juste au-dessus de la valeur normale (vers 26-28 mmol/L).</p>
+            <ul>
+                <li>Si votre sang est normal (24 mmol/L), vous êtes *sous* le seuil. Le rein réabsorbe 100% du HCO3- et l'urine n'en contient pas.</li>
+                <li>Si vous prenez trop de bicarbonate (ex: 30 mmol/L), vous êtes *au-dessus* du seuil. Le rein réabsorbe son maximum (27) et tout ce qui dépasse (30 - 27 = 3) fuit dans l'urine.</li>
+            </ul>
+            <p>C'est un "trop-plein" automatique. C'est pour cela qu'il est très difficile de se mettre en alcalose métabolique durable quand on a des reins qui fonctionnent bien.</p>
+        </div>
+        
+        <div class="image-placeholder">[Image : Graphique du seuil rénal de bicarbonate.
+        - Ligne "filtré" : augmente linéairement avec le HCO3- plasmatique.
+        - Ligne "réabsorbé" (verte) : suit le "filtré" puis atteint un plateau (le "Tm") à 27-28.
+        - Ligne "excrété" (rouge) : est à 0, puis augmente pour tout ce qui dépasse le plateau de réabsorption.]</div>
+        
+        <div class="image-placeholder">[Image : Graphique de la réponse à une charge alcaline. Montre que dès que la charge commence (jour 0), le HCO3- urinaire augmente massivement et le pH urinaire devient alcalin (proche de 8), stabilisant le HCO3- plasma.]</div>
+        
+        <p>En situation aiguë, le canal collecteur cortical et médullaire participe également à l’excrétion de la charge de bicarbonate, l’augmentation du pH sanguin et donc péritubulaire inhibant la réabsorption de bicarbonate dans ce segment du néphron.</p>
+        <div class="explication">
+            <h4>Explication</h4>
+            <p>En cas d'alcalose, les cellules intercalaires B s'activent pour sécréter activement le HCO3- en excès.</p>
+        </div>
+
+        <h2>PHYSIOPATHOLOGIE DES ACIDOSES ET DES ALCALOSES</h2>
+        <p>Une acidose est une situation caractérisée par un bilan positif d’acide.</p>
+        <p>Ceci peut résulter d’une association variable de 3 mécanismes</p>
+        <ul>
+            <li>une augmentation des entrées d’acide, les entrées pouvant être endogènes (par la production cellulaire d’acide, par exemple acidocétose diabétique ou acidose lactique) ou exogènes (ingestion d’acide ou de substance dont le métabolisme génère un acide)</li>
+            <li>une diminution de la capacité d’élimination d’acide d’origine rénale (acidoses tubulaires ; insuffisance rénale) ou respiratoire (hypoventilation entrainant un défaut d’élimination du CO2)</li>
+            <li>une augmentation de perte d’alcalin (de base), par exemple lors des diarrhées ou des iléostomies.</li>
+        </ul>
+        <div class="image-placeholder">[Image : Schéma d'une balance déséquilibrée vers l'Acide, montrant les 3 mécanismes d'acidose.]</div>
+        <div class="explication">
+            <h4>Explication : Les 3 Causes d'Acidose</h4>
+            <p>On est en acidose si :</p>
+            <ol>
+                <li>On produit trop d'acide (ex: acidocétose, marathon).</li>
+                <li>On n'élimine plus l'acide (ex: insuffisance rénale, ou insuffisance respiratoire qui garde le CO2).</li>
+                <li>On perd des bases (ex: diarrhée, où l'on perd beaucoup de bicarbonate).</li>
+            </ol>
+        </div>
+
+        <h3>Physiopathologie des alcaloses</h3>
+        <p>Une alcalose est une situation caractérisée par un bilan positif d’alcalin.</p>
+        <p>Ceci peut résulter d’une association variable de 3 mécanismes</p>
+        <ul>
+            <li>une augmentation des entrées d’alcalin, les entrées pouvant être endogènes (par la libération de carbonate osseux, par exemple) ou exogènes</li>
+            <li>une diminution de la capacité rénale d’élimination d’alcalin (hyperaldostéronisme primaire)</li>
+            <li>une augmentation de perte d’acide d’origine digestive (vomissements) ou respiratoire (hyperventilation entrainant une élimination excessive de CO2)</li>
+        </ul>
+        <div class="image-placeholder">[Image : Schéma d'une balance déséquilibrée vers les Bases, montrant les 3 mécanismes d'alcalose.]</div>
+        <div class="explication">
+            <h4>Explication : Les 3 Causes d'Alcalose</h4>
+            <p>On est en alcalose si :</p>
+            <ol>
+                <li>On ingère trop de base (ex: Bicarbonate de soude).</li>
+                <li>Le rein n'élimine plus la base (rare, car le seuil de 27 est très efficace. Sauf en cas d'hyperaldostéronisme).</li>
+                <li>On perd de l'acide (ex: vomissements, où l'on perd l'acide HCl de l'estomac ; ou hyperventilation, où l'on perd l'acide CO2).</li>
+            </ol>
+        </div>
+
+        <h2>EN PRATIQUE (selon le CUEN de Néphrologie) :</h2>
+        <h3>Définition de l’acidémie et de l’alcalémie.</h3>
+        <div class="image-placeholder">[Image : Définitions
+        - Acidémie (acidose décompensée) : pH artériel < 7,38
+        - Alcalémie (alcalose décompensée) : pH artériel > 7,42
+        - Note : Un trouble mixte peut exister avec un pH normal (ex: acidose métabolique + alcalose respiratoire).]</div>
+        
+        <p>A noter que dans l’idéal, il faut prélever le sans sans air dans une seringue héparinée (seringue à gaz du sang) dans une artère plutôt qu’une veine pour mesurer le pH extracellulaire (artère radiale du poignet le plus souvent).</p>
+        <p>En plus du pH, la gazométrie permet également d’obtenir la PO2, la PCO2 et la [HCO3-], ces deux derniers paramètres étant nécessaires pour déterminer l’origine métabolique ou respiratoire de l’anomalie acidobasique.</p>
+        <p>Fasse à une modification du pH sanguin, on peut en effet déterminer l’origine métabolique ou respiratoire grâce au raisonnement ci-dessous.</p>
+        <p>L’équation d’Henderson-Hasselbalch montre que le pH varie quand le rapport entre PCO2 et HCO3- est modifié :</p>
+        <div class="explication">
+            <h4>Explication : Le Diagnostic (Gaz du Sang)</h4>
+            <p>En pratique, pour savoir ce qui se passe, on fait un "gaz du sang". On regarde 3 valeurs :</p>
+            <ol>
+                <li><strong>pH :</strong> Si < 7,38 (Acidose) ou > 7,42 (Alcalose).</li>
+                <li><strong>PCO2 (Pôle respiratoire/poumon) :</strong> Normal = 40.</li>
+                <li><strong>HCO3- (Pôle métabolique/rein) :</strong> Normal = 24.</li>
+            </ol>
+        </div>
+
+        <p>-Quand il y a une modification primitive de la PCO2, il y a alors alcalose (PCO2 basse) ou acidose (PCO2 élevée) <strong>respiratoire</strong>.</p>
+        <p>Lors d’une <strong>alcalose respiratoire</strong> , l’augmentation du pH sanguin est due à une baisse de la PCO2 (flèches rouges). Afin de limiter cette augmentation du pH, il est nécessaire de diminuer la [HCO3-] (flèche verte), ce qui est possible grâce à l’élimination rénale de HCO3- (réponse attendue).</p>
+        <div class="image-placeholder">[Image : Équation HH montrant pH ↑, PCO2 ↓ (primitif), HCO3- ↓ (compensation)]</div>
+        
+        <p>Lors d’une <strong>acidose respiratoire</strong> , la baisse du pH sanguin est due à une augmentation de la PCO2 (flèches rouges). Afin de limiter cette baisse du pH, il est nécessaire d’augmenter la concentration de [HCO3-] (flèche verte), ce qui est possible grâce à la génération compensatrice de HCO3- par le rein (réponse attendue).</p>
+        <div class="image-placeholder">[Image : Équation HH montrant pH ↓, PCO2 ↑ (primitif), HCO3- ↑ (compensation)]</div>
+
+        <p>-Quand il y a une modification primitive de la concentration des ions HCO3-, il y a alors alcalose ([HCO3-] élevé) ou acidose ([HCO3-] basse) <strong>métabolique</strong></p>
+        <p>Lors d’une <strong>alcalose métabolique</strong> , l’augmentation du pH sanguin est due à une augmentation de la [HCO3-] (flèches rouges). Afin de limiter cette augmentation du pH, il est nécessaire d’augmenter la PCO2 (flèche verte), ce qui est possible grâce à une hypoventilation alvéolaire (réponse respiratoire attendue).</p>
+        <div class="image-placeholder">[Image : Équation HH montrant pH ↑, HCO3- ↑ (primitif), PCO2 ↑ (compensation)]</div>
+        
+        <p>Lors d’une <strong>acidose métabolique</strong> , la baisse du pH sanguin est due à une diminution de la [HCO3-] (flèches rouges). Afin de limiter cette baisse du pH, il est nécessaire de diminuer la PCO2 (flèche verte), ce qui est possible grâce à une hyperventilation alvéolaire (réponse respiratoire attendue).</p>
+        <div class="image-placeholder">[Image : Équation HH montrant pH ↓, HCO3- ↓ (primitif), PCO2 ↓ (compensation)]</div>
+        
+        <div class="explication">
+            <h4>Explication : Raisonnement "Gaz du Sang"</h4>
+            <p>Le raisonnement est simple :</p>
+            <ol>
+                <li>Je regarde le <strong>pH</strong>. (Ex: pH 7,30 → Acidose).</li>
+                <li>Je cherche le <strong>coupable</strong> : qui va dans le même sens que le pH ? (Rappel : CO2 = acide, HCO3- = base).
+                    <ul>
+                        <li>Mon HCO3- est bas (ex: 18). Une baisse de base (HCO3-) explique une acidose. C'est donc une <strong>Acidose Métabolique</strong>.</li>
+                        <li>Mon PCO2 est élevée (ex: 50). Une hausse d'acide (CO2) explique une acidose. C'est donc une <strong>Acidose Respiratoire</strong>.</li>
+                    </ul>
+                </li>
+                <li>Je regarde l'autre paramètre, c'est la <strong>compensation</strong>.
+                    <ul>
+                        <li>Dans mon Acidose Métabolique (HCO3- bas), je m'attends à ce que les poumons compensent en hyperventilant. Je m'attends donc à un PCO2 bas. C'est la réponse attendue.</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <p>Comme expliqué ci-dessous une acidose métabolique est donc associée à un pH bas et à une [HCO3-] plasmatique basse (< 22 mmol/L).</p>
+        
+        <p>La deuxième étape après avoir fait le diagnostic d’une acidose métabolique est de savoir si la compensation respiratoire est adaptée ou pas.</p>
+        <p>En cas d’acidose métabolique simple, la baisse de la [HCO3-] entraine une baisse prévisible de la PCO2 estimée par la <strong>formule de Winter</strong> :</p>
+        <p><code>PaCO2 (mmHg) attendue = 1,5 x [HCO3-] + 8 ± 2</code></p>
+        
+        <p>Si PCO2> valeur calculée : suspecter un désordre acido-basique <strong>mixte</strong> associant une acidose respiratoire à l’acidose métabolique</p>
+        <p>Si PCO2< valeur calculée : suspecter un désordre acido-basique <strong>complexe</strong> associant une alcalose respiratoire à l’acidose métabolique</p>
+        <div class="explication">
+            <h4>Explication : La Formule de Winter</h4>
+            <p>La formule de Winter permet de vérifier si la compensation respiratoire est *appropriée*. On calcule la PCO2 "attendue" pour un certain niveau de HCO3-.</p>
+            <p>Ex: HCO3- = 14. PCO2 attendue = (1.5 * 14) + 8 = 21 + 8 = 29 (± 2).</p>
+            <ul>
+                <li>Si la PCO2 mesurée est bien à 29, le patient compense parfaitement. C'est une acidose métabolique simple.</li>
+                <li>Si la PCO2 mesurée est à 40 (trop haute), le patient ne respire pas assez. Il a *deux* problèmes : une acidose métabolique ET une acidose respiratoire. C'est un trouble mixte.</li>
+            </ul>
+        </div>
+        
+        <p>La troisième étape face à une acidose métabolique est d’effectuer le raisonnement suivant pour arriver à comprendre le mécanisme sous-jacent :</p>
+        <p>Détermination du <strong>trou anionique plasmatique</strong> :</p>
+        <p><code>[Na+] + [K+] + [cations indosés] = [Cl–] + [HCO3–] + [anions indosés]</code></p>
+        <p>Et donc que</p>
+        <p><code>[Na+] + [K+] – [Cl– + HCO3–] = [anions indosés] - [cations indosés] = Trou anionique plasmatique = 16 ± 4 mmol/L*</code></p>
+        <p>Il est aussi possible de raisonner sans tenir compte de la [K+], auquel cas,</p>
+        <p><code>[Na+] – [Cl– + HCO3–] = [anions indosés] - [cations indosés] = Trou anionique plasmatique = 12 ± 4 mmol/L*</code></p>
+        <p>*Le trou anionique plasmatique est positif car il existe physiologiquement plus d’anions indosés que de cations indosés.</p>
+        
+        <p>Les variations de TA vont permettre d’évaluer si l’anion accompagnant l’H+ en excès (donc la perte de HCO3–) est le chlore (anion dosé) ou des anions indosés.</p>
+        <div class="explication">
+            <h4>Explication : Le Trou Anionique (TA)</h4>
+            <p>Le Trou Anionique (TA) est un calcul fondamental pour trouver la *cause* d'une acidose métabolique. Le sang doit être électriquement neutre : il y a autant de charges + (Cations) que de charges - (Anions).</p>
+            <p>TA = (Cations mesurés) - (Anions mesurés) = (Na+) - (Cl- + HCO3-). Normal = 12.</p>
+            <p>Ce "trou" représente les anions qu'on ne mesure pas (protéines, phosphates, sulfates...).</p>
+        </div>
+
+        <p><strong>Acidose avec trou anionique normal (gain d’HCl) :</strong> perte rénale ou digestive de HCO3–→ baisse du HCO3– compensée par une augmentation proportionnelle du Cl– (gain d’HCl) → <strong>acidose métabolique hyperchlorémique</strong>.</p>
+        <div class="explication">
+            <h4>Explication : TA Normal (Hyperchlorémique)</h4>
+            <p>Le patient est en acidose (son HCO3- a chuté). Mais son TA est normal (à 12).</p>
+            <p>Si TA = Na - (Cl + HCO3-), et que HCO3- a baissé, la seule façon pour que le TA reste normal est que le <strong>Chlore (Cl-) ait augmenté</strong> pour compenser. C'est une acidose "hyperchlorémique".</p>
+            <p><strong>Cause :</strong> Perte de Bicarbonate. Soit par les intestins (diarrhée), soit par le rein (acidose tubulaire). Le corps remplace le HCO3- perdu par du Cl- pour garder la neutralité.</p>
+        </div>
+        
+        <p><strong>Acidose avec trou anionique élevé (TA > 20 mmol/L) :</strong> addition d’H+ associé à un anion indosé (gain d’AH) → Baisse de [HCO3–] remplacée par un anion non mesuré. Par exemple le lactate, le β-hydroxy butyrate (CH3-CHOH-CH2-COO-) et l’acétoacétate (CH3-CO-CH2-COO-) dans l’acidocétose diabétique, TA secondaire à l’accumulation des anions non éliminés par le rein (acide organique, phosphate, sulfate…) en cas d’insuffisance rénale, intoxication avec un acide exogène (salicylate, éthylène glycol, méthanol ).</p>
+        <div class="explication">
+            <h4>Explication : TA Élevé</h4>
+            <p>Le patient est en acidose (son HCO3- a chuté). Mais son Cl- est normal. Quand on calcule le TA, il est élevé (ex: 25).</p>
+            <p><strong>Cause :</strong> Production d'un acide "fixe" (AH). L'acide (H+) a consommé le HCO3-. Mais l'anion (A-) qui l'accompagnait (ex: Lactate, corps cétoniques...) n'est ni du chlore, ni du bicarbonate. C'est un "anion indosé". Il s'accumule dans le sang et fait augmenter le trou anionique.</p>
+            <p><strong>Causes typiques :</strong> Acidocétose, Acidose lactique, Insuffisance rénale (les acides fixes ne sont plus éliminés), Intoxications.</p>
+        </div>
+        
+        <div class="image-placeholder">[Image : Schémas de "Gamblegrammes" montrant :
+        - Normale : Na+ (140) = Cl- (106) + HCO3- (24) + TA (10).
+        - TA Normal : Na+ (140) = Cl- (126) + HCO3- (4) + TA (10). Le Cl- a augmenté.
+        - TA Élevé : Na+ (140) = Cl- (106) + HCO3- (4) + TA (30). Le TA a augmenté.]</div>
+        
+        <p>Devant une acidose métabolique hyperchlorémique (TA plasmatique normal), il faut ensuite déterminer si la réponse rénale est adaptée ou non, autrement dit si l’acidose est d’origine rénale ou extra rénale.</p>
+        <p>La principale forme d’élimination rénale des protons (H+ ) en excès est l’ion ammonium (NH4+). C’est en outre la forme adaptable d’élimination d’acide (autrement dit, en cas de charge acide, la réponse rénale attendue est l’augmentation de l’excrétion de NH4 + ). En cas d’acidose à TA plasmatique normal, la réponse rénale peut être évaluée par le calcul du <strong>trou anionique urinaire</strong> qui est le reflet (inverse) de l’ammoniurie.</p>
+        <p><strong>TAu = [Na+]u + [K+]u – [Cl–]u</strong></p>
+        <p>Physiologiquement le TAu est discrètement positif.</p>
+        <p>En situation d’acidose métabolique à TA plasmatique normal :</p>
+        <ul>
+            <li>si le <strong>TAu est < 0</strong> (= concentration de NH4 urinaire élevée = réponse rénale adaptée) → <strong>origine extrarénale</strong> de l’acidose (perte digestive de bicarbonate) ;</li>
+            <li>si le <strong>TAu est > 0</strong> (= concentration de NH4+ urinaire basse = réponse rénale inadaptée) → <strong>origine tubulaire rénale</strong> .</li>
+        </ul>
+        <div class="explication">
+            <h4>Explication : Le Trou Anionique Urinaire (TAu)</h4>
+            <p>On a une acidose à TA normal (hyperchlorémique). On sait que c'est une perte de HCO3-. Mais est-ce le <strong>rein</strong> qui fuit ou l'<strong>intestin</strong> (diarrhée) ?</p>
+            <p>On regarde la réponse du rein en mesurant le **Trou Anionique Urinaire**.</p>
+            <p>L'ammonium (NH4+) est un cation (+). Mais on ne le mesure pas. On le déduit. L'urine doit être neutre : (Na+ + K+ + NH4+) = (Cl-). Donc : <strong>NH4+ ≈ Cl- - (Na+ + K+)</strong>.</p>
+            <p>Le TAu est <code>(Na+ + K+) - Cl-</code>. C'est donc <strong>l'inverse</strong> de l'ammoniurie (<code>-NH4+</code>).</p>
+            <ul>
+                <li><strong>Cas 1 : Diarrhée.</strong> Le rein fonctionne bien. Face à l'acidose, il augmente massivement sa production de NH4+ pour éliminer l'acide. Le NH4+ urinaire est donc très élevé. L'urine est pleine de NH4+ et de Cl-. Le TAu <code>(Na+K+) - Cl-</code> devient très <strong>négatif (< 0)</strong>. C'est la <strong>réponse rénale adaptée</strong>.</li>
+                <li><strong>Cas 2 : Acidose tubulaire rénale.</strong> Le rein est malade. Il *n'arrive pas* à produire de NH4+ ou à sécréter des H+. Le NH4+ urinaire est donc bas. Le TAu reste <strong>positif (> 0)</strong>. C'est la <strong>réponse rénale inadaptée</strong>.</li>
+            </ul>
+        </div>
+        
+        <div class="image-placeholder">[Image : Arbre décisionnel final de l'acidose.
+        1. Acidémie (pH < 7,38)
+        2. Regarder PCO2 et HCO3- → Acidose respiratoire (PCO2 > 42) ou Métabolique (HCO3- < 22).
+        3. Si Métabolique → Calculer TA plasmatique.
+        4. Si TA > 20 → Acidose lactique, Acidocétose, Insuffisance rénale.
+        5. Si TA ≤ 20 (hyperchlorémique) → Calculer TAu.
+        6. Si TAu < 0 → Pertes digestives (réponse rein OK).
+        7. Si TAu > 0 → Acidoses tubulaires (réponse rein KO).]</div>
+    </div>
+</body>
+</html>
+
