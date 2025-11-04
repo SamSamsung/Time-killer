@@ -997,3 +997,34 @@ li {
     /* Caché par défaut */
     display: none; 
 }
+/* ================================================= */
+/* == STYLE MODERNE POUR LA BOÎTE "NOTE" == */
+/* ================================================= */
+
+#note-box-stacked {
+    /* On utilise flexbox pour centrer verticalement */
+    display: flex;
+    flex-direction: column; /* Met les éléments l'un sur l'autre */
+    align-items: center;    /* Centre horizontalement */
+    justify-content: center; /* Centre verticalement */
+    
+    padding-top: 12px;    /* Plus d'espace pour le nouveau look */
+    padding-bottom: 12px;
+}
+
+.note-emoji-stacked {
+    font-size: 40px;  /* Un gros émoji */
+    line-height: 1;   /* Réduit l'espace de ligne */
+}
+
+.note-number-stacked {
+    font-size: 15px;        /* Petit texte */
+    font-weight: 600;       /* Semi-gras */
+    color: #555;            /* Gris foncé (pas noir) */
+    margin-top: 5px;        /* Espace entre l'émoji et le texte */
+    
+    /* Ajoute un petit fond "pilule" */
+    background-color: rgba(0,0,0,0.05);
+    padding: 2px 8px;
+    border-radius: 12px;
+}

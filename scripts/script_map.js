@@ -378,7 +378,10 @@ function getPopupContent(markerData, userData, key, allComments) {
         <div class="popup-images">${popuptexte}</div>
         
         <p class="header_popup">Note</p>
-        <p class="popup-data-box">${note_emoji} - ${note_num}/10</p>
+        <div class="popup-data-box" id="note-box-stacked">
+            <span class="note-emoji-stacked">${note_emoji}</span>
+            <span class="note-number-stacked">${note_num}/10</span>
+        </div>
         
         <p class="header_popup">Les commentaires (du créateur)</p>
         <p class="popup-data-box">${markerData.commentaires || ''}</p>
