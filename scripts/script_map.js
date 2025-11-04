@@ -777,34 +777,35 @@ function loginWithGoogle() {
             const firebaseUser = result.user;
             const additionalInfo = window.getAdditionalUserInfo(result);
             const googleProfile = additionalInfo.profile;
-            const googleProfileName = googleProfile.given_name || googleProfile.name.split(' ')[0];
 
             // On compare le nom en cache de Firebase avec le nom frais de Google
-            if (firebaseUser.displayName !== googleProfileName) {
+            if (firebaseUser.photoURL !== googleProfile.picture) {
                 
-                console.warn("Mise à jour du profil Firebase !");
-                console.log(`Ancien nom (cache) : ${firebaseUser.displayName}`);
-                console.log(`Nouveau nom (Google) : ${googleProfileName}`);
+                console.warn("Mise à jour de la photo de profil (Firebase Auth)...");
+                console.log("La photo Google a changé, on la synchronise.");
 
-                // On force la mise à jour du profil Firebase
-                // (On met aussi à jour la photo, au cas où)
+                // On force la mise à jour de la photo dans Firebase AUTHENTICATION
+                // On NE TOUCHE PAS au displayName, pour préserver le pseudo !
                 await window.updateProfile(firebaseUser, {
-                    displayName: googleProfileName,
-                    photoURL: additionalInfo.profile.picture 
+                    photoURL: googleProfile.picture 
                 });
                 
-                console.log("Profil Firebase mis à jour avec succès.");
-                
-                // On recharge la page pour que "updateUI" s'exécute
-                // avec le bon nom partout.
-                window.location.reload();
+                console.log("Photo de profil (Auth) mise à jour.");
             }
 
             // Si les noms sont déjà identiques, on ferme simplement le popup
             login_pop_up_close();
         })
         .catch((error) => {
-            console.error("Erreur de connexion :", error);
+            if (error.code === 'auth/admin-restricted-operation') {
+                console.warn("Tentative de connexion bloquée (admin-restricted-operation) :", error.customData.email);
+                alert("Accès refusé. Votre compte n'est pas autorisé pour cette application. Veuillez contacter l'administrateur pour obtenir un accès.");
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                console.log("Connexion annulée par l'utilisateur.");
+            } else {
+                console.error("Erreur de connexion inconnue :", error);
+                alert("Une erreur est survenue lors de la connexion. Veuillez réessayer.");
+            }
         });
 }
 
@@ -837,41 +838,79 @@ function login_pop_up_close() {
 // Mettre à jour l'UI en fonction de l'état de connexion
 function updateUI(user) {
     if (user) {
-        // Utilisateur connecté
-        const displayName = user.displayName || "Utilisateur inconnu";
-        const email = user.email || "Aucun email";
-        const photoURL = user.photoURL || "./icons_map/default-avatar.png"; // URL de la photo de profil
-
-        console.log("Nom:", displayName);
-        console.log("Email:", email);
-        console.log("Photo:", photoURL);
-
+        // --- 1. L'UTILISATEUR EST CONNECTÉ ---
+        
+        // On cible le profil de l'utilisateur dans /users/
         const userRef = ref(db, `users/${user.uid}`);
-        const userData = {
-            displayName: displayName,
-            email: email,
-            photoURL: photoURL,
-            displayName_lowercase: displayName.toLowerCase(),
-            // On ajoute la valeur par défaut pour satisfaire la règle .validate
-            chosen_color: "google"
-        };
 
-        set(userRef, userData);
+        // On lance la première promesse : lire le profil
+        get(userRef).then((userSnapshot) => {
 
-        // Activer la carte
-        document.getElementById('map').removeAttribute('disabled');
-        document.getElementById('logout-button').style.display = 'flex';
-        document.getElementById('friends-button').style.display = 'flex';
-        loadMarkers(); // Charger les marqueurs de l'utilisateur
+            if (userSnapshot.exists()) {
+                // --- 2. UTILISATEUR CONNU (Login normal) ---
+                console.log("Utilisateur connu, synchronisation de la photoURL...");
+                
+                // On lance la deuxième promesse : mettre à jour la photo
+                update(userRef, {
+                    photoURL: user.photoURL
+                }).then(() => {
+                    // Une fois la mise à jour terminée, on charge l'app
+                    loadApp(user);
+                }); // (on pourrait ajouter un .catch ici si on voulait)
+
+            } else {
+                // --- 3. NOUVEL UTILISATEUR ! (Premier login) ---
+                console.log("Nouvel utilisateur ! Création du profil...");
+                
+                const firstName = user.displayName.split(' ')[0] || "Nouvel utilisateur";
+                
+                const userData = {
+                    displayName: firstName,
+                    displayName_lowercase: firstName.toLowerCase(),
+                    email: user.email,
+                    photoURL: user.photoURL,
+                    chosen_color: "google" // Valeur par défaut
+                };
+                
+                // On lance la deuxième promesse : créer l'utilisateur
+                set(userRef, userData).then(() => {
+                    // Une fois la création terminée, on charge l'app
+                    loadApp(user);
+                }); // (on pourrait ajouter un .catch ici)
+            }
+
+        }).catch((error) => {
+            // Ce .catch() gère les erreurs de LECTURE (get)
+            console.error("Erreur lors de la lecture du profil utilisateur :", error);
+        });
+        
     } else {
-        // Désactiver la carte et afficher le popup
+        // --- 4. L'UTILISATEUR EST DÉCONNECTÉ ---
         document.getElementById('map').setAttribute('disabled', 'true');
         document.getElementById('logout-button').style.display = 'none';
         document.getElementById('friends-button').style.display = 'none';
-        show_login_popup(); // Afficher le popup de connexion
+        if (document.getElementById('profile-button')) {
+             document.getElementById('profile-button').style.display = 'none';
+        }
+        show_login_popup(); 
     }
 }
 
+
+/**
+ * Active l'interface utilisateur et charge les marqueurs.
+ * Appelé SEULEMENT après que updateUI ait vérifié/créé le profil.
+ */
+function loadApp(user) {
+    // 1. Activation de l'interface
+    document.getElementById('map').removeAttribute('disabled');
+    document.getElementById('logout-button').style.display = 'flex';
+    document.getElementById('friends-button').style.display = 'flex';
+    document.getElementById('profile-button').style.display = 'flex';
+    
+    // 2. Chargement de la carte
+    loadMarkers();
+}
 
 
 // Écouteur pour le bouton de connexion Google
