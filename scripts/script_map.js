@@ -919,6 +919,8 @@ function loadApp(user) {
     
     // 2. Chargement de la carte
     loadMarkers();
+
+    updateFriendRequestCount();
 }
 
 
@@ -1129,6 +1131,8 @@ async function acceptFriendRequest(friendId, friendName) {
     loadCurrentFriends();
     loadPendingRequests();
     searchUsers(); // Rafraîchir aussi la recherche si elle est ouverte
+
+    updateFriendRequestCount();
 }
 
 async function declineFriendRequest(friendId, friendName) {
@@ -1145,6 +1149,8 @@ async function declineFriendRequest(friendId, friendName) {
 
     alert(`Demande de ${friendName} refusée.`);
     loadPendingRequests(); // Rafraîchir la liste des demandes
+
+    updateFriendRequestCount();
 }
 
 async function removeFriend(friendId, friendName) {
@@ -1163,6 +1169,46 @@ async function removeFriend(friendId, friendName) {
     loadCurrentFriends(); // Rafraîchir la liste d'amis
 }
 
+/**
+ * Compte les demandes d'amis en attente et met à jour le badge.
+ */
+function updateFriendRequestCount() {
+    // Sécurité : ne rien faire si on n'est pas connecté
+    if (!window.auth || !window.auth.currentUser) {
+        return;
+    }
+    
+    const currentUserId = window.auth.currentUser.uid;
+    const badge = document.getElementById('friend-request-badge');
+    
+    const friendsRef = ref(db, `friendships/${currentUserId}`);
+
+    get(friendsRef).then((snapshot) => {
+        let pendingCount = 0;
+        
+        if (snapshot.exists()) {
+            const relations = snapshot.val();
+            // On compte combien de relations sont "pending"
+            for (const friendId in relations) {
+                if (relations[friendId] === "pending") {
+                    pendingCount++;
+                }
+            }
+        }
+        
+        // On met à jour le badge
+        if (pendingCount > 0) {
+            badge.innerText = pendingCount;
+            badge.style.display = 'flex'; // On le montre
+        } else {
+            badge.style.display = 'none'; // On le cache
+        }
+        
+    }).catch(error => {
+        console.error("Erreur lors de la mise à jour du compteur d'amis :", error);
+        badge.style.display = 'none'; // Cacher en cas d'erreur
+    });
+}
 
 
 // --- Fonctions d'affichage des listes ---

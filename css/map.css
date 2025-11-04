@@ -962,3 +962,38 @@ li {
 .profile-attribution a:hover {
     text-decoration: underline; /* On souligne au survol */
 }
+
+/* ================================================= */
+/* == STYLE POUR LE BADGE DE NOTIFICATION (AMIS) == */
+/* ================================================= */
+
+/* 1. On doit dire au bouton qu'il peut contenir des éléments en position absolue */
+#ui-container button {
+    position: relative; /* C'est la clé */
+}
+
+/* 2. On style le badge lui-même */
+.notification-badge {
+    position: absolute; /* Se positionne par-dessus le bouton */
+    top: 10px;  /* Ajustez ces valeurs pour le placer où vous voulez */
+    right: 15px; /* Ajustez ces valeurs */
+    
+    background-color: #EA4335; /* Rouge vif (style Google) */
+    color: white;
+    
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    
+    /* Pour centrer le chiffre */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    border-radius: 50%; /* Le rend rond */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    
+    /* Caché par défaut */
+    display: none; 
+}
