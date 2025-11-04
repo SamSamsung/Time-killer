@@ -24,8 +24,17 @@ const ICON_COLOR_MAP = {
     "google": null // Cas spécial pour la photo de profil Google
 };
 // =================================================
+// On définit les "coins" du monde
+var coinSudOuest = L.latLng(-90, -180);
+var coinNordEst = L.latLng(90, 180);
+var limitesMonde = L.latLngBounds(coinSudOuest, coinNordEst);
 
-var map = L.map('map');
+var map = L.map('map', {
+    worldCopyJump: true,
+    maxBounds: limitesMonde, // <-- La nouvelle option
+    maxBoundsViscosity: 1.0,   // Force la limite (1.0 = mur solide)
+    minZoom: 3,  // <-- Empêche de trop dézoomer
+});
 
 // Ajouter le contrôle de géocodage à la carte
 L.Control.geocoder().addTo(map);
