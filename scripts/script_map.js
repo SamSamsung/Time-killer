@@ -851,7 +851,9 @@ function updateUI(user) {
             displayName: displayName,
             email: email,
             photoURL: photoURL,
-            displayName_lowercase: displayName.toLowerCase()
+            displayName_lowercase: displayName.toLowerCase(),
+            // On ajoute la valeur par défaut pour satisfaire la règle .validate
+            chosen_color: "google"
         };
 
         set(userRef, userData);
