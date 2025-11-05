@@ -1028,3 +1028,50 @@ li {
     padding: 2px 8px;
     border-radius: 12px;
 }
+
+/* ================================================= */
+/* == STYLES RESPONSIVES (POUR PETITS APPAREILS) == */
+/* ================================================= */
+
+/* S'applique à tous les écrans de 600px de large ou moins */
+@media (max-width: 600px) {
+
+    /* 1. On repositionne le conteneur */
+    #ui-container {
+        /* On le centre en bas */
+        left: 50%;
+        bottom: 10px;
+        transform: translateX(-50%); /* Astuce pour centrer horizontalement */
+        
+        /* On le passe en LIGNE (horizontal) */
+        flex-direction: row;
+        
+        /* On ajuste l'espacement et le padding */
+        gap: 8px;
+        padding: 8px;
+        border-radius: 12px; /* On peut réduire un peu les coins */
+    }
+
+    /* 2. On modifie les boutons */
+    #ui-container button {
+        /* On les rend carrés et plus petits */
+        width: 44px;
+        height: 44px;
+        min-width: unset; /* On annule la largeur minimum */
+        padding: 10px; /* Espace pour l'icône */
+        border-radius: 10px;
+    }
+
+    /* 3. ON CACHE LE TEXTE */
+    #ui-container button span {
+        display: none;
+    }
+
+    /* 4. On réinitialise les marges de l'icône */
+    #ui-container button img {
+        margin-right: 0;
+        margin-bottom: 0;
+        width: 22px;  /* On peut les rendre un peu plus grandes */
+        height: 22px;
+    }
+}
