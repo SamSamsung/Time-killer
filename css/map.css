@@ -873,6 +873,10 @@ li {
     font-weight: bold;
     line-height: 18px; /* Centre le "×" */
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1074,4 +1078,47 @@ li {
         width: 22px;  /* On peut les rendre un peu plus grandes */
         height: 22px;
     }
+}
+
+/* ================================================= */
+/* == STYLE POUR LE BOUTON "X" DES POPUPS == */
+/* ================================================= */
+
+.close-popup-button {
+    /* Positionnement */
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10; /* S'assure qu'il est au-dessus du contenu */
+    
+    /* Apparence */
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    
+    background-color: #f0f0f0; /* Gris clair */
+    border: none;
+    border-radius: 50%; /* Le rend rond */
+    
+    /* Le "X" */
+    color: #888; /* Couleur du X */
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    
+    /* Interaction */
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-popup-button:hover {
+    background-color: #EA4335; /* Le même rouge que votre bouton "Annuler" */
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Assure que le bouton ne gêne pas le premier titre */
+.pop_up p.header_popup:first-child {
+    margin-top: 10px; /* Ajoute un peu d'espace en haut */
 }
