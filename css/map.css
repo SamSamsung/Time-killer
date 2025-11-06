@@ -1,9 +1,11 @@
+/* ================================================= */
+/* == CSS DE BASE (Global) == */
+/* ================================================= */
 html, body {
-    margin: 0;  /* Annule la marge par défaut */
-    padding: 0; /* Annule l'espacement intérieur par défaut */
-    background-color: #f0f2f5; /* Un gris très clair et neutre */
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
 }
-
 
 #map { 
     height: 100vh;
@@ -11,29 +13,370 @@ html, body {
     position: relative;
 }
 
+#map[disabled] {
+    pointer-events: none;
+    opacity: 0.3;
+    filter: grayscale(100%);
+}
 
+/* ================================================= */
+/* == STYLES DE L'UI PRINCIPALE (Boutons, Marqueurs) == */
+/* ================================================= */
 
+/* --- Conteneur UI (en bas à gauche) --- */
+#ui-container {
+    position: absolute;
+    bottom: 15px; 
+    left: 15px;
+    z-index: 1001; /* Reste au-dessus des contrôles Leaflet */
+    display: flex;
+    flex-direction: column; 
+    background-color: rgba(255, 255, 255, 0); 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    gap: 15px; 
+    padding: 15px;
+    border-radius: 16px; 
+}
 
+/* Boutons dans le conteneur UI */
+#ui-container button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;     
+    justify-content: center; 
+    padding: 16px 20px; 
+    min-width: 110px;   
+    background-color: white; 
+    border: none;
+    cursor: pointer;
+    border-radius: 10px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+    position: relative; /* Pour le badge */
+}
+#ui-container button:hover {
+    background-color: #f9f9f9;
+    transform: translateY(-2px);
+}
+#ui-container button img {
+    width: 24px;  
+    height: 24px;
+    margin-right: 0;   
+    margin-bottom: 8px;
+    opacity: 0.7;
+}
+#ui-container button span {
+    font-size: 13px; 
+    font-weight: 500;
+    color: #333;
+}
+#friends-button[style*="display: none"],
+#logout-button[style*="display: none"] {
+    display: none !important;
+}
 
-/* Conteneur pour les images */
-.popup-images {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
-    gap: 5px; /* Espacement entre les images */
+/* --- Badge de notification (sur bouton Amis) --- */
+.notification-badge {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background-color: #EA4335;
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    display: none; 
+}
+
+/* --- Marqueurs de Profil (sur la carte) --- */
+.profile-marker-container {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(45deg, #4285F4, #9b59b6);
+    padding: 3px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.profile-marker-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.profile-marker {
+    border: none !important;
+    background: transparent !important;
+}
+
+/* ================================================= */
+/* == STYLES DES POPUPS LEAFLET (Sur la carte) == */
+/* ================================================= */
+
+/* --- Conteneur du popup Leaflet --- */
+.leaflet-popup-content-wrapper {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.85);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0;
+}
+.leaflet-popup-content {
+    width: 300px !important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 14px 18px;
+    margin: 0 !important;
+}
+.leaflet-popup-tip-container {
+    display: none;
+}
+.leaflet-popup-content p {
     margin: 0;
+}
+
+/* --- Contenu des popups Leaflet (Titres & Boîtes de données) --- */
+/* --- Contenu des popups Leaflet (Titres & Boîtes de données) --- */
+.leaflet-popup-content .header_popup {
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 16px; 
+    margin-bottom: 4px;
+    text-align: center; /* <-- CORRECTION : On recentre les titres */
+}
+.leaflet-popup-content .header_popup:first-child {
+    margin-top: 0;
+}
+/* On centre aussi le texte des boîtes de données (comme "Admin", "11/06/2025") */
+.leaflet-popup-content .header_popup + p {
+    font-size: 15px;
+    color: #111;
+    font-weight: 500;
+    text-align: center; /* <-- CORRECTION : On recentre le contenu */
+}
+.leaflet-popup-content .popup-images {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    
+    /* C'est la correction : on met un 'gap' plus grand */
+    gap: 8px; /* <-- J'ai augmenté l'espace (5px -> 8px) */
+    
+    /* On centre la grille */
+    justify-items: center; 
+    
+    margin-top: 10px; /* Un peu plus d'espace */
+    margin-bottom: 10px;
     padding: 0;
     list-style: none;
 }
 
-/* Style pour chaque image */
-.popup-images img {
+/* --- NOUVEAU : Taille des images de position (dans popup Leaflet) --- */
+.leaflet-popup-content .popup-images img {
     width: 50px;
-    height: 50px; /* Hauteur fixe pour les images */
-    object-fit: cover; /* Pour que les images remplissent bien leur espace */
+    height: 50px; 
+    object-fit: cover; 
     border-radius: 4px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
+.leaflet-popup-content .header_popup:last-child {
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+.leaflet-popup-content p.popup-data-box {
+    background-color: rgba(245, 245, 247, 0.7); 
+    padding: 10px 14px;
+    margin-top: 5px;
+    margin-bottom: 0; 
+    border-radius: 8px;
+    font-size: 15px; 
+    font-style: normal;
+    font-weight: 500;   
+    color: #111;
+    line-height: 1.4;
+    border: 1px solid rgba(255, 255, 255, 0.4); 
+    word-break: break-word; 
+}
+.leaflet-popup-content p.popup-data-box:empty {
+    display: none; 
+}
+
+/* --- Boutons d'action (dans popups Leaflet) --- */
+.popup-actions-container {
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    margin-top: 10px;
+}
+.popup-action-button {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+.popup-action-button:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+.popup-action-button img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    filter: invert(0.2);
+}
+.popup-action-button[title="Modifier"]:hover {
+    background-color: #cceeff;
+}
+.popup-action-button[title="Supprimer"]:hover {
+    background-color: #ffcccc;
+}
+.popup-action-button[title="Ajouter un commentaire"]:hover {
+    background-color: #ccffcc;
+}
+
+/* --- Bouton Suppr. Commentaire (Admin) --- */
+.comment-delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    color: #888;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.comment-delete-button:hover {
+    background-color: #EA4335;
+    color: white;
+    border-color: #d00;
+    transform: scale(1.1);
+}
+
+/* ================================================= */
+/* == STYLES DES POPUPS (Formulaires pleine page) == */
+/* ================================================= */
+
+/* --- Système de Popup Unifié (Base) --- */
+#overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, .5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease-in-out;
+    z-index: 1002; 
+}
+#overlay.show {
+    opacity: 1;
+    pointer-events: all;
+}
+.pop_up {
+    /* Apparence */
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 10px;
+    
+    /* Taille */
+    width: 90%;
+    max-width: 500px;
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1003; 
+    
+    /* Position Desktop */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    
+    /* État caché (Desktop) */
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+    pointer-events: none;
+    
+    transition: opacity 200ms ease-in-out, transform 200ms ease-in-out;
+
+    /* CORRECTION : Centrage par défaut pour #informations, #comments, #login-popup */
+    text-align: center;
+}
+.pop_up.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    pointer-events: all;
+}
+/* CORRECTION : Alignement gauche pour les popups "modernes" */
+#friends-popup,
+#profile-popup {
+    text-align: left;
+    padding: 20px; /* <-- AJOUTE CETTE LIGNE (le "pudding") */
+    box-sizing: border-box; /* <-- AJOUTE CELLE-CI (pour que le padding ne casse pas la largeur) */
+}
+
+#friends-popup h2, #friends-popup h3,
+#profile-popup h2, #profile-popup h3 {
+    text-align: center;
+}
+
+/* --- Bouton "X" (dans les popups) --- */
+.close-popup-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    color: #888;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.close-popup-button:hover {
+    background-color: #EA4335;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* --- Boutons de formulaire (Verif/Popup) --- */
 .verif_button {
     padding: 10px 20px;
     margin: 5px;
@@ -41,7 +384,6 @@ html, body {
     border-radius: 5px;
     cursor: pointer;
 }
-
 .popup-button{
     padding: 10px 10px;
     margin: 5px;
@@ -50,52 +392,46 @@ html, body {
     cursor: pointer;
 }
 
-.pop_up {
-    text-align: center;
-    width: 50%;
-    transform: translate(-50%, 30%) scale(0);
-    height: auto;
+/* --- Contenu #informations (Formulaire Multi-étapes) --- */
+.header_popup {
+    font-weight: bold;
 }
-
-
-.pop_up.active#informations{
-    transform: translate(-50%, -50%) scale(1);
-    top: 50%;
-
-    height: auto;
-    width: 90%;
-    max-width: 500px;
-    padding: 20px;
+#informations .form-page {
+    display: none;
 }
-
-.pop_up.active#comments{
-    transform: translate(-50%, -50%) scale(1.5);
+#informations .form-page.active-page {
+    display: block;
 }
-
+.form-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+#informations .form-page .header_popup:first-child {
+    margin-top: 15px; 
+}
+/* Checkboxes (Positions) */
 li {
     display: inline-block;
-  }
-  
-  input[type="checkbox"][class^="cb"] {
+}
+input[type="checkbox"][class^="cb"] {
     display: none;
-  }
-  
-  label {
+}
+label {
     border: 1px solid #fff;
     padding: 10px;
     display: block;
     position: relative;
     margin: 10px;
     cursor: pointer;
-    -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-  }
-  
-  label::before {
+}
+label::before {
     background-color: white;
     color: white;
     content: " ";
@@ -111,177 +447,104 @@ li {
     line-height: 28px;
     transition-duration: 0.4s;
     transform: scale(0);
-  }
-  
-  label img {
+}
+label img {
     height: 51px;
     width: 51px;
     transition-duration: 0.2s;
     transform-origin: 50% 50%;
-  }
-  
-  :checked+label {
+}
+:checked+label {
     border-color: #ddd;
-  }
-  
-  :checked+label::before {
+}
+:checked+label::before {
     content: "✓";
     background-color: green;
     transform: scale(1);
-  }
-  
+}
 :checked+label img {
     transform: scale(0.9);
     box-shadow: 0 0 5px #333;
     z-index: -1;
 }
-
-/* ================================================= */
-/* == STYLE UI (Votre idée: Parent flou + 3 boutons opaques) == */
-/* ================================================= */
-
-/* Le conteneur UI (style de l'image) */
-#ui-container {
-    position: absolute;
-    bottom: 15px; 
-    left: 15px;
-    z-index: 1001; /* Reste au-dessus des contrôles Leaflet */
-    
-    display: flex;
-    flex-direction: column; /* Pile verticale */
-    
-    /* --- C'EST LA PARTIE PARENT FLOU --- */
-    /* 1. Couleur de repli semi-transparente */
-    background-color: rgba(255, 255, 255, 0); 
-    
-    /* 2. Le flou (fonctionnera maintenant) */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* Pour Safari */
-    
-    /* 3. L'ombre du parent */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    /* --- FIN DE L'EFFET --- */
-
-    /* L'espace entre les boutons */
-    gap: 15px; 
-    
-    /* LE PADDING QUE VOUS VOULEZ */
-    padding: 15px;
-    
-    /* Coins arrondis pour le parent */
-    border-radius: 16px; 
-}
-
-/* Style uniforme pour les boutons */
-/* CE SONT MAINTENANT LES 3 "SOUS-CONTENEURS" BLANCS */
-#ui-container button {
-    display: flex;
-    flex-direction: column;  /* Icon et texte sont empilés */
-    align-items: center;     
-    justify-content: center; 
-    
-    padding: 16px 20px; 
-    min-width: 110px;   
-    
-    /* C'est le bouton qui est BLANC et OPAQUE */
-    background-color: white; 
-    border: none;
-    cursor: pointer;
-    
-    /* Coins très arrondis pour les boutons */
-    border-radius: 10px; /* Un peu moins que le parent */
-    
-    /* Une ombre plus subtile, car ils sont déjà dans un conteneur */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    
-    transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-#ui-container button:hover {
-    background-color: #f9f9f9; /* Léger gris au survol */
-    transform: translateY(-2px); /* Léger "lift" au survol */
-}
-
-/* Style des icônes dans les boutons */
-#ui-container button img {
-    width: 24px;  
-    height: 24px;
-    margin-right: 0;   
-    margin-bottom: 8px; /* Espace ENTRE l'icône et le texte */
-    opacity: 0.7;
-}
-
-/* Style du texte dans les boutons */
-#ui-container button span {
-    font-size: 13px; 
-    font-weight: 500;
-    color: #333;
-}
-
-/* Force les boutons cachés à être VRAIMENT cachés */
-#friends-button[style*="display: none"],
-#logout-button[style*="display: none"] {
-    display: none !important;
-}
-
-.header_popup {
-    font-weight: bold;
-}
-
-/* Section de notation */
+/* Emoji Rating (Note) */
 .emoji-rating {
     display: flex;
-    flex-wrap: wrap; /* Permet le retour à la ligne automatique */
-    justify-content: center; /* Centre les emojis */
-    gap: 6px; /* Espacement entre les emojis */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
     margin: 10px 0;
-    max-width: 100%; /* Limite la largeur */
+    max-width: 100%;
 }
-
-
 .emoji-rating input[type="radio"] {
     display: none;
 }
-
-/* Style des labels (emojis) */
 .emoji-rating label {
-    display: block; /* Chaque emoji est un bloc */
-    font-size: 28px; /* Taille des emojis */
+    display: block;
+    font-size: 28px;
     cursor: pointer;
     transition: all 0.2s ease;
-    width: 40px; /* Largeur fixe */
-    height: 40px; /* Hauteur fixe */
-    line-height: 40px; /* Centrage vertical */
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
-    border-radius: 50%; /* Forme ronde */
+    border-radius: 50%;
 }
-
 .emoji-rating label:hover {
     transform: scale(1.15);
 }
-
-/* Effet quand sélectionné */
 .emoji-rating input[type="radio"]:checked + label {
     transform: scale(1.25);
     filter: drop-shadow(0 0 2px gold);
     background-color: rgba(255, 215, 0, 0.2);
 }
-
-/* Style spécifique pour l'emoji "❌" (plus petit) */
 .emoji-rating label:last-child {
     font-size: 24px;
     width: 36px;
     height: 36px;
     line-height: 36px;
 }
-
 .selected-rating {
     font-size: 14px;
     color: #666;
     margin-top: 10px;
 }
+#note-box-stacked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.note-emoji-stacked {
+    font-size: 40px;
+    line-height: 1;
+}
+.note-number-stacked {
+    font-size: 15px;
+    font-weight: 600;
+    color: #555;
+    margin-top: 5px;
+    background-color: rgba(0,0,0,0.05);
+    padding: 2px 8px;
+    border-radius: 12px;
+}
 
-/* Style du popup de connexion */
+/* --- Contenu #comments (Formulaire) --- */
+#comment_box{
+    width: 90%;
+    max-width: 500px;
+    min-width: 200px;
+    box-sizing: border-box;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+}
+
+/* --- Contenu #login-popup (Formulaire) --- */
 #login-popup {
     text-align: center;
     padding: 20px;
@@ -289,169 +552,13 @@ li {
     width: 90%;
 }
 
-
-/* Désactiver la carte quand non connecté */
-#map[disabled] {
-    pointer-events: none;
-    opacity: 0.3;
-    filter: grayscale(100%);
-}
-
-
-#comment_box{
-    width: 90%; /* Largeur maximale = 100% du conteneur */
-    max-width: 500px; /* Largeur maximale sur grand écran */
-    min-width: 200px; /* Largeur minimale sur petit écran */
-    box-sizing: border-box; /* Inclut le padding et la bordure dans la largeur */
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    resize: vertical; /* Permet seulement un redimensionnement vertical */
-    font-size: 14px;
-}
-
-
-/* Adaptation pour petits écrans */
-@media (max-width: 450px) {
-    .emoji-rating label {
-        font-size: 24px;
-        width: 35px;
-        height: 35px;
-        line-height: 35px;
-    }
-    .emoji-rating label:last-child {
-        font-size: 22px;
-        width: 32px;
-        height: 32px;
-        line-height: 32px;
-    }
-    .emoji-rating {
-        gap: 4px; /* Espacement réduit sur mobile */
-    }
-}
-
-/* Ajustements pour petits écrans (mobile) */
-@media (max-width: 600px) {
-    #positions li {
-        margin: 4px;
-    }
-
-    #positions label {
-        padding: 4px;
-        width: 40px;
-        height: 40px;
-    }
-
-    #positions label img {
-        height: 28px;
-        width: 28px;
-    }
-
-    #positions label::before {
-        width: 18px;
-        height: 18px;
-        line-height: 18px;
-        top: -4px;
-        left: -4px;
-    }
-}
-
-/* Ajustements pour très petits écrans */
-@media (max-width: 400px) {
-    #positions li {
-        margin: 3px;
-    }
-
-    #positions label {
-        padding: 3px;
-        width: 32px;
-        height: 32px;
-    }
-
-    #positions label img {
-        height: 22px;
-        width: 22px;
-    }
-
-    #positions label::before {
-        width: 16px;
-        height: 16px;
-        line-height: 16px;
-        top: -3px;
-        left: -3px;
-    }
-}
-
-/* ================================================= */
-/* == CSS DE SECOURS POUR #friends-popup == */
-/* Annule et remplace les styles du Pendu (.pop_up) */
-/* ================================================= */
-
-/* --- 1. On ANNULE les styles de .pop_up --- */
-#friends-popup {
-    /* On garde la base pour être un popup */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    z-index: 1003; /* (plus haut que l'overlay) */
-    background: white;
-    border: 1px solid black;
-    border-radius: 10px;
-
-    /* ON ÉCRASE LES MAUVAIS STYLES */
-    width: 90%; /* Pas 50% */
-    max-width: 500px; /* Une largeur max */
-    height: auto; /* PAS 20% ! Hauteur auto */
-    max-height: 80vh; /* Hauteur max avec scroll */
-    padding: 20px; /* De l'espace à l'intérieur */
-    text-align: left; /* FORCE l'alignement à gauche */
-    overflow-y: auto; /* Ajoute un scroll si besoin */
-
-    /* ON CHANGE L'ANIMATION */
-    /* On le cache par défaut (sans scale) */
-    opacity: 0;
-    pointer-events: none;
-    transform: translate(-50%, -50%) scale(1.0); /* PAS de scale(0) */
-    transition: opacity 200ms ease-in-out;
-}
-
-/* --- 2. On change l'état .active --- */
-#friends-popup.active {
-    opacity: 1;
-    pointer-events: all;
-    transform: translate(-50%, -50%) scale(1.0); /* PAS de scale(1.5) */
-}
-
-/* --- 3. On FORCE les styles de texte à l'intérieur --- */
-#friends-popup h2,
-#friends-popup h3,
-#friends-popup p {
-    text-align: left; /* FORCE l'alignement gauche */
-    position: static; /* Annule les 'position: absolute' */
-    font-size: 1.25rem; /* Taille de police normale */
-    margin: 0 0 15px 0; /* Marges normales */
-}
-#friends-popup h2 {
-    text-align: center; /* OK, le titre principal peut être centré */
-    font-size: 1.5rem;
-    margin-bottom: 20px;
-}
-#friends-popup h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-
-/* --- 4. Le CSS fonctionnel (de ma réponse précédente) --- */
-
+/* --- Contenu #friends-popup (Formulaire) --- */
 .friend-section {
     margin-top: 20px;
 }
 .friend-section:first-of-type {
     margin-top: 0;
 }
-
 .search-bar {
     display: flex;
     margin-bottom: 10px;
@@ -461,7 +568,7 @@ li {
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
-    font-size: 1rem; /* Taille de police normale */
+    font-size: 1rem;
 }
 #user-search-button {
     padding: 8px 12px;
@@ -471,7 +578,6 @@ li {
     cursor: pointer;
     border-radius: 0 4px 4px 0;
 }
-
 #pending-friends-list,
 #user-search-results,
 #current-friends-list {
@@ -482,8 +588,6 @@ li {
     padding: 8px;
     background: #f9f9f9;
 }
-
-/* Les lignes de résultat */
 .friend-item,
 .pending-item,
 .user-result {
@@ -501,28 +605,21 @@ li {
 .user-result:last-child {
     margin-bottom: 0;
 }
-
-/* Le nom */
 .friend-item span,
 .pending-item span,
 .user-result span {
-    margin-right: 0; /* L'avatar gère la marge maintenant */
+    margin-right: 0;
     font-size: 1rem;
     font-weight: bold;
     color: #333;
-    /* S'assure que le nom est coupé s'il est trop long */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
-/* Conteneur pour Accepter/Refuser */
 .pending-item div {
     display: flex;
     flex-shrink: 0;
 }
-
-/* Boutons dans les listes */
 .friend-item button,
 .pending-item button,
 .user-result button {
@@ -534,371 +631,43 @@ li {
     color: white;
     margin-left: 5px;
 }
-
 .pending-item button.accept,
 .user-result button {
-    background-color: #34A853; /* Vert */
+    background-color: #34A853;
 }
 .pending-item button.decline,
 .friend-item button {
-    background-color: #EA4335; /* Rouge */
+    background-color: #EA4335;
 }
 .user-result button[disabled] {
-    background-color: #aaa; /* Gris */
-    cursor: not-allowed;
+    background-color: #aaa;
 }
-
-/* Bouton "Fermer" (on force son style) */
 #friends-popup > .verif_button {
-    display: block !important; /* important pour écraser */
-    position: static !important; /* important pour écraser */
-    float: none !important; /* important pour écraser */
-    margin: 25px auto 0 auto !important; /* centré */
+    display: block !important;
+    position: static !important;
+    float: none !important;
+    margin: 25px auto 0 auto !important;
     width: 120px !important;
     height: auto !important;
 }
-
-
-
-/* Styles pour la liste des demandes en attente */
-.pending-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.pending-item:last-child {
-    border-bottom: none;
-}
-
-.pending-item span {
-    font-weight: bold;
-}
-
-.pending-item button {
-    padding: 4px 8px;
-    font-size: 12px;
-    cursor: pointer;
-    border: none;
-    border-radius: 4px;
-    color: white;
-    margin-left: 5px;
-}
-
-.pending-item button.accept {
-    background-color: #34A853; /* Vert */
-}
-
-.pending-item button.decline {
-    background-color: #EA4335; /* Rouge */
-}
-
-
 .user-result-identity {
     display: flex;
     align-items: center;
-    /* Pour que le nom ne sorte pas du conteneur */
     overflow: hidden;
-    /* Prend l'espace dispo mais laisse la place à l'action */
     flex: 1; 
-    min-width: 0; /* Important pour flex + overflow */
+    min-width: 0;
 }
-
-
 .result-avatar {
     width: 32px;
     height: 32px;
-    border-radius: 50%; /* Image ronde */
-    object-fit: cover; /* Remplit le cercle sans déformer */
-    margin-right: 10px; /* Espace entre l'avatar et le nom */
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
     border: 1px solid #eee;
-    /* Pour que l'image ne soit pas "écrasée" */
     flex-shrink: 0; 
 }
 
-
-/* ================================================= */
-/* == CORRECTION FINALE Z-INDEX == */
-/* ================================================= */
-
-/* On force l'overlay à être au-dessus de la barre UI */
-#overlay {
-    z-index: 1002 !important;
-}
-
-/* On force TOUS les popups à être au-dessus de l'overlay */
-/* (Cible #informations, #comments, #login-popup) */
-.pop_up {
-    z-index: 1003 !important; 
-}
-
-
-/* ================================================= */
-/* == STYLE DES BOUTONS D'ACTION DU POPUP (Icônes) == */
-/* ================================================= */
-
-.popup-actions-container {
-    display: flex;
-    justify-content: flex-start; /* Aligner à droite */
-    gap: 8px; /* Espace entre les boutons */
-    margin-top: 10px; /* Espace au-dessus des boutons */
-}
-
-.popup-action-button {
-    width: 38px; /* Taille du bouton */
-    height: 38px;
-    border-radius: 50%; /* Boutons ronds */
-    background-color: #f0f0f0; /* Fond léger */
-    border: none;
-    cursor: pointer;
-    display: flex; /* Pour centrer l'icône */
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ombre subtile */
-    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.popup-action-button:hover {
-    background-color: #e0e0e0; /* Assombrir au survol */
-    transform: translateY(-1px); /* Léger soulèvement */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-.popup-action-button img {
-    width: 20px; /* Taille de l'icône */
-    height: 20px;
-    opacity: 0.7; /* Légèrement moins opaque */
-    filter: invert(0.2); /* Rendre les icônes sombres si elles sont blanches */
-}
-
-/* Vous pouvez ajouter des couleurs de survol spécifiques si vous voulez un effet visuel */
-.popup-action-button[title="Modifier"]:hover {
-    background-color: #cceeff; /* Bleu clair pour Modifier */
-}
-.popup-action-button[title="Supprimer"]:hover {
-    background-color: #ffcccc; /* Rouge clair pour Supprimer */
-}
-.popup-action-button[title="Ajouter un commentaire"]:hover {
-    background-color: #ccffcc; /* Vert clair pour Commentaire */
-}
-
-
-/* ================================================= */
-/* == STYLE MODERNE POUR POPUP DE MARQUEUR == */
-/* ================================================= */
-
-/* --- 1. On redessine le conteneur du popup --- */
-
-/* On cible la "bulle" principale */
-.leaflet-popup-content-wrapper {
-    /* L'effet "verre dépoli" (flou + transparence) */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* Pour Safari */
-    background-color: rgba(255, 255, 255, 0.85); /* Fond de repli */
-    
-    border-radius: 12px; /* Coins arrondis modernes */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Bordure subtile */
-    padding: 0; /* On gère le padding à l'intérieur */
-}
-
-/* On cible le conteneur intérieur */
-.leaflet-popup-content {
-    /* On force une police moderne */
-    width: 300px !important; /* Gardons votre largeur fixe */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    padding: 14px 18px; /* Notre propre espacement */
-    margin: 0 !important; /* Annule le style par défaut de Leaflet */
-}
-
-/* On supprime la petite flèche moche en bas */
-.leaflet-popup-tip-container {
-    display: none;
-}
-
-/* --- 2. On met en forme votre contenu (le HTML) --- */
-
-/* On annule la marge par défaut des <p> pour tout contrôler */
-.leaflet-popup-content p {
-    margin: 0;
-}
-
-/* On style vos titres de section */
-.leaflet-popup-content .header_popup {
-    font-size: 11px;
-    font-weight: 600;
-    color: #666; /* Un gris moyen, pas noir */
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    
-    /* C'est ce qui crée la séparation ! */
-    margin-top: 16px; 
-    margin-bottom: 4px; /* Espace avant le contenu */
-}
-
-/* Le tout premier titre n'a pas besoin de marge en haut */
-.leaflet-popup-content .header_popup:first-child {
-    margin-top: 0;
-}
-
-/* On style le texte de contenu (la balise <p> QUI SUIT un .header_popup) */
-.leaflet-popup-content .header_popup + p {
-    font-size: 15px;
-    color: #111; /* Presque noir, pour la lisibilité */
-    font-weight: 500;
-}
-
-/* On s'assure que le conteneur des images est bien calé */
-.leaflet-popup-content .popup-images {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-/* On sépare la section commentaire de la fin */
-.leaflet-popup-content .header_popup:last-child {
-    border-top: 1px solid #eee;
-    padding-top: 15px;
-    margin-top: 15px;
-}
-
-
-/* ================================================= */
-/* == STYLE POUR LES "BOÎTES" DE DONNÉES (MODERNE) == */
-/* ================================================= */
-
-/* Cible la nouvelle classe .popup-data-box */
-.leaflet-popup-content p.popup-data-box {
-    /* Fond "verre sur verre" - légèrement plus sombre/opaque */
-    background-color: rgba(245, 245, 247, 0.7); 
-    
-    padding: 10px 14px;
-    margin-top: 5px; /* Espace par rapport au titre de section */
-    margin-bottom: 0; 
-    border-radius: 8px; /* Coins arrondis */
-    
-    /* Style de texte "normal" (pas d'italique) */
-    font-size: 15px; 
-    font-style: normal;
-    font-weight: 500;   
-    color: #111; /* Texte foncé pour la lisibilité */
-    line-height: 1.4;
-    
-    /* Bordure très subtile pour délimiter */
-    border: 1px solid rgba(255, 255, 255, 0.4); 
-    
-    /* Pour que le texte ne déborde pas de la boîte */
-    word-break: break-word; 
-}
-
-/* Gérer les boîtes vides */
-.leaflet-popup-content p.popup-data-box:empty {
-    /* On n'affiche pas les boîtes vides (ex: si 'lieu' est vide) */
-    display: none; 
-}
-
-/* (Rappel) Assure que les titres de section sont bien espacés */
-.leaflet-popup-content p.header_popup {
-    font-size: 11px;
-    font-weight: 600;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 16px; 
-    margin-bottom: 4px;
-}
-.leaflet-popup-content p.header_popup:first-child {
-    margin-top: 0;
-}
-
-/* (Rappel) Assure que le dernier header ("Section commentaire") est bien placé */
-.leaflet-popup-content p.header_popup:last-child {
-    border-top: 1px solid #eee;
-    padding-top: 15px;
-    margin-top: 15px;
-}
-
-/* ================================================= */
-/* == STYLE POUR LES ICÔNES DE PROFIL (Marqueurs) == */
-/* ================================================= */
-
-.profile-marker-container {
-    width: 36px;
-    height: 36px;
-    
-    /* --- VOTRE BORDURE MODERNE --- */
-    /* On remplace le fond blanc par un dégradé */
-    background: linear-gradient(45deg, #4285F4, #9b59b6); /* Bleu Google -> Violet */
-    
-    padding: 3px; /* C'est l'épaisseur de la bordure */
-    border-radius: 50%; /* Rend le conteneur rond */
-    
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* L'image de profil elle-même */
-.profile-marker-image {
-    width: 30px;  /* (Taille totale - 2 * padding) */
-    height: 30px; /* (36px - 2 * 3px) */
-    
-    border-radius: 50%; /* Rend l'image ronde */
-    object-fit: cover; /* S'assure que l'image remplit le cercle */
-}
-
-/* Leaflet ajoute une bordure moche, on la supprime */
-.profile-marker {
-    border: none !important;
-    background: transparent !important;
-}
-
-/* ================================================= */
-/* == STYLE POUR BOUTON "SUPPRIMER COMMENTAIRE" (Admin) == */
-/* ================================================= */
-
-.comment-delete-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 50%; /* Bouton rond */
-    
-    color: #888;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 18px; /* Centre le "×" */
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.comment-delete-button:hover {
-    background-color: #EA4335; /* Rouge */
-    color: white;
-    border-color: #d00;
-    transform: scale(1.1);
-}
-
-
-/* ================================================= */
-/* == STYLE POUR LA SÉLECTION DE COULEUR D'ICÔNE == */
-/* ================================================= */
-
+/* --- Contenu #profile-popup (Formulaire) --- */
 #icon-color-grid {
     display: flex;
     flex-wrap: wrap;
@@ -909,7 +678,6 @@ li {
     max-height: 140px;
     overflow-y: auto;
 }
-
 .color-choice {
     width: 40px;
     height: 40px;
@@ -917,279 +685,156 @@ li {
     cursor: pointer;
     border: 3px solid #ccc;
     transition: all 0.2s ease;
-    
-    background-color: #ffffff; /* Un fond blanc propre */
-    background-size: contain;  /* Affiche l'icône en entier */
-    background-repeat: no-repeat; /* Ne pas répéter l'icône */
-    background-position: center;  /* Centrer l'icône */
-
-    /* Pour centrer l'icône de la photo Google */
+    background-color: #ffffff;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 .color-choice:hover {
     transform: scale(1.1);
 }
-
 .color-choice.selected {
-    border-color: #4285F4; /* Bleu pour l'icône sélectionnée */
+    border-color: #4285F4;
     box-shadow: 0 0 10px rgba(66, 133, 244, 0.5);
 }
-
-/* Style pour le bouton "Google" */
 .color-choice[data-color="google"] img {
     width: 38px;
     height: 38px;
     border-radius: 50%;
     object-fit: cover;
 }
-
-/* ================================================= */
-/* == STYLE POUR L'ATTRIBUTION (LÉGAL) == */
-/* ================================================= */
-
 .profile-attribution {
-    /* Positionnement */
-    text-align: center; /* Centré */
-    margin-top: 20px; /* Espace au-dessus */
-    padding-top: 15px; /* Espace après la ligne */
-    border-top: 1px solid #eee; /* Ligne de séparation fine */
-    
-    /* Style "moderne et discret" */
-    font-size: 11px; /* Très petit */
-    color: #aaa; /* Gris très clair */
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    font-size: 11px;
+    color: #aaa;
 }
-
-/* On style les liens pour qu'ils ne soient pas bleus */
 .profile-attribution a {
-    color: #888; /* Un peu plus foncé pour être lisible */
-    text-decoration: none; /* Pas de soulignement par défaut */
+    color: #888;
+    text-decoration: none;
 }
-
 .profile-attribution a:hover {
-    text-decoration: underline; /* On souligne au survol */
+    text-decoration: underline;
 }
 
 /* ================================================= */
-/* == STYLE POUR LE BADGE DE NOTIFICATION (AMIS) == */
+/* == STYLES RESPONSIVES (Unifiés) == */
 /* ================================================= */
 
-/* 1. On doit dire au bouton qu'il peut contenir des éléments en position absolue */
-#ui-container button {
-    position: relative; /* C'est la clé */
+/* --- Media Query 1: Petits téléphones (pour les positions/emojis) --- */
+@media (max-width: 450px) {
+    .emoji-rating label {
+        font-size: 24px;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+    }
+    .emoji-rating label:last-child {
+        font-size: 22px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+    }
+    .emoji-rating {
+        gap: 4px;
+    }
+}
+@media (max-width: 400px) {
+    #positions li {
+        margin: 3px;
+    }
+    #positions label {
+        padding: 3px;
+        width: 32px;
+        height: 32px;
+    }
+    #positions label img {
+        height: 22px;
+        width: 22px;
+    }
+    #positions label::before {
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        top: -3px;
+        left: -3px;
+    }
 }
 
-/* 2. On style le badge lui-même */
-.notification-badge {
-    position: absolute; /* Se positionne par-dessus le bouton */
-    top: 10px;  /* Ajustez ces valeurs pour le placer où vous voulez */
-    right: 15px; /* Ajustez ces valeurs */
-    
-    background-color: #EA4335; /* Rouge vif (style Google) */
-    color: white;
-    
-    width: 20px;
-    height: 20px;
-    font-size: 12px;
-    font-weight: bold;
-    
-    /* Pour centrer le chiffre */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    border-radius: 50%; /* Le rend rond */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    
-    /* Caché par défaut */
-    display: none; 
-}
-/* ================================================= */
-/* == STYLE MODERNE POUR LA BOÎTE "NOTE" == */
-/* ================================================= */
-
-#note-box-stacked {
-    /* On utilise flexbox pour centrer verticalement */
-    display: flex;
-    flex-direction: column; /* Met les éléments l'un sur l'autre */
-    align-items: center;    /* Centre horizontalement */
-    justify-content: center; /* Centre verticalement */
-    
-    padding-top: 12px;    /* Plus d'espace pour le nouveau look */
-    padding-bottom: 12px;
-}
-
-.note-emoji-stacked {
-    font-size: 40px;  /* Un gros émoji */
-    line-height: 1;   /* Réduit l'espace de ligne */
-}
-
-.note-number-stacked {
-    font-size: 15px;        /* Petit texte */
-    font-weight: 600;       /* Semi-gras */
-    color: #555;            /* Gris foncé (pas noir) */
-    margin-top: 5px;        /* Espace entre l'émoji et le texte */
-    
-    /* Ajoute un petit fond "pilule" */
-    background-color: rgba(0,0,0,0.05);
-    padding: 2px 8px;
-    border-radius: 12px;
-}
-
-/* ================================================= */
-/* == STYLES RESPONSIVES (POUR PETITS APPAREILS) == */
-/* ================================================= */
-
-/* S'applique à tous les écrans de 600px de large ou moins */
+/* --- Media Query 2: Tous les téléphones (pour l'UI et les Popups) --- */
 @media (max-width: 600px) {
-
-    /* 1. On repositionne le conteneur */
+    
+    /* 1. UI Container (en bas, horizontal) */
     #ui-container {
-        /* On le centre en bas */
         left: 50%;
         bottom: 10px;
-        transform: translateX(-50%); /* Astuce pour centrer horizontalement */
-        
-        /* On le passe en LIGNE (horizontal) */
+        transform: translateX(-50%);
         flex-direction: row;
-        
-        /* On ajuste l'espacement et le padding */
         gap: 8px;
         padding: 8px;
-        border-radius: 12px; /* On peut réduire un peu les coins */
+        border-radius: 12px;
     }
-
-    /* 2. On modifie les boutons */
     #ui-container button {
-        /* On les rend carrés et plus petits */
         width: 44px;
         height: 44px;
-        min-width: unset; /* On annule la largeur minimum */
-        padding: 10px; /* Espace pour l'icône */
+        min-width: unset;
+        padding: 10px;
         border-radius: 10px;
     }
-
-    /* 3. ON CACHE LE TEXTE */
     #ui-container button span {
         display: none;
     }
-
-    /* 4. On réinitialise les marges de l'icône */
     #ui-container button img {
         margin-right: 0;
         margin-bottom: 0;
-        width: 22px;  /* On peut les rendre un peu plus grandes */
+        width: 22px;
         height: 22px;
     }
-}
 
-/* ================================================= */
-/* == STYLE POUR LE BOUTON "X" DES POPUPS == */
-/* ================================================= */
-
-.close-popup-button {
-    /* Positionnement */
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10; /* S'assure qu'il est au-dessus du contenu */
-    
-    /* Apparence */
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    
-    background-color: #f0f0f0; /* Gris clair */
-    border: none;
-    border-radius: 50%; /* Le rend rond */
-    
-    /* Le "X" */
-    color: #888; /* Couleur du X */
-    font-size: 24px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center; /* Centre horizontalement */
-    
-    /* Interaction */
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.close-popup-button:hover {
-    background-color: #EA4335; /* Le même rouge que votre bouton "Annuler" */
-    color: white;
-    transform: scale(1.1);
-}
-
-/* Assure que le bouton ne gêne pas le premier titre */
-.pop_up p.header_popup:first-child {
-    margin-top: 10px; /* Ajoute un peu d'espace en haut */
-}
-
-/* ================================================= */
-/* == STYLE POUR LE FORMULAIRE MULTI-ÉTAPES == */
-/* ================================================= */
-
-/* On cache toutes les pages par défaut */
-#informations .form-page {
-    display: none;
-}
-
-/* On affiche SEULEMENT la page active */
-#informations .form-page.active-page {
-    display: block;
-}
-
-/* Conteneur pour les boutons "Suivant" / "Précédent" */
-.form-navigation {
-    display: flex;
-    justify-content: space-between; /* Place les boutons aux extrémités */
-    margin-top: 20px;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
-}
-
-/* ================================================= */
-/* == ADAPTATION MOBILE : POPUPS EN "VOLET INFÉRIEUR" == */
-/* ================================================= */
-
-/* S'applique à tous les écrans de 600px de large ou moins */
-@media (max-width: 600px) {
-
-    /* 1. On cible TOUS vos popups */
-    .pop_up, 
-    #friends-popup, 
-    #profile-popup {
-        width: 100% !important;     /* Prend toute la largeur */
+    /* 2. Popups (en "volet inférieur") */
+    .pop_up {
+        width: 100% !important;
         max-width: 100% !important;
-        
-        top: auto !important;     /* On annule le centrage vertical */
-        left: 0 !important;
-        bottom: 0 !important;   /* On le colle en bas */
-        
-        /* On annule le centrage 'translate' */
-        transform: translateY(100%) !important; /* Caché (en bas) par défaut */
-        
-        /* On arrondit les coins DU HAUT */
+        top: auto !important; 
+        bottom: 0 !important;   
+        opacity: 1;
+        transform: translateY(100%) !important; 
         border-radius: 20px 20px 0 0 !important;
-        
-        /* On limite la hauteur pour ne pas prendre tout l'écran */
-        max-height: 80vh; 
-        overflow-y: auto; /* Permet de scroller DANS le volet */
-        
-        transition: transform 0.3s ease-out; /* Animation de glissement */
+        transition: transform 0.3s ease-out;
     }
-
-    /* 2. Quand le popup est "actif" */
     .pop_up.active {
-        transform: translateY(0) !important; /* Il glisse vers le haut */
+        transform: translateY(0) !important;
     }
     
-    /* 3. On adapte le bouton "X" */
+    /* 3. Bouton "X" sur mobile */
     .close-popup-button {
         top: 15px;
         right: 15px;
+    }
+    
+    /* 4. Checkboxes (Positions) sur mobile */
+    #positions li {
+        margin: 4px;
+    }
+    #positions label {
+        padding: 4px;
+        width: 40px;
+        height: 40px;
+    }
+    #positions label img {
+        height: 28px;
+        width: 28px;
+    }
+    #positions label::before {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        top: -4px;
+        left: -4px;
     }
 }
