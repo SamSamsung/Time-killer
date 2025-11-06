@@ -859,11 +859,11 @@ label img {
 
 /* On force une hauteur max et un scroll intérieur */
 .leaflet-popup-content {
-    max-height: 450px; /* Hauteur max sur ORDINATEUR */
-    overflow-y: auto; /* Ajoute un scroll A L'INTÉRIEUR */
-    
-    /* Un peu d'espace pour la barre de scroll */
-    padding-right: 15px !important; 
+    /* On force une police moderne */
+    width: 300px !important; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 14px 18px; 
+    margin: 0 !important;
 }
 
 
@@ -930,5 +930,21 @@ label img {
         
         /* On limite la hauteur à 60% de l'écran */
         max-height: 60vh; 
+    }
+
+    /* AJOUTE LES LIGNES ICI */
+    .leaflet-popup-content-wrapper {
+        /* On force la largeur à 90% de l'écran */
+        width: 90vw !important; 
+    }
+    
+    .leaflet-popup-content {
+        /* On garde la largeur du parent */
+        width: 100% !important; 
+        box-sizing: border-box; /* Important */
+        
+        /* --- VEUILLEZ AJOUTER CES DEUX LIGNES --- */
+        max-height: 60vh; /* On limite la hauteur à 60% de l'écran */
+        overflow-y: auto; /* On ajoute le scroll A L'INTÉRIEUR */
     }
 }

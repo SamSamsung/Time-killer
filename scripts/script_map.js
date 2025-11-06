@@ -1003,22 +1003,28 @@ document.addEventListener('DOMContentLoaded', function() {
     map.on('locationerror', onLocationError);
 
     map.on('popupopen', function(e) {
-            // 1. On récupère la coordonnée du marqueur
+        // 1. On récupère la coordonnée du marqueur
         var latLng = e.popup.getLatLng();
-        
-        // 2. On la convertit en "pixels" (coordonnées de l'écran)
+        // On convertit en "pixels"
         var px = map.project(latLng);
+
+        // On "triche" en déplaçant le point de centrage de 150px vers le BAS
+        // (sur un écran, "bas" = Y positif)
+        // Cela forcera la carte à glisser vers le HAUT,
+        // laissant de la place pour le volet qui s'ouvre d'en bas.
         
-        // 3. C'EST LA CORRECTION :
-        // On "triche" en déplaçant notre point de centrage de 150 pixels vers le HAUT
-        // (sur un écran, "haut" = Y négatif)
-        // Cela forcera le marqueur à s'afficher 150px en DESSOUS du centre
-        px.y -= 200; // Tu peux changer 150 en 100 ou 200 pour ajuster
         
-        // 4. On reconvertit ce nouveau point "pixel" en coordonnée géographique
+        // 2. ON VÉRIFIE LA TAILLE DE L'ÉCRAN
+        if (window.innerWidth <= 600) {
+            // --- CAS MOBILE (Volet inférieur) ---
+            px.y += 200; // Tu peux ajuster 150
+            
+        } else {
+            // --- CAS ORDINATEUR (Popup centré) ---
+            // On fait un centrage simple, sans décalage.
+            px.y -= 400;
+        }
         var newCenter = map.unproject(px);
-        
-        // 5. On dit à la carte de glisser vers ce nouveau centre
         map.panTo(newCenter);
     });
 
