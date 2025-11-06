@@ -802,13 +802,14 @@ label img {
         max-width: 100% !important;
         top: auto !important; 
         bottom: 0 !important;   
-        opacity: 1;
-        transform: translateY(100%) !important; 
+ 
+        transform: translate(-50%, 100vh) !important; /* Caché tout en bas */
         border-radius: 20px 20px 0 0 !important;
-        transition: transform 0.3s ease-out;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
     }
     .pop_up.active {
-        transform: translateY(0) !important;
+        opacity: 1 !important; /* On force l'apparition */
+        transform: translateY(0) !important; /* Il glisse vers le haut */
     }
     
     /* 3. Bouton "X" sur mobile */
