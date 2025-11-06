@@ -21,6 +21,7 @@ const ICON_COLOR_MAP = {
     "purple" : './icons_map/boutique-de-sexe-purple.png',
     "darkgray" : './icons_map/boutique-de-sexe-darkgray.png',
     "black": './icons_map/boutique-de-sexe-black.png',
+    "bed": './icons_map/lit.png',
     "google": null // Cas spécial pour la photo de profil Google
 };
 // =================================================
