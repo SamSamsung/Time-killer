@@ -536,6 +536,10 @@ function modifyMarker(key) {
         // 7. On stocke la clé
         window.currentEditingKey = key;
 
+        // --- VEUILLEZ AJOUTER CETTE LIGNE ---
+        showFormPage(1); // Réinitialise le formulaire à la première page
+        // ---------------------------------
+
         // 8. On charge les COMMENTAIRES (pour l'affichage du tempMarker)
         return get(commentsRef); 
 
@@ -633,6 +637,8 @@ function onMapClick(e) {
     tempMarker = L.marker(e.latlng, { icon: customIcon }).addTo(map)
         .bindPopup(popupContent)
         .openPopup();
+
+    showFormPage(1); // Réinitialise le formulaire à la première page
 }
 
 map.on('click', onMapClick);
@@ -652,8 +658,10 @@ function pop_up_close(){
     // Réinitialisation
     window.currentEditingOriginalCreator = null; 
     window.currentEditingKey = null;
-}
 
+    // (Réinitialise le formulaire à la page 1 pour la prochaine ouverture)
+    setTimeout(() => showFormPage(1), 200); // 200ms pour laisser l'animation de fermeture se faire
+}
 
 function pop_up_close_comments(){
     document.getElementById("comments").classList.remove("active")
@@ -1597,4 +1605,42 @@ function createProfileIcon(userProfile) {
             popupAnchor: [0, -16] 
         });
     }
+}
+
+// AJOUTEZ CETTE VARIABLE GLOBALE (au début de votre script)
+var currentFormPage = 1;
+
+/**
+ * Affiche la page N du formulaire et cache les autres
+ * @param {number} pageNumber - Le numéro de la page (1-4)
+ */
+function showFormPage(pageNumber) {
+    currentFormPage = pageNumber;
+    
+    // Cache toutes les pages
+    document.querySelectorAll('#informations .form-page').forEach(page => {
+        page.style.display = 'none';
+        page.classList.remove('active-page');
+    });
+    
+    // Affiche la page ciblée
+    const targetPage = document.querySelector(`#informations .form-page[data-page="${pageNumber}"]`);
+    if (targetPage) {
+        targetPage.style.display = 'block';
+        targetPage.classList.add('active-page');
+    }
+}
+
+/**
+ * Passe à la page suivante du formulaire
+ */
+function formNext() {
+    showFormPage(currentFormPage + 1);
+}
+
+/**
+ * Revient à la page précédente du formulaire
+ */
+function formPrev() {
+    showFormPage(currentFormPage - 1);
 }

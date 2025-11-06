@@ -59,8 +59,13 @@ html, body {
 
 
 .pop_up.active#informations{
-    transform: translate(-50%, 30%) scale(1.5);
-    top: 0%;
+    transform: translate(-50%, -50%) scale(1);
+    top: 50%;
+
+    height: auto;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
 }
 
 .pop_up.active#comments{
@@ -1121,4 +1126,27 @@ li {
 /* Assure que le bouton ne gêne pas le premier titre */
 .pop_up p.header_popup:first-child {
     margin-top: 10px; /* Ajoute un peu d'espace en haut */
+}
+
+/* ================================================= */
+/* == STYLE POUR LE FORMULAIRE MULTI-ÉTAPES == */
+/* ================================================= */
+
+/* On cache toutes les pages par défaut */
+#informations .form-page {
+    display: none;
+}
+
+/* On affiche SEULEMENT la page active */
+#informations .form-page.active-page {
+    display: block;
+}
+
+/* Conteneur pour les boutons "Suivant" / "Précédent" */
+.form-navigation {
+    display: flex;
+    justify-content: space-between; /* Place les boutons aux extrémités */
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
 }

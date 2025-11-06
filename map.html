@@ -17,102 +17,137 @@
     <body>
         <div id="overlay"></div>
         <div class="pop_up" id="informations">
+    
             <button class="close-popup-button" onclick="pop_up_close()">&times;</button>
-            <p>Qui est l'heureux·se élu·e ?</p>
-            <p id="creator-name-display" class="popup-data-box" style="margin-top: 5px; text-align: center;"></p>
-            <p>Partenaire·s</p>
-            <textarea id="partenaire" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
-            <p>Date</p>
-            <input id="date" type="date"/>
-            <p>Lieu</p>
-            <textarea id="lieu" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
-            <p>Position·s</p>
-            <ul id="positions">
-                <li><input type="checkbox" id="doggy-style" class="cb"/>
-                  <label for="doggy-style" title="La levrette - Doggy style"><img src="icons_map/dog.png" /></label>
-                </li>
-                <li><input type="checkbox" id="lazy-doggy-style" class="cb"/>
-                    <label for="lazy-doggy-style" title="L'union de l'éléphant (Levrette allongée) - The Lazy doggy style"><img src="icons_map/anal.png" /></label>
-                </li>
-                <li><input type="checkbox" id="standing-doggy-style" class="cb"/>
-                      <label for="standing-doggy-style" title="La vache (levrette debout) - The Standing doggy style"><img src="icons_map/doggy.png" /></label>
-                </li>
-                <li><input type="checkbox" id="missionary" class="cb" />
-                  <label for="missionary" title="Missionaire - Missionary"><img src="icons_map/sex-2.png"></label>
-                </li>
-                <li><input type="checkbox" id="cowgirl" class="cb"/>
-                  <label for="cowgirl" title="L'andromaque - Cowgirl"><img src="icons_map/cowgirl.png" /></label>
-                </li>
-                <li><input type="checkbox" id="cunnilingus" class="cb" />
-                    <label for="cunnilingus" title="Le cunnilingus - The cunnilingus"><img src="icons_map/licking.png"></label>
-                </li>
-                <li><input type="checkbox" id="blowjob" class="cb"/>
-                    <label for="blowjob" title="La fellation - The Blowjob"><img src="icons_map/oral-sex-2.png" /></label>
-                </li>
-                <li><input type="checkbox" id="lazy-blowjob" class="cb"/>
-                    <label for="lazy-blowjob" title="La fellation allongée - The lazy Blowjob"><img src="icons_map/oral-sex.png" /></label>
-                </li>
-                <li><input type="checkbox" id="upstanding-citizen" class="cb" />
-                    <label for="upstanding-citizen" title="L'Homme debout - The Upstanding citizen"><img src="icons_map/front.png"></label>
-                </li>
-                <li><input type="checkbox" id="reversed-cowgirl" class="cb"/>
-                    <label for="reversed-cowgirl" title="L'andromaque inversée - Reversed cowgirl"><img src="icons_map/back.png" /></label>
-                </li>
-                <li><input type="checkbox" id="leapfrog" class="cb" />
-                      <label for="leapfrog" title="La grenouille à la nage - The Leapfrog"><img src="icons_map/back (1).png"></label>
-                </li>
-                <li><input type="checkbox" id="69" class="cb"/>
-                      <label for="69" title="Le 69"><img src="icons_map/man.png" /></label>
-                </li>
-                <li><input type="checkbox" id="lotus" class="cb"/>
-                      <label for="lotus" title="Le Totus - The Lotus"><img src="icons_map/sex.png" /></label>
-                </li>
-                <li><input type="checkbox" id="others" class="cb"/>
-                    <label for="others" title="Autres..."><img src="icons_map/autre.png" /></label>
-              </li>
-            </ul>
-            <p>Note</p>
-            <div class="emoji-rating">
-                <input type="radio" id="rating-1" name="rating" value="1" />
-                <label for="rating-1" title="1/10 - Nul">🤮</label>
-        
-                <input type="radio" id="rating-2" name="rating" value="2" />
-                <label for="rating-2" title="2/10">🫥</label>
-        
-                <input type="radio" id="rating-3" name="rating" value="3" />
-                <label for="rating-3" title="3/10">🥱</label>
-        
-                <input type="radio" id="rating-4" name="rating" value="4" />
-                <label for="rating-4" title="4/10">🙃</label>
-        
-                <input type="radio" id="rating-5" name="rating" value="5" />
-                <label for="rating-5" title="5/10">😏</label>
-        
-                <input type="radio" id="rating-6" name="rating" value="6" />
-                <label for="rating-6" title="6/10">😋</label>
-        
-                <input type="radio" id="rating-7" name="rating" value="7" />
-                <label for="rating-7" title="7/10">🥴</label>
-        
-                <input type="radio" id="rating-8" name="rating" value="8" />
-                <label for="rating-8" title="8/10">😍</label>
-        
-                <input type="radio" id="rating-9" name="rating" value="9" />
-                <label for="rating-9" title="9/10">😈</label>
-        
-                <input type="radio" id="rating-10" name="rating" value="10" />
-                <label for="rating-10" title="10/10 - Meilleur">🥵</label>
+            
+            <div class="form-page active-page" data-page="1">
+                
+                <p class="header_popup" style="margin-top:0;">Créé par</p>
+                <p id="creator-name-display" class="popup-data-box" style="margin-top: 5px; text-align: center;"></p>
+                
+                <p class="header_popup">Partenaire·s</p>
+                <textarea id="partenaire" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
+                
+                <p class="header_popup">Date</p>
+                <input id="date" type="date"/>
+                
+                <p class="header_popup">Lieu</p>
+                <textarea id="lieu" name="partenaire" rows="1" cols="15" style="resize: none;"></textarea>
 
-                <input type="radio" id="rating-none" name="rating" value="none" checked/>
-                <label for="rating-none" title="None - Pas de note">❌</label>
+                <div class="form-navigation">
+                    <button class="verif_button" style="background-color: red;" onclick="pop_up_close()">Annuler</button>
+                    <button class="verif_button" style="background-color: lightblue;" onclick="formNext()">Suivant &rarr;</button>
+                </div>
             </div>
-            <p>Commentaires</p>
-            <textarea id="commentaires" name="commentaires" rows="5" cols="25"></textarea>
-            <br>
-            <button class="verif_button" style="background-color: lightgreen;" onclick="yes()">Enregistrer</button>
-            <button class="verif_button" style="background-color: red;" onclick="pop_up_close()">Annuler</button>
-        </div>
+            
+            <div class="form-page" data-page="2">
+                <p class="header_popup">Position·s</p>
+                <ul id="positions">
+                    <li><input type="checkbox" id="doggy-style" class="cb"/>
+                    <label for="doggy-style" title="La levrette - Doggy style"><img src="icons_map/dog.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="lazy-doggy-style" class="cb"/>
+                        <label for="lazy-doggy-style" title="L'union de l'éléphant (Levrette allongée) - The Lazy doggy style"><img src="icons_map/anal.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="standing-doggy-style" class="cb"/>
+                        <label for="standing-doggy-style" title="La vache (levrette debout) - The Standing doggy style"><img src="icons_map/doggy.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="missionary" class="cb" />
+                    <label for="missionary" title="Missionaire - Missionary"><img src="icons_map/sex-2.png"></label>
+                    </li>
+                    <li><input type="checkbox" id="cowgirl" class="cb"/>
+                    <label for="cowgirl" title="L'andromaque - Cowgirl"><img src="icons_map/cowgirl.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="cunnilingus" class="cb" />
+                        <label for="cunnilingus" title="Le cunnilingus - The cunnilingus"><img src="icons_map/licking.png"></label>
+                    </li>
+                    <li><input type="checkbox" id="blowjob" class="cb"/>
+                        <label for="blowjob" title="La fellation - The Blowjob"><img src="icons_map/oral-sex-2.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="lazy-blowjob" class="cb"/>
+                        <label for="lazy-blowjob" title="La fellation allongée - The lazy Blowjob"><img src="icons_map/oral-sex.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="upstanding-citizen" class="cb" />
+                        <label for="upstanding-citizen" title="L'Homme debout - The Upstanding citizen"><img src="icons_map/front.png"></label>
+                    </li>
+                    <li><input type="checkbox" id="reversed-cowgirl" class="cb"/>
+                        <label for="reversed-cowgirl" title="L'andromaque inversée - Reversed cowgirl"><img src="icons_map/back.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="leapfrog" class="cb" />
+                        <label for="leapfrog" title="La grenouille à la nage - The Leapfrog"><img src="icons_map/back (1).png"></label>
+                    </li>
+                    <li><input type="checkbox" id="69" class="cb"/>
+                        <label for="69" title="Le 69"><img src="icons_map/man.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="lotus" class="cb"/>
+                        <label for="lotus" title="Le Totus - The Lotus"><img src="icons_map/sex.png" /></label>
+                    </li>
+                    <li><input type="checkbox" id="others" class="cb"/>
+                        <label for="others" title="Autres..."><img src="icons_map/autre.png" /></label>
+                </li>
+                </ul>
+                
+                <div class="form-navigation">
+                    <button class="verif_button" style="background-color: #ccc;" onclick="formPrev()">&larr; Précédent</button>
+                    <button class="verif_button" style="background-color: lightblue;" onclick="formNext()">Suivant &rarr;</button>
+                </div>
+            </div>
 
+            <div class="form-page" data-page="3">
+                <p class="header_popup">Note</p>
+                <div class="emoji-rating">
+                    <input type="radio" id="rating-1" name="rating" value="1" />
+                    <label for="rating-1" title="1/10 - Nul">🤮</label>
+            
+                    <input type="radio" id="rating-2" name="rating" value="2" />
+                    <label for="rating-2" title="2/10">🫥</label>
+            
+                    <input type="radio" id="rating-3" name="rating" value="3" />
+                    <label for="rating-3" title="3/10">🥱</label>
+            
+                    <input type="radio" id="rating-4" name="rating" value="4" />
+                    <label for="rating-4" title="4/10">🙃</label>
+            
+                    <input type="radio" id="rating-5" name="rating" value="5" />
+                    <label for="rating-5" title="5/10">😏</label>
+            
+                    <input type="radio" id="rating-6" name="rating" value="6" />
+                    <label for="rating-6" title="6/10">😋</label>
+            
+                    <input type="radio" id="rating-7" name="rating" value="7" />
+                    <label for="rating-7" title="7/10">🥴</label>
+            
+                    <input type="radio" id="rating-8" name="rating" value="8" />
+                    <label for="rating-8" title="8/10">😍</label>
+            
+                    <input type="radio" id="rating-9" name="rating" value="9" />
+                    <label for="rating-9" title="9/10">😈</label>
+            
+                    <input type="radio" id="rating-10" name="rating" value="10" />
+                    <label for="rating-10" title="10/10 - Meilleur">🥵</label>
+
+                    <input type="radio" id="rating-none" name="rating" value="none" checked/>
+                    <label for="rating-none" title="None - Pas de note">❌</label>
+                </div>
+                
+                <div class="form-navigation">
+                    <button class="verif_button" style="background-color: #ccc;" onclick="formPrev()">&larr; Précédent</button>
+                    <button class="verif_button" style="background-color: lightblue;" onclick="formNext()">Suivant &rarr;</button>
+                </div>
+            </div>
+
+            <div class="form-page" data-page="4">
+                <p class="header_popup">Commentaires</p>
+                <textarea id="commentaires" name="commentaires" rows="5" cols="25"></textarea>
+                <br>
+                
+                <div class="form-navigation">
+                    <button class="verif_button" style="background-color: #ccc;" onclick="formPrev()">&larr; Précédent</button>
+                    <button class="verif_button" style="background-color: lightgreen;" onclick="yes()">Enregistrer</button>
+                </div>
+            </div>
+
+        </div>
 
         <div class="pop_up" id="comments">
             <p>Vous etes connecté·es sous le pseudo : <b id="pseudo"></b></p>
