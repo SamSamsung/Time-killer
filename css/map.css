@@ -800,6 +800,8 @@ label img {
     .pop_up {
         width: 100% !important;
         max-width: 100% !important;
+
+        left: 0 !important;
         top: auto !important; 
         bottom: 0 !important;   
  
