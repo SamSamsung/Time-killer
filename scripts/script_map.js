@@ -1017,11 +1017,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // 2. ON VÉRIFIE LA TAILLE DE L'ÉCRAN
         if (window.innerWidth <= 600) {
             // --- CAS MOBILE (Volet inférieur) ---
-            px.y -= 200; // Tu peux ajuster 150
+            px.y -= 200; 
             
         } else {
             // --- CAS ORDINATEUR (Popup centré) ---
-            // On fait un centrage simple, sans décalage.
             px.y -= 400;
         }
         var newCenter = map.unproject(px);
