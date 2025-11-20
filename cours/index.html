@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polycopiés L3 Maths - Dauphine</title>
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --dauphine-blue: #0f2c5c; /* Bleu sombre institutionnel */
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--dauphine-blue);
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .university-tag {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: #dbeafe;
+        }
+
+        .author-badge {
+            display: inline-block;
+            margin-top: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+            flex: 1;
+        }
+
+        /* --- GRID LAYOUT --- */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2.5rem;
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            color: white;
+            position: relative;
+        }
+
+        /* Couleurs thématiques */
+        .header-lebesgue { background: linear-gradient(135deg, #2980b9, #2c3e50); }
+        .header-equadiff { background: linear-gradient(135deg, #c0392b, #8e44ad); }
+        .header-stats { background: linear-gradient(135deg, #27ae60, #16a085); }
+
+        .course-code {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            opacity: 0.9;
+            letter-spacing: 1px;
+        }
+
+        .course-title {
+            font-size: 1.5rem;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .prof-name {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .chapter-list {
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        
+        .chapter-list h4 {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            color: #888;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
+        }
+
+        .chapter-list ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .chapter-list li {
+            padding: 0.2rem 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .chapter-list li:last-child {
+            border-bottom: none;
+        }
+
+        .tags {
+            margin-top: auto;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: #f0f2f5;
+            color: #555;
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* --- BUTTON --- */
+        .btn-download {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--dauphine-blue);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.2s;
+            gap: 0.5rem;
+        }
+
+        .btn-download:hover {
+            background-color: #1a4b8e;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #222;
+            color: #aaa;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        footer p { margin-bottom: 0.5rem; }
+
+        /* --- ICONS (SVG) --- */
+        .icon { width: 20px; height: 20px; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .container { padding: 1.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="university-tag">Université Paris Dauphine - PSL</div>
+        <h1>Polycopiés L3 Mathématiques</h1>
+        <p class="subtitle">MIDO - Mathématiques de la Décision</p>
+        
+        <div class="author-badge">
+            Compilé et édité par <strong>Samuel Lelouch</strong>
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="course-grid">
+
+            <article class="card">
+                <div class="card-header header-lebesgue">
+                    <div class="course-code">UE Fondamentale</div>
+                    <h2 class="course-title">Intégrale de Lebesgue & Probabilités</h2>
+                </div>
+                <div class="card-body">
+                    <div class="prof-name">Cours de M. José Trashorras</div>
+                    
+                    <div class="chapter-list">
+                        <h4>Contenu du cours</h4>
+                        <ul>
+                            <li><strong>Chap 2 :</strong> Intégration par rapport à une mesure</li>
+                            <li><strong>Chap 3 :</strong> Espaces Lᵖ</li>
+                            <li><strong>Chap 4 :</strong> Mesures Produits</li>
+                            <li><strong>Chap 5 :</strong> Fondements des probabilités</li>
+                            <li><strong>Chap 6 :</strong> Indépendance</li>
+                            <li><strong>Chap 7 :</strong> Convergence de v.a.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tags">
+                        <span class="tag">Théorie de la Mesure</span>
+                        <span class="tag">Fubini</span>
+                        <span class="tag">Radon-Nikodym</span>
+                        <span class="tag">Loi des Grands Nombres</span>
+                    </div>
+
+                    <a href="Cours_Lebesgue_L3.pdf" class="btn-download" target="_blank">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Télécharger le PDF
+                    </a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-header header-equadiff">
+                    <div class="course-code">UE Fondamentale</div>
+                    <h2 class="course-title">Calcul Différentiel & Équations Différentielles</h2>
+                </div>
+                <div class="card-body">
+                    <div class="prof-name">Cours de M. Borris Haspot</div>
+                    
+                    <div class="chapter-list">
+                        <h4>Partie 1 : Calcul Différentiel</h4>
+                        <ul>
+                            <li>Théorème d'inversion locale</li>
+                            <li>Théorème de Hadamard</li>
+                            <li>Géométrie différentielle</li>
+                        </ul>
+                        <h4 style="margin-top: 10px;">Partie 2 : Équations Différentielles</h4>
+                        <ul>
+                            <li>Théorème de Cauchy-Lipschitz</li>
+                            <li>Équations autonomes</li>
+                            <li>Équilibres et Stabilité</li>
+                        </ul>
+                    </div>
+
+                    <div class="tags">
+                        <span class="tag">Difféomorphismes</span>
+                        <span class="tag">EDO</span>
+                        <span class="tag">Stabilité</span>
+                        <span class="tag">Gronwall</span>
+                    </div>
+
+                    <a href="Cours_EquaDiff_Complet_L3.pdf" class="btn-download" target="_blank">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Télécharger le PDF
+                    </a>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-header header-stats">
+                    <div class="course-code">UE Statistique</div>
+                    <h2 class="course-title">Statistical Modelling</h2>
+                </div>
+                <div class="card-body">
+                    <div class="prof-name">Cours de Mme Judith Rousseau</div>
+                    
+                    <div class="chapter-list">
+                        <h4>Thèmes abordés</h4>
+                        <ul>
+                            <li>Modèles linéaires & Régression simple</li>
+                            <li>Régression multiple</li>
+                            <li>Inférence statistique</li>
+                            <li>Tests d'hypothèses</li>
+                            <li>Analyse de la variance (ANOVA)</li>
+                        </ul>
+                    </div>
+
+                    <div class="tags">
+                        <span class="tag">Régression</span>
+                        <span class="tag">Inférence</span>
+                        <span class="tag">Tests</span>
+                        <span class="tag">ANOVA</span>
+                    </div>
+
+                    <a href="stats_cours_complet.pdf" class="btn-download" target="_blank">
+                        <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Télécharger le PDF
+                    </a>
+                </div>
+            </article>
+
+        </section>
+    </div>
+
+    <footer>
+        <p>Année Universitaire 2025-2026</p>
+        <p>&copy; 2025 Samuel Lelouch. Tous droits réservés.</p>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 10px;">L3 MIDO - Université Paris Dauphine - PSL</p>
+    </footer>
+
+</body>
+</html>
