@@ -129,37 +129,6 @@ if (navigator.geolocation) {
   initMap(48.8566, 2.3522);
 }
 
-/**
- * Crée une icône de profil ronde (L.divIcon)
- * @param {object} userProfile - L'objet utilisateur (de /users/)
- */
-function createProfileIcon(userProfile) {
-    if (!userProfile) { // Sécurité si le profil est manquant
-        userProfile = {}; 
-    }
-    
-    // VOTRE IDÉE : On utilise l'icône choisie, SINON la photo Google
-    const photoToUse = userProfile.chosen_icon || userProfile.photoURL || null;
-
-    const proxyImageURL = photoToUse ?
-        `https://images.weserv.nl/?url=${encodeURIComponent(photoToUse)}&w=40&h=40&t=circle` :
-        './icons_map/default-avatar.png'; // Un avatar par défaut
-
-    const iconHTML = `
-        <div class="profile-marker-container">
-            <img src="${proxyImageURL}" class="profile-marker-image" onerror="this.src='./icons_map/default-avatar.png'">
-        </div>
-    `;
-
-    return L.divIcon({
-        className: 'profile-marker', // Classe CSS pour le conteneur global
-        html: iconHTML,
-        iconSize: [36, 36], // Taille de l'icône
-        iconAnchor: [18, 18], // Point d'ancrage (centre)
-        popupAnchor: [0, -20] // Point d'où le popup sort
-    });
-}
-
 
 function loadMarkers() {
     const currentUserId = window.auth.currentUser.uid;
