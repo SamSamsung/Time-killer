@@ -382,11 +382,44 @@ html, body {
 
 /* --- Boutons de formulaire (Verif/Popup) --- */
 .verif_button {
-    padding: 10px 20px;
-    margin: 5px;
+    flex: 1; /* Les boutons prennent chacun 50% de la largeur */
+    border-radius: 12px;
     border: none;
-    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.verif_button:hover {
+    transform: translateY(-1px);
+    filter: brightness(0.95);
+}
+.verif_button:active {
+    transform: scale(0.96);
+}
+
+/* Couleurs */
+.verif_button[style*="lightblue"] {
+    background-color: #4285F4 !important; 
+    color: white !important;
+}
+.verif_button[style*="lightgreen"] {
+    background-color: #34A853 !important; 
+    color: white !important;
+}
+.verif_button[style*="red"] {
+    background-color: #F2F2F7 !important; /* Gris clair iOS */
+    color: #FF3B30 !important; /* Rouge iOS */
+}
+.verif_button[style*="#ccc"] {
+    background-color: #F2F2F7 !important; /* Gris clair iOS */
+    color: #000 !important;
 }
 .popup-button{
     padding: 10px 10px;
@@ -409,9 +442,11 @@ html, body {
 .form-navigation {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
-    border-top: 1px solid #eee;
-    padding-top: 15px;
+    margin-top: 25px; /* Espace au-dessus des boutons */
+    border-top: 1px solid #eee; /* Petite ligne de séparation */
+    padding-top: 20px; /* Espace entre la ligne et les boutons */
+    padding-bottom: 10px;
+    gap: 15px; /*C'est ça qui décolle les boutons l'un de l'autre */
 }
 #informations .form-page .header_popup:first-child {
     margin-top: 15px; 
@@ -550,10 +585,35 @@ label img {
 
 /* --- Contenu #login-popup (Formulaire) --- */
 #login-popup {
-    text-align: center;
-    padding: 20px;
-    max-width: 400px;
+    /* Positionnement Central (Ordi) */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Apparence Carte */
+    background-color: #ffffff;
     width: 90%;
+    max-width: 400px; /* Pas trop large sur ordi */
+    padding: 30px;
+    border-radius: 20px; /* Arrondi partout */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Belle ombre portée */
+    text-align: center;
+    z-index: 1003;
+}
+#login-popup h2 {
+    margin-top: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 10px;
+}
+
+#login-popup p {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 30px;
 }
 
 /* --- Contenu #friends-popup (Formulaire) --- */
@@ -783,7 +843,7 @@ label img {
         border-radius: 12px;
         
         /* --- LE SEUL CHANGEMENT : ON AGRANDIT --- */
-        width: 92%;  /* La barre prend 92% de la largeur de l'écran */
+        width: 85%;  /* La barre prend 92% de la largeur de l'écran */
         max-width: 400px; /* Sécurité pour les gros téléphones */
         justify-content: space-between; /* On étale les boutons */
     }
@@ -874,6 +934,32 @@ label img {
         line-height: 18px;
         top: -4px;
         left: -4px;
+    }
+    /* Transformation du Login en "Bottom Sheet" (Volet du bas) */
+    #login-popup {
+        /* On annule le centrage vertical de l'ordi */
+        top: auto !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        
+        /* On prend toute la largeur */
+        width: 100% !important;
+        max-width: 100% !important;
+        
+        /* Animation d'entrée (glisse du bas vers le haut) */
+        transform: translateY(100%); 
+        transition: transform 0.3s ease-out;
+        
+        /* Arrondi SEULEMENT en haut */
+        border-radius: 24px 24px 0 0 !important;
+        
+        /* Gestion de la barre noire iPhone (Safe Area) */
+        padding-bottom: calc(30px + env(safe-area-inset-bottom)) !important;
+    }
+
+    /* Quand le popup est actif, il remonte */
+    #login-popup.active {
+        transform: translateY(0) !important;
     }
 }
 
@@ -1037,4 +1123,30 @@ label img {
 .notif-location::before {
     content: "📍 ";
     margin-right: 2px;
+}
+
+/* Amélioration du bouton Google */
+#google-login-button {
+    border-radius: 50px; /* Pilule */
+    background-color: #4285F4;
+    color: white;
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+#google-login-button:hover {
+    background-color: #3367D6;
+    transform: translateY(-1px);
+}
+#google-login-button:active {
+    transform: scale(0.98);
 }
