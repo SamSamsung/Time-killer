@@ -757,6 +757,7 @@ function yes_comments(){
         
         // 5. On recharge la carte
         // (on n'a pas besoin de vider la carte, loadMarkers() le fait déjà)
+        notifyOwnerOfComment(key, texte);
         loadMarkers();
     }).catch((error) => {
         console.error("Erreur lors de l'ajout du commentaire :", error);
@@ -1779,8 +1780,9 @@ async function notifyFriendsOfNewMarker(markerData, markerKey) {
     
     const relations = snapshot.val();
     const myName = currentUser.displayName;
-    const lieu = markerData.lieu || "un nouvel endroit";
-    
+    const lieu = markerData.lieu || "un lieu mystère";
+
+    const phrase = getRandomPhrase();
     // 2. On parcourt les amis
     for (const friendId in relations) {
         if (relations[friendId] === "friends") {
@@ -1790,7 +1792,7 @@ async function notifyFriendsOfNewMarker(markerData, markerKey) {
             
             set(notifRef, {
                 title: `Nouvelle activité de ${myName} !`,
-                body: `A ajouté : "${lieu}"`,
+                body: `${myName} ${phrase}`,
                 timestamp: Date.now(),
                 // Données pour le clic :
                 lat: markerData.position[0],
@@ -1839,4 +1841,40 @@ async function sendAdminBroadcast() {
     document.getElementById("admin-msg-title").value = "";
     document.getElementById("admin-msg-body").value = "";
     closeNewsPopup();
+}
+
+// Remplace cette fonction dans script_map.js
+
+async function notifyOwnerOfComment(markerKey, commentText) {
+    const currentUser = window.auth.currentUser;
+    const markerRef = ref(db, `markers/${markerKey}`);
+    
+    const snapshot = await get(markerRef);
+    if (!snapshot.exists()) return;
+    
+    const markerData = snapshot.val();
+    const ownerId = markerData.creator_id;
+    const spotName = markerData.lieu || "Emplacement";
+    
+    // On ne se notifie pas soi-même
+    if (ownerId === currentUser.uid) return;
+
+    // On coupe le texte s'il est trop long
+    const shortText = commentText.length > 40 ? commentText.substring(0, 40) + "..." : commentText;
+    
+    const notifRef = push(ref(db, `notifications/${ownerId}`));
+    
+    set(notifRef, {
+        title: `💬 Nouveau com' de ${currentUser.displayName}`,
+        // --- CHANGEMENT ICI : Le texte d'abord, le spot entre parenthèses ---
+        body: `"${shortText}" (sur : ${spotName})`,
+        timestamp: Date.now(),
+        lat: markerData.position[0],
+        lng: markerData.position[1],
+        markerKey: markerKey,
+        locationName: spotName,
+        type: "comment_add"
+    });
+    
+    console.log(`Notif de commentaire envoyée au créateur (${ownerId})`);
 }

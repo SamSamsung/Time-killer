@@ -773,31 +773,62 @@ label img {
 /* --- Media Query 2: Tous les téléphones (pour l'UI et les Popups) --- */
 @media (max-width: 600px) {
     
-    /* 1. UI Container (en bas, horizontal) */
     #ui-container {
         left: 50%;
-        bottom: 10px;
+        bottom: 15px; /* J'ai remonté un peu (10->15) pour l'arrondi iPhone */
         transform: translateX(-50%);
         flex-direction: row;
         gap: 8px;
         padding: 8px;
         border-radius: 12px;
+        
+        /* --- LE SEUL CHANGEMENT : ON AGRANDIT --- */
+        width: 92%;  /* La barre prend 92% de la largeur de l'écran */
+        max-width: 400px; /* Sécurité pour les gros téléphones */
+        justify-content: space-between; /* On étale les boutons */
     }
+
+    /* 2. Les Boutons */
     #ui-container button {
-        width: 44px;
-        height: 44px;
+        /* On remplace la largeur fixe (44px) par "flex: 1" */
+        /* Ça veut dire : "Partagez-vous toute la place disponible" */
+        flex: 1; 
+        
+        height: 48px; /* J'ai mis 48px au lieu de 44px pour que ce soit plus facile à cliquer */
         min-width: unset;
         padding: 10px;
         border-radius: 10px;
     }
-    #ui-container button span {
+
+    #ui-container button span:not(.notification-badge) {
         display: none;
     }
+    
     #ui-container button img {
         margin-right: 0;
         margin-bottom: 0;
-        width: 22px;
-        height: 22px;
+        width: 26px; /* J'ai passé de 22 à 26px pour que l'icône suive la taille */
+        height: 26px;
+    }
+
+    /* Badge plus petit et discret */
+    .notification-badge {
+        position: absolute;
+        top: 5px;   /* Plus proche du bord haut */
+        right: 5px; /* Plus proche du bord droit */
+        width: 16px;  /* Plus petit (était 20px) */
+        height: 16px; /* Plus petit */
+        font-size: 10px; /* Texte plus petit */
+        border-radius: 50%;
+        background-color: #EA4335;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 10;
+        pointer-events: none; /* Pour ne pas gêner le clic */
     }
 
     /* 2. Popups (en "volet inférieur") */
