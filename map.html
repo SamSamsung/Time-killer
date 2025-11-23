@@ -176,6 +176,11 @@
                 <img src="./icons_map/account.png" alt="Profil">
                 <span>Mon Profil</span>
             </button>
+
+            <button id="news-button" title="Nouveautés">
+                <img src="./icons_map/bell.png" alt="News" onerror="this.src='./icons_map/account.png'"> <span>Actus</span>
+                <span id="news-badge" class="notification-badge"></span>
+            </button>
             
             <button id="logout-button" title="Déconnexion">
                 <img src="./icons_map/logout.png" alt="Déconnexion">
@@ -254,6 +259,26 @@
             </div>
         </div>
 
+
+        <div class="pop_up" id="news-popup">
+            <h2>Quoi de neuf ?</h2>
+            
+            <div id="admin-news-panel" style="display: none; background: #eee; padding: 10px; margin-bottom: 15px; border-radius: 8px;">
+                <h3>👑 Admin : Message Global</h3>
+                <input type="text" id="admin-msg-title" placeholder="Titre..." style="width: 100%; margin-bottom: 5px;">
+                <textarea id="admin-msg-body" placeholder="Message pour tout le monde..." rows="2" style="width: 100%;"></textarea>
+                <button class="verif_button" style="background-color: #4285F4; color: white; width: 100%;" onclick="sendAdminBroadcast()">Envoyer à tous</button>
+            </div>
+
+            <div id="news-list" style="max-height: 300px; overflow-y: auto; text-align: left;">
+                <p style="text-align: center; color: #888;">Aucune nouvelle fraîche.</p>
+            </div>
+
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button class="verif_button" style="background-color: #EA4335; color: white; flex: 1;" onclick="clearAllNotifications()">Tout effacer</button>
+                <button class="verif_button" style="background-color: #ccc; flex: 1;" onclick="closeNewsPopup()">Fermer</button>
+            </div>
+        </div>
 
        
         <script type="module">

@@ -236,6 +236,8 @@ function loadMarkers() {
             const marker = L.marker(position, { icon: markerIcon }).addTo(map);
             marker.options.key = key;
             marker.bindPopup(finalPopupContent);
+
+            window.allLeafletMarkers[key] = marker; // On le stocke pour le retrouver
         }
 
     }).catch((error) => {
@@ -709,6 +711,9 @@ function yes(){
             
             tempMarker.setIcon(markerIcon);
             tempMarker.getPopup().setContent(popupHTML);
+
+            // On prévient les copains
+            notifyFriendsOfNewMarker(result.data, result.key);
             
             reloadMapAndClosePopup(); // Appelle la fonction helper
         });
@@ -901,12 +906,18 @@ function loadApp(user) {
     // 2. Chargement de la carte
     loadMarkers();
 
+    listenToMyNotifications(); // On lance l'écoute du dossier Firebase
+
     updateFriendRequestCount();
 }
 
 
 // Écouteur pour le bouton de connexion Google
 document.getElementById('google-login-button').addEventListener('click', loginWithGoogle);
+
+// Écouter pour le bouton des news
+document.getElementById('news-button').addEventListener('click', openNewsPopup);
+
 // Écouteur pour le bouton de déconnexion
 document.getElementById('logout-button').addEventListener('click', logout);
 
@@ -1638,4 +1649,194 @@ function formNext() {
  */
 function formPrev() {
     showFormPage(currentFormPage - 1);
+}
+
+// =================================================
+// == SYSTÈME DE NEWSLETTER / NOTIFICATIONS IN-APP ==
+// =================================================
+
+// Dictionnaire pour retrouver les markers Leaflet par leur ID Firebase
+// (Indispensable pour ouvrir le popup au clic sur la notif)
+window.allLeafletMarkers = {}; 
+
+// 1. Ouvrir/Fermer le Popup
+function openNewsPopup() {
+    document.getElementById("news-popup").classList.add("active");
+    document.getElementById("overlay").classList.add("show");
+    
+    // Si Admin, on montre le panneau spécial
+    if (window.auth.currentUser.uid === ADMIN_UID) {
+        document.getElementById("admin-news-panel").style.display = "block";
+    }
+}
+function closeNewsPopup() {
+    document.getElementById("news-popup").classList.remove("active");
+    document.getElementById("overlay").classList.remove("show");
+}
+
+// 2. Écouter mes notifications (Lecture + Badge)
+function listenToMyNotifications() {
+    const uid = window.auth.currentUser.uid;
+    const notifsRef = ref(db, `notifications/${uid}`);
+    
+    // On écoute les changements en temps réel
+    onValue(notifsRef, (snapshot) => {
+        const listContainer = document.getElementById("news-list");
+        const badge = document.getElementById("news-badge");
+        
+        if (!snapshot.exists()) {
+            listContainer.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">Rien à signaler pour l\'instant 😴</p>';
+            badge.style.display = 'none';
+            return;
+        }
+
+        const notifs = snapshot.val();
+        let html = "";
+        let count = 0;
+        
+        // On convertit en tableau pour trier par date (plus récent en haut)
+        const notifArray = Object.entries(notifs).map(([key, val]) => ({ key, ...val }));
+        notifArray.sort((a, b) => b.timestamp - a.timestamp);
+
+        notifArray.forEach(n => {
+            count++;
+            
+            // Si la notif contient des coordonnées (lat/lng), on ajoute l'action de clic
+            let clickAction = "";
+            let locationHTML = "";
+            
+            if (n.lat && n.lng) {
+                // On passe les infos au gestionnaire de clic
+                // On met des guillemets simples échappés pour les strings
+                const lieuSafe = n.locationName ? n.locationName.replace(/'/g, "\\'") : "Lieu";
+                clickAction = `onclick="goToLocation(${n.lat}, ${n.lng}, '${n.markerKey}', '${lieuSafe}')"`;
+                locationHTML = `<div class="notif-location">Voir : ${n.locationName || "Sur la carte"}</div>`;
+            }
+
+            html += `
+            <div class="notif-item" ${clickAction}>
+                <div class="notif-title">${n.title}</div>
+                <div class="notif-body">${n.body}</div>
+                ${locationHTML}
+            </div>
+            `;
+        });
+
+        listContainer.innerHTML = html;
+        
+        // Gestion du badge rouge
+        if (count > 0) {
+            badge.innerText = count;
+            badge.style.display = "flex";
+        } else {
+            badge.style.display = "none";
+        }
+    });
+}
+
+// 3. Action : Aller sur le lieu (Clic notif)
+window.goToLocation = function(lat, lng, markerKey, lieuName) {
+    // 1. Fermer le popup news
+    closeNewsPopup();
+    
+    // 2. Bouger la carte (Animation fluide)
+    map.flyTo([lat, lng], 16, { duration: 1.5 });
+    
+    // 3. Essayer d'ouvrir le popup du marker
+    // On attend un peu que le zoom finisse
+    setTimeout(() => {
+        const marker = window.allLeafletMarkers[markerKey];
+        if (marker) {
+            marker.openPopup();
+        } else {
+            console.warn("Marker non trouvé sur la carte (peut-être filtré ?)");
+            // Fallback : on met juste un marker temporaire pour montrer le lieu
+            L.popup()
+                .setLatLng([lat, lng])
+                .setContent(`<b>${lieuName}</b><br>Ce marker n'est pas affiché actuellement.`)
+                .openOn(map);
+        }
+    }, 1600);
+}
+
+// 4. Action : Tout effacer
+function clearAllNotifications() {
+    const uid = window.auth.currentUser.uid;
+    if(confirm("Tout marquer comme lu et effacer ?")) {
+        remove(ref(db, `notifications/${uid}`));
+    }
+}
+
+// 5. FONCTION D'ENVOI (Appelée quand on crée un marker)
+// À appeler dans yes() après la création du marker
+async function notifyFriendsOfNewMarker(markerData, markerKey) {
+    const currentUser = window.auth.currentUser;
+    const friendsRef = ref(db, `friendships/${currentUser.uid}`);
+    
+    // 1. On récupère la liste des amis
+    const snapshot = await get(friendsRef);
+    if (!snapshot.exists()) return;
+    
+    const relations = snapshot.val();
+    const myName = currentUser.displayName;
+    const lieu = markerData.lieu || "un nouvel endroit";
+    
+    // 2. On parcourt les amis
+    for (const friendId in relations) {
+        if (relations[friendId] === "friends") {
+            
+            // 3. On écrit dans LEUR boîte de notifs
+            const notifRef = push(ref(db, `notifications/${friendId}`));
+            
+            set(notifRef, {
+                title: `Nouvelle activité de ${myName} !`,
+                body: `A ajouté : "${lieu}"`,
+                timestamp: Date.now(),
+                // Données pour le clic :
+                lat: markerData.position[0],
+                lng: markerData.position[1],
+                markerKey: markerKey,
+                locationName: lieu,
+                type: "marker_add"
+            });
+        }
+    }
+    console.log("Notifications envoyées aux amis !");
+}
+
+// 6. FONCTION ADMIN (Broadcast global)
+async function sendAdminBroadcast() {
+    if (window.auth.currentUser.uid !== ADMIN_UID) return;
+    
+    const title = document.getElementById("admin-msg-title").value;
+    const body = document.getElementById("admin-msg-body").value;
+    
+    if (!title || !body) return alert("Remplis le titre et le message !");
+    
+    if (!confirm("Envoyer ce message à TOUS les utilisateurs de l'app ?")) return;
+    
+    // Aïe, en NoSQL c'est dur d'écrire à tout le monde sans serveur.
+    // On va devoir lire la liste des users et boucler (Méthode "Bourrin" mais OK pour < 1000 users)
+    
+    const usersSnap = await get(ref(db, 'users'));
+    if (!usersSnap.exists()) return;
+    
+    const users = usersSnap.val();
+    let count = 0;
+    
+    for (const userId in users) {
+        const notifRef = push(ref(db, `notifications/${userId}`));
+        set(notifRef, {
+            title: `📢 ${title}`, // Petit emoji haut-parleur
+            body: body,
+            timestamp: Date.now(),
+            type: "admin_msg"
+        });
+        count++;
+    }
+    
+    alert(`Message envoyé à ${count} utilisateurs !`);
+    document.getElementById("admin-msg-title").value = "";
+    document.getElementById("admin-msg-body").value = "";
+    closeNewsPopup();
 }

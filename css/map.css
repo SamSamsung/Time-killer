@@ -948,3 +948,62 @@ label img {
         overflow-y: auto; /* On ajoute le scroll A L'INTÉRIEUR */
     }
 }
+
+
+
+/* --- STYLE DES NOTIFICATIONS --- */
+
+/* Un élément de notification */
+.notif-item {
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+/* Effet au survol */
+.notif-item:hover {
+    background: #f0f8ff; /* Bleu très clair */
+    border-color: #4285F4;
+}
+
+/* Pastille "Nouveau" pour les items non lus */
+.notif-unread::after {
+    content: "";
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 8px;
+    height: 8px;
+    background-color: #EA4335; /* Rouge */
+    border-radius: 50%;
+}
+
+.notif-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.notif-body {
+    font-size: 13px;
+    color: #666;
+}
+
+.notif-location {
+    font-size: 11px;
+    color: #4285F4;
+    margin-top: 5px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+.notif-location::before {
+    content: "📍 ";
+    margin-right: 2px;
+}
