@@ -1658,6 +1658,25 @@ function formPrev() {
 
 // Dictionnaire pour retrouver les markers Leaflet par leur ID Firebase
 // (Indispensable pour ouvrir le popup au clic sur la notif)
+const NOTIF_PHRASES = [
+    "vient de marquer son territoire ! 🐕",
+    "a ajouté un nouveau spot coquin... 👀",
+    "a encore frappé ! Va voir où c'est.",
+    "partage ses exploits. Curieux ?",
+    "a agrandi la carte. C'est chaud ! 🔥",
+    "ne s'arrête plus ! Nouveau lieu ajouté.",
+    "a laissé une trace sur la carte.",
+    "vient de pécho ici ! 👇",
+    "a validé un nouveau terrain de jeu.",
+    "te recommande ce coin..."
+];
+
+
+function getRandomPhrase() {
+    const index = Math.floor(Math.random() * NOTIF_PHRASES.length);
+    return NOTIF_PHRASES[index];
+}
+
 window.allLeafletMarkers = {}; 
 
 // 1. Ouvrir/Fermer le Popup
@@ -1732,6 +1751,7 @@ function listenToMyNotifications() {
         } else {
             badge.style.display = "none";
         }
+        loadMarkers();
     });
 }
 
@@ -1867,7 +1887,7 @@ async function notifyOwnerOfComment(markerKey, commentText) {
     set(notifRef, {
         title: `💬 Nouveau com' de ${currentUser.displayName}`,
         // --- CHANGEMENT ICI : Le texte d'abord, le spot entre parenthèses ---
-        body: `"${shortText}" (sur : ${spotName})`,
+        body: `"${shortText}"`,
         timestamp: Date.now(),
         lat: markerData.position[0],
         lng: markerData.position[1],
